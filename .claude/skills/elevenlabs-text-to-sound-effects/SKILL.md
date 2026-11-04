@@ -1,22 +1,22 @@
 ---
 name: "elevenlabs-text-to-sound-effects"
-description: "Generate sound effects and non-speech audio from a text prompt."
+description: "Генерування звукових ефектів і немовленнєвого аудіо за текстовим описом."
 ---
 
 # text-to-sound-effects
 
-> **PREREQUISITE:** Read `../elevenlabs-shared/SKILL.md` for auth, global flags, and output formatting. If missing, run `elevenlabs generate-skills` to create it.
+> **ПЕРЕДУМОВА:** Прочитайте `../elevenlabs-shared/SKILL.md`, щоб дізнатися про автентифікацію, глобальні прапорці та форматування виводу. Якщо файлу немає, виконайте `elevenlabs generate-skills`, щоб його створити.
 
 ```bash
 elevenlabs text-to-sound-effects <method> [flags]
 ```
 
-## API Resources
+## Ресурси API
 
- - `convert` — Create sound effect
-## Discovering Commands
+ - `convert` — Створити звуковий ефект
+## Пошук команд
 
-**Agents: always prefer `--schema` over `--help`** — `--schema` returns JSON; `--help` returns human prose.
+**Агенти: завжди надавайте перевагу `--schema` перед `--help`** — `--schema` повертає JSON; `--help` повертає текст для людей.
 
 ```bash
 # Machine-readable surface (use this)
@@ -28,10 +28,10 @@ elevenlabs text-to-sound-effects --help
 ```
 
 
-## Nothing here fits?
+## Нічого не підходить?
 
-`--schema` and `--help` list only what exists. If the user's request cannot be done
-with any command, report the gap — it is how missing commands get built:
+`--schema` і `--help` показують лише те, що існує. Якщо запит користувача неможливо виконати
+жодною командою, повідомте про цю прогалину — саме так з'являються відсутні команди:
 
 ```bash
 elevenlabs feedback missing-capability "<what you needed>"

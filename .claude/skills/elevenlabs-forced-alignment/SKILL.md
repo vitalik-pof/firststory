@@ -1,22 +1,22 @@
 ---
 name: "elevenlabs-forced-alignment"
-description: "Force align an audio file to a text transcript to get precise word-level and character level timing information."
+description: "Примусове вирівнювання аудіофайлу з текстовою транскрипцією для отримання точних часових міток на рівні слів і символів."
 ---
 
 # forced-alignment
 
-> **PREREQUISITE:** Read `../elevenlabs-shared/SKILL.md` for auth, global flags, and output formatting. If missing, run `elevenlabs generate-skills` to create it.
+> **ПЕРЕДУМОВА:** Прочитайте `../elevenlabs-shared/SKILL.md`, щоб дізнатися про автентифікацію, глобальні прапорці та форматування виводу. Якщо файлу немає, виконайте `elevenlabs generate-skills`, щоб його створити.
 
 ```bash
 elevenlabs forced-alignment <method> [flags]
 ```
 
-## API Resources
+## Ресурси API
 
- - `create` — Create Forced Alignment
-## Discovering Commands
+ - `create` — Створити примусове вирівнювання
+## Пошук команд
 
-**Agents: always prefer `--schema` over `--help`** — `--schema` returns JSON; `--help` returns human prose.
+**Агенти: завжди надавайте перевагу `--schema` перед `--help`** — `--schema` повертає JSON; `--help` повертає текст для людей.
 
 ```bash
 # Machine-readable surface (use this)
@@ -28,10 +28,10 @@ elevenlabs forced-alignment --help
 ```
 
 
-## Nothing here fits?
+## Нічого не підходить?
 
-`--schema` and `--help` list only what exists. If the user's request cannot be done
-with any command, report the gap — it is how missing commands get built:
+`--schema` і `--help` показують лише те, що існує. Якщо запит користувача неможливо виконати
+жодною командою, повідомте про цю прогалину — саме так з'являються відсутні команди:
 
 ```bash
 elevenlabs feedback missing-capability "<what you needed>"
