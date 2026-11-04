@@ -1,25 +1,25 @@
 ---
 name: "elevenlabs-text-to-speech"
-description: "Convert text into lifelike speech using a voice of your choice."
+description: "Перетворення тексту на реалістичне мовлення голосом на ваш вибір."
 ---
 
 # text-to-speech
 
-> **PREREQUISITE:** Read `../elevenlabs-shared/SKILL.md` for auth, global flags, and output formatting. If missing, run `elevenlabs generate-skills` to create it.
+> **ПЕРЕДУМОВА:** Прочитайте `../elevenlabs-shared/SKILL.md` про автентифікацію, глобальні прапорці та форматування виводу. Якщо файлу немає, запустіть `elevenlabs generate-skills`, щоб створити його.
 
 ```bash
 elevenlabs text-to-speech <method> [flags]
 ```
 
-## API Resources
+## Ресурси API
 
- - `convert` — Create speech
- - `convert_with_timestamps` — Create speech with timing
- - `stream` — Stream speech
- - `stream_with_timestamps` — Stream speech with timing
-## Discovering Commands
+ - `convert` — Створити мовлення
+ - `convert_with_timestamps` — Створити мовлення з часовими мітками
+ - `stream` — Потокове передавання мовлення
+ - `stream_with_timestamps` — Потокове передавання мовлення з часовими мітками
+## Як знайти команди
 
-**Agents: always prefer `--schema` over `--help`** — `--schema` returns JSON; `--help` returns human prose.
+**Агентам: завжди надавайте перевагу `--schema`, а не `--help`** — `--schema` повертає JSON; `--help` повертає текст для людей.
 
 ```bash
 # Machine-readable surface (use this)
@@ -31,16 +31,17 @@ elevenlabs text-to-speech --help
 ```
 
 
-## Model
+## Модель
 
-Pass `--model-id eleven_v4`, the most expressive model, which also reads audio
-tags like `[whispers]` as delivery. Without it the API falls back to an older
-default. For real-time streaming, use `eleven_v4_turbo` instead.
+Передайте `--model-id eleven_v4` — найвиразнішу модель, яка також сприймає
+аудіотеги на кшталт `[whispers]` як вказівки щодо подачі. Без цього прапорця API
+використовує старішу типову модель. Для потокового передавання в реальному часі
+натомість використовуйте `eleven_v4_turbo`.
 
-## Nothing here fits?
+## Нічого не підходить?
 
-`--schema` and `--help` list only what exists. If the user's request cannot be done
-with any command, report the gap — it is how missing commands get built:
+`--schema` і `--help` показують лише те, що існує. Якщо запит користувача неможливо виконати
+жодною командою, повідомте про прогалину — саме так з’являються відсутні команди:
 
 ```bash
 elevenlabs feedback missing-capability "<what you needed>"

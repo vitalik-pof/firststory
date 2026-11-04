@@ -1,40 +1,40 @@
 ---
 name: "elevenlabs-music"
-description: "Generate music from a text prompt."
+description: "Генерування музики за текстовим описом."
 ---
 
 # music
 
-> **PREREQUISITE:** Read `../elevenlabs-shared/SKILL.md` for auth, global flags, and output formatting. If missing, run `elevenlabs generate-skills` to create it.
+> **ПЕРЕДУМОВА:** Прочитайте `../elevenlabs-shared/SKILL.md` про автентифікацію, глобальні прапорці та форматування виводу. Якщо файлу немає, запустіть `elevenlabs generate-skills`, щоб створити його.
 
 ```bash
 elevenlabs music <method> [flags]
 ```
 
-## API Resources
+## Ресурси API
 
- - `compose` — Compose Music
- - `compose_detailed` — Compose Music With A Detailed Response
- - `compose_detailed_stream` — Stream Composed Music With A Detailed Response
- - `separate_stems` — Stem Separation
- - `stream` — Stream Composed Music
- - `upload` — Upload Music
- - `video_to_music` — Video To Music
+ - `compose` — Створити музику
+ - `compose_detailed` — Створити музику з детальною відповіддю
+ - `compose_detailed_stream` — Потокове передавання створеної музики з детальною відповіддю
+ - `separate_stems` — Розділення на стеми
+ - `stream` — Потокове передавання створеної музики
+ - `upload` — Завантажити музику
+ - `video_to_music` — Музика з відео
 
 ### composition-plan
 
- - `create` — Generate Composition Plan
+ - `create` — Згенерувати план композиції
 
 ### finetunes
 
- - `create` — Create Music Finetune
- - `delete` — Delete Music Finetune
- - `get` — Get Music Finetune
- - `list` — Get Music Finetunes
- - `update` — Update Music Finetune
-## Discovering Commands
+ - `create` — Створити донавчену музичну модель
+ - `delete` — Видалити донавчену музичну модель
+ - `get` — Отримати донавчену музичну модель
+ - `list` — Отримати список донавчених музичних моделей
+ - `update` — Оновити донавчену музичну модель
+## Як знайти команди
 
-**Agents: always prefer `--schema` over `--help`** — `--schema` returns JSON; `--help` returns human prose.
+**Агентам: завжди надавайте перевагу `--schema`, а не `--help`** — `--schema` повертає JSON; `--help` повертає текст для людей.
 
 ```bash
 # Machine-readable surface (use this)
@@ -46,10 +46,10 @@ elevenlabs music --help
 ```
 
 
-## Nothing here fits?
+## Нічого не підходить?
 
-`--schema` and `--help` list only what exists. If the user's request cannot be done
-with any command, report the gap — it is how missing commands get built:
+`--schema` і `--help` показують лише те, що існує. Якщо запит користувача неможливо виконати
+жодною командою, повідомте про прогалину — саме так з’являються відсутні команди:
 
 ```bash
 elevenlabs feedback missing-capability "<what you needed>"

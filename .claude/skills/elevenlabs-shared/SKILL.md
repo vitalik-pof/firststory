@@ -1,36 +1,36 @@
 ---
 name: "elevenlabs-shared"
-description: "elevenlabs CLI: Shared patterns for authentication, global flags, and output formatting."
+description: "elevenlabs CLI: спільні шаблони автентифікації, глобальних прапорців і форматування виводу."
 ---
 
-# elevenlabs — Shared Reference
+# elevenlabs — Спільний довідник
 
-## Authentication
+## Автентифікація
 
-Every request is authenticated with an ElevenLabs API key, sent as the `xi-api-key` header.
+Кожен запит автентифікується ключем API ElevenLabs, який передається в заголовку `xi-api-key`.
 
 ```bash
 export ELEVENLABS_API_KEY=xi-...
 ```
 
-A `.env` file in the working directory is loaded automatically. For a one-off call, pass `--xi-api-key xi-...` instead. `elevenlabs auth login` sets up OAuth in a keyring as an alternative to the env var.
+Файл `.env` у робочому каталозі завантажується автоматично. Для одноразового виклику натомість передайте `--xi-api-key xi-...`. Команда `elevenlabs auth login` налаштовує OAuth зі зберіганням у сховищі ключів (keyring) як альтернативу змінній середовища.
 
-## Global Flags
+## Глобальні прапорці
 
-These flags appear across the CLI. The harness-level ones (`--dry-run`, `--format`, `--base-url`, `--quiet`) are available on every command; `--output` surfaces only on operations whose spec supports the affordance — check the per-op `--schema` output's `binaryResponse` hint to know which ops carry them.
+Ці прапорці трапляються в усьому CLI. Прапорці рівня обв’язки (`--dry-run`, `--format`, `--base-url`, `--quiet`) доступні в кожній команді; `--output` з’являється лише в операціях, специфікація яких підтримує цю можливість, — щоб дізнатися, які операції його мають, перевірте підказку `binaryResponse` у виводі `--schema` для конкретної операції.
 
-| Flag | Description | Default |
+| Прапорець | Опис | Типове значення |
 |------|-------------|---------|
-| `--dry-run` | Validate locally without sending the request | |
-| `--format <FMT>` | Output format: `json`, `table`, `yaml`, `csv`, `raw`, `jsonl`, `http` | `table` on a TTY, `json` when piped |
-| `--base-url <URL>` | Override the API base URL | |
-| `--params <JSON>` | URL/query/path parameters as JSON | |
-| `--json <JSON>` | Request body for POST/PATCH/PUT | |
-| `-o, --output <PATH>` | Write a binary response to a file; `-` streams the bytes to stdout for piping. Only on operations that return binary. | |
-| `--no-retry` | Disable retries | |
-| `--no-extract` | Print the full response body | |
+| `--dry-run` | Перевірити локально, не надсилаючи запит | |
+| `--format <FMT>` | Формат виводу: `json`, `table`, `yaml`, `csv`, `raw`, `jsonl`, `http` | `table` у TTY, `json` у разі передавання через конвеєр |
+| `--base-url <URL>` | Перевизначити базову URL-адресу API | |
+| `--params <JSON>` | Параметри URL, рядка запиту та шляху у форматі JSON | |
+| `--json <JSON>` | Тіло запиту для POST/PATCH/PUT | |
+| `-o, --output <PATH>` | Записати двійкову відповідь у файл; `-` передає байти в stdout для конвеєра. Лише для операцій, що повертають двійкові дані. | |
+| `--no-retry` | Вимкнути повторні спроби | |
+| `--no-extract` | Вивести повне тіло відповіді | |
 
-## Output Formatting
+## Форматування виводу
 
 ```bash
 # JSON (default)
@@ -43,59 +43,60 @@ elevenlabs <resource> <method> --format table
 elevenlabs <resource> <method> | jq '.fieldName'
 ```
 
-## Dry Run
+## Пробний запуск
 
-Use `--dry-run` to preview the HTTP request without sending it:
+Використовуйте `--dry-run`, щоб переглянути HTTP-запит, не надсилаючи його:
 
 ```bash
 elevenlabs <resource> <method> --dry-run
 ```
 
 
-## Telling us what you are doing
+## Розкажіть нам, що ви робите
 
-Two inputs let you report what you are trying to accomplish and what you could
-not do. Neither changes what a command does.
+Два вхідні параметри дають змогу повідомити, чого ви намагаєтеся досягти і чого
+не змогли зробити. Жоден із них не змінює того, що робить команда.
 
-### `--intent` — why you are running this command
+### `--intent` — навіщо ви запускаєте цю команду
 
-Optional, and available on every command. Sent as a request header. Nothing
-changes if you leave it off, but supplying it is what tells us which commands
-to build next:
+Необов’язковий і доступний у кожній команді. Надсилається як заголовок запиту.
+Якщо його не вказати, нічого не зміниться, але саме він підказує нам, які
+команди створювати далі:
 
 ```bash
 elevenlabs voices search --intent "pick a narrator voice for an audiobook"
 ```
 
-One sentence describing the user's goal, max 500 characters, on one line.
+Одне речення, що описує мету користувача, до 500 символів, в одному рядку.
 
-No environment variable sets this once for a whole task. A fresh sentence per
-command is the point — read back in order, they show what you were actually
-working through.
+Немає змінної середовища, яка задала б це один раз для всього завдання. Суть
+саме в новому реченні для кожної команди — прочитані послідовно, вони показують,
+над чим ви насправді працювали.
 
-### `elevenlabs feedback missing-capability` — what you could not do
+### `elevenlabs feedback missing-capability` — чого ви не змогли зробити
 
-Call this when the user's request cannot be completed with any available
-`elevenlabs` command. Describe the capability you were looking for, so it can
-inform which commands get built next. Do not call it when an existing command
-already covers the request.
+Викликайте цю команду, коли запит користувача неможливо виконати жодною
+доступною командою `elevenlabs`. Опишіть можливість, яку ви шукали, щоб це
+допомогло визначити, які команди створювати далі. Не викликайте її, якщо
+наявна команда вже покриває запит.
 
 ```bash
 elevenlabs feedback missing-capability \
   "no way to batch-render a script to separate files per speaker"
 ```
 
-It records the report and returns; it does not fail the task. Continue with the
-available commands, or tell the user the thing is not supported yet.
+Команда фіксує звіт і повертає керування; вона не зриває завдання. Продовжуйте
+з доступними командами або повідомте користувачеві, що це поки не підтримується.
 
-### Never put personal data in either field
+### Ніколи не вказуйте персональні дані в жодному з полів
 
-Describe the *goal*, not the data. Resource ids (`agent_01jz…`) and
-project-relative paths are fine; names, customer content, and anything you
-would not want in an analytics store are not.
+Описуйте *мету*, а не дані. Ідентифікатори ресурсів (`agent_01jz…`) і шляхи
+відносно проєкту — це нормально; імена, вміст клієнтів і все, чого ви не хотіли
+б бачити у сховищі аналітики, — ні.
 
-Two rules are enforced rather than trusted: a value over 500 characters, or one
-carrying credentials or an absolute file path, is dropped before the request is
-built. `--intent` warns on stderr and the command proceeds normally — a dropped
-value still satisfies the requirement, so you do not need to retry, but fix the
-wording next time; `feedback` fails so you can rewrite it.
+Два правила не покладаються на довіру, а застосовуються примусово: значення,
+довше за 500 символів, або таке, що містить облікові дані чи абсолютний шлях до
+файлу, відкидається ще до формування запиту. `--intent` виводить попередження в
+stderr, і команда виконується як зазвичай — відкинуте значення однаково
+задовольняє вимогу, тож повторювати не потрібно, але наступного разу виправте
+формулювання; `feedback` завершується з помилкою, щоб ви могли переписати текст.
