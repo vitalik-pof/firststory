@@ -1,33 +1,33 @@
 ---
 name: "elevenlabs-pronunciation-dictionaries"
-description: "Manage pronunciation dictionaries that override how specific words are pronounced."
+description: "Керування словниками вимови, які перевизначають, як вимовляються певні слова."
 ---
 
 # pronunciation-dictionaries
 
-> **PREREQUISITE:** Read `../elevenlabs-shared/SKILL.md` for auth, global flags, and output formatting. If missing, run `elevenlabs generate-skills` to create it.
+> **ПЕРЕДУМОВА:** Прочитайте `../elevenlabs-shared/SKILL.md`, щоб дізнатися про автентифікацію, глобальні прапорці та форматування виводу. Якщо файлу немає, виконайте `elevenlabs generate-skills`, щоб його створити.
 
 ```bash
 elevenlabs pronunciation-dictionaries <method> [flags]
 ```
 
-## API Resources
+## Ресурси API
 
- - `create_from_file` — Create a pronunciation dictionary from a file
- - `create_from_rules` — Create a pronunciation dictionary from rules
- - `download` — Get pronunciation dictionary by version
- - `get` — Get pronunciation dictionary
- - `list` — List pronunciation dictionaries
- - `update` — Update Pronunciation Dictionary
+ - `create_from_file` — Створити словник вимови з файлу
+ - `create_from_rules` — Створити словник вимови з правил
+ - `download` — Отримати словник вимови за версією
+ - `get` — Отримати словник вимови
+ - `list` — Список словників вимови
+ - `update` — Оновити словник вимови
 
 ### rules
 
- - `add` — Add pronunciation dictionary rules
- - `remove` — Remove pronunciation dictionary rules
- - `set` — Set pronunciation dictionary rules
-## Discovering Commands
+ - `add` — Додати правила словника вимови
+ - `remove` — Вилучити правила словника вимови
+ - `set` — Встановити правила словника вимови
+## Пошук команд
 
-**Agents: always prefer `--schema` over `--help`** — `--schema` returns JSON; `--help` returns human prose.
+**Агенти: завжди надавайте перевагу `--schema` перед `--help`** — `--schema` повертає JSON; `--help` повертає текст для людей.
 
 ```bash
 # Machine-readable surface (use this)
@@ -39,10 +39,10 @@ elevenlabs pronunciation-dictionaries --help
 ```
 
 
-## Nothing here fits?
+## Нічого не підходить?
 
-`--schema` and `--help` list only what exists. If the user's request cannot be done
-with any command, report the gap — it is how missing commands get built:
+`--schema` і `--help` показують лише те, що існує. Якщо запит користувача неможливо виконати
+жодною командою, повідомте про цю прогалину — саме так з'являються відсутні команди:
 
 ```bash
 elevenlabs feedback missing-capability "<what you needed>"

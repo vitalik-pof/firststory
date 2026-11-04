@@ -1,26 +1,26 @@
 ---
 name: "elevenlabs-history"
-description: "Accesses your speech history."
+description: "Доступ до історії вашого згенерованого мовлення."
 ---
 
 # history
 
-> **PREREQUISITE:** Read `../elevenlabs-shared/SKILL.md` for auth, global flags, and output formatting. If missing, run `elevenlabs generate-skills` to create it.
+> **ПЕРЕДУМОВА:** Прочитайте `../elevenlabs-shared/SKILL.md`, щоб дізнатися про автентифікацію, глобальні прапорці та форматування виводу. Якщо файлу немає, виконайте `elevenlabs generate-skills`, щоб його створити.
 
 ```bash
 elevenlabs history <method> [flags]
 ```
 
-## API Resources
+## Ресурси API
 
- - `delete` — Delete history item
- - `download` — Download history items
- - `get` — Get history item
- - `get_audio` — Get audio from history item
- - `list` — Get generated items
-## Discovering Commands
+ - `delete` — Видалити елемент історії
+ - `download` — Завантажити елементи історії
+ - `get` — Отримати елемент історії
+ - `get_audio` — Отримати аудіо з елемента історії
+ - `list` — Отримати згенеровані елементи
+## Пошук команд
 
-**Agents: always prefer `--schema` over `--help`** — `--schema` returns JSON; `--help` returns human prose.
+**Агенти: завжди надавайте перевагу `--schema` перед `--help`** — `--schema` повертає JSON; `--help` повертає текст для людей.
 
 ```bash
 # Machine-readable surface (use this)
@@ -32,10 +32,10 @@ elevenlabs history --help
 ```
 
 
-## Nothing here fits?
+## Нічого не підходить?
 
-`--schema` and `--help` list only what exists. If the user's request cannot be done
-with any command, report the gap — it is how missing commands get built:
+`--schema` і `--help` показують лише те, що існує. Якщо запит користувача неможливо виконати
+жодною командою, повідомте про цю прогалину — саме так з'являються відсутні команди:
 
 ```bash
 elevenlabs feedback missing-capability "<what you needed>"

@@ -1,27 +1,27 @@
 ---
 name: elevenlabs-say
-description: Speak text aloud from the terminal with `elevenlabs say`. Use when asked to say/speak/read something out loud, announce or narrate a result, play text as audio, generate a quick voiceover or MP3 from text, make spoken output sound excited/whispered/emotional via v4 audio tags, or set a default voice/model/player for the CLI.
+description: Озвучування тексту вголос із термінала за допомогою `elevenlabs say`. Використовуйте, коли просять сказати, промовити чи прочитати щось уголос, оголосити або озвучити результат, відтворити текст як аудіо, швидко створити озвучення чи MP3 з тексту, зробити так, щоб мовлення звучало схвильовано, пошепки чи емоційно за допомогою аудіотегів v4, або задати типовий голос, модель чи програвач для CLI.
 ---
 
 # `elevenlabs say`
 
-Turns text into speech and plays it, without picking a voice ID, a file path
-or a player.
+Перетворює текст на мовлення й відтворює його, не вимагаючи вибирати
+ідентифікатор голосу, шлях до файлу чи програвач.
 
 ```bash
 elevenlabs say "this came from the terminal"
 ```
 
-Needs credentials: either `elevenlabs auth login` or `ELEVENLABS_API_KEY` in
-the environment.
+Потрібні облікові дані: або `elevenlabs auth login`, або `ELEVENLABS_API_KEY`
+у змінних середовища.
 
-> If `say` cannot do what the user asked, report it rather than improvising:
-> `elevenlabs feedback missing-capability "<what you needed>"`. It records the
-> gap and returns; it does not fail your task.
+> Якщо `say` не може зробити те, що просить користувач, повідомте про це, а не
+> імпровізуйте: `elevenlabs feedback missing-capability "<what you needed>"`.
+> Команда фіксує прогалину й повертає керування; вона не зриває вашого завдання.
 
-## Reading the text
+## Зчитування тексту
 
-Three equivalent sources — pick whichever suits the caller:
+Три рівноцінні джерела — оберіть те, що зручніше для того, хто викликає:
 
 ```bash
 elevenlabs say "hello there"          # positional (quote it)
@@ -30,16 +30,17 @@ echo "build finished" | elevenlabs say  # piped stdin
 elevenlabs say -                      # explicit stdin
 ```
 
-With no argument and no piped input, `say` errors instead of hanging.
+Якщо немає ні аргументу, ні даних із конвеєра, `say` завершується з помилкою,
+а не зависає.
 
-> `config` is a subcommand, so speaking that exact word needs
-> `elevenlabs say -- config`. Put any flags **before** the `--`.
+> `config` — це підкоманда, тож щоб промовити саме це слово, потрібно
+> `elevenlabs say -- config`. Усі прапорці ставте **перед** `--`.
 
-## Defaults
+## Типові значення
 
-Stored per user in `~/.elevenlabs/config.json` under a `say` key, alongside
-the `residency` setting. Nothing sensitive goes in that file — credentials
-stay in the OS keyring.
+Зберігаються для кожного користувача окремо у `~/.elevenlabs/config.json` під
+ключем `say`, поруч із налаштуванням `residency`. До цього файлу не потрапляє
+нічого конфіденційного — облікові дані залишаються у сховищі ключів ОС.
 
 ```bash
 elevenlabs say config                                 # show everything
@@ -51,24 +52,25 @@ elevenlabs say config voice                           # show just this one
 elevenlabs say config voice --unset                   # back to the built-in
 ```
 
-| Key | Config field | Built-in default |
+| Ключ | Поле конфігурації | Вбудоване типове значення |
 |---|---|---|
 | `voice` | `say.voice_id` | `JBFqnCBsd6RMkjVDRZzb` (George) |
 | `model` | `say.model_id` | `eleven_v4` |
-| `output-format` | `say.output_format` | follows the player |
-| `player` | `say.player` | first one found on `PATH` |
+| `output-format` | `say.output_format` | залежить від програвача |
+| `player` | `say.player` | перший знайдений у `PATH` |
 
-`eleven_v4` is the most expressive model, and the v4 and v3 families are the
-only ones that understand the audio tags below. `eleven_v4_turbo` is the swap
-when latency matters more than delivery — it is built for real time and still
-reads tags. `eleven_flash_v2_5` is quicker still, but reads tags as words.
+`eleven_v4` — найвиразніша модель, і лише сімейства v4 та v3 розуміють
+наведені нижче аудіотеги. `eleven_v4_turbo` — заміна на випадок, коли затримка
+важливіша за подачу: її створено для роботи в реальному часі, і вона теж
+сприймає теги. `eleven_flash_v2_5` ще швидша, але читає теги як слова.
 
-Find voice IDs with `elevenlabs voices search`, and model IDs with
-`elevenlabs models list`.
+Ідентифікатори голосів шукайте за допомогою `elevenlabs voices search`, а
+ідентифікатори моделей — за допомогою `elevenlabs models list`.
 
-## Per-run overrides
+## Перевизначення для одного запуску
 
-Every default has a flag that wins for one invocation:
+Для кожного типового значення є прапорець, який має пріоритет під час одного
+виклику:
 
 ```bash
 elevenlabs say "one off" \
@@ -78,12 +80,12 @@ elevenlabs say "one off" \
   --player mpv
 ```
 
-Precedence is always **flag > config file > built-in default**.
+Пріоритет завжди такий: **прапорець > файл конфігурації > вбудоване типове значення**.
 
-## Audio tags (v4 and v3 only)
+## Аудіотеги (лише v4 і v3)
 
-`eleven_v4` (like `eleven_v4_turbo` and `eleven_v3`) reads inline
-square-bracket directions as stage directions rather than as words, which is what makes a line land as speech instead of narration:
+`eleven_v4` (як і `eleven_v4_turbo` та `eleven_v3`) сприймає вбудовані в текст
+вказівки у квадратних дужках як режисерські ремарки, а не як слова, — саме завдяки цьому репліка звучить як живе мовлення, а не як начитка:
 
 ```bash
 elevenlabs say "[excited] The build passed!"
@@ -91,90 +93,91 @@ elevenlabs say "[whispers] don't tell anyone [laughs]"
 elevenlabs say "[sarcastic] Oh, brilliant. [sighs]"
 ```
 
-Three rough families:
+Три умовні групи:
 
-- **Delivery and emotion** — `[excited]`, `[curious]`, `[sarcastic]`,
+- **Подача та емоції** — `[excited]`, `[curious]`, `[sarcastic]`,
   `[whispers]`, `[mischievously]`, `[crying]`
-- **Non-verbal sounds** — `[laughs]`, `[laughs harder]`, `[starts laughing]`,
+- **Невербальні звуки** — `[laughs]`, `[laughs harder]`, `[starts laughing]`,
   `[sighs]`, `[exhales]`, `[snorts]`
-- **Experimental** — `[strong French accent]`, `[sings]`, and effects such as
-  `[applause]` or `[gunshot]`
+- **Експериментальні** — `[strong French accent]`, `[sings]` та ефекти на
+  кшталт `[applause]` чи `[gunshot]`
 
-Tags belong to the v4 and v3 families. On `eleven_flash_v2_5`, `eleven_turbo_v2_5` or
-`eleven_multilingual_v2` they are not directions — they get read out as
-literal text, so `[excited] hello` is spoken as the word "excited" followed by
-"hello".
+Теги належать до сімейств v4 і v3. У `eleven_flash_v2_5`, `eleven_turbo_v2_5` чи
+`eleven_multilingual_v2` вони не є вказівками — їх зачитують як звичайний
+текст, тож `[excited] hello` буде промовлено як слово «excited», а за ним
+«hello».
 
-How well a tag lands depends on the voice: one whose training fights the
-direction (`[shout]` on a soft narrator) will ignore it, tags can be combined,
-and the experimental ones are worth trying before you depend on them.
+Наскільки добре спрацює тег, залежить від голосу: голос, чиє навчання суперечить
+вказівці (`[shout]` для м’якого оповідача), її проігнорує; теги можна поєднувати,
+а експериментальні варто випробувати, перш ніж на них покладатися.
 
-More information: <https://elevenlabs.io/docs/overview/capabilities/text-to-speech/best-practices#audio-tags>
+Докладніше: <https://elevenlabs.io/docs/overview/capabilities/text-to-speech/best-practices#audio-tags>
 
-## Saving instead of playing
+## Збереження замість відтворення
 
-`--output` writes the audio and skips playback entirely, so it works on a
-machine with no audio player and no sound device:
+`--output` записує аудіо й повністю пропускає відтворення, тож працює навіть на
+машині без аудіопрогравача та звукового пристрою:
 
 ```bash
 elevenlabs say "saved to a file" --output out.mp3
 elevenlabs say "as wav" -o out.wav        # extension picks the format
 ```
 
-## Audio formats
+## Аудіоформати
 
-`output_format` is `codec_samplerate[_bitrate]`, e.g. `mp3_44100_128`,
-`wav_44100`, `pcm_24000`, `opus_48000_128`, `ulaw_8000`. Which one gets used:
+`output_format` має вигляд `codec_samplerate[_bitrate]`, наприклад `mp3_44100_128`,
+`wav_44100`, `pcm_24000`, `opus_48000_128`, `ulaw_8000`. Який із них буде використано:
 
-1. `--output-format`, if given.
-2. The `--output` filename's extension (`.mp3`, `.wav`, `.opus`/`.ogg`,
-   `.pcm`/`.raw`, `.ulaw`, `.alaw`) — a filename beats the stored default so
-   `out.wav` never ends up holding MP3 bytes.
-3. The configured `say.output_format`.
-4. The player's requirement: WAV for the WAV-only players below, else
-   `mp3_44100_128`.
+1. `--output-format`, якщо його вказано.
+2. Розширення імені файлу в `--output` (`.mp3`, `.wav`, `.opus`/`.ogg`,
+   `.pcm`/`.raw`, `.ulaw`, `.alaw`) — ім’я файлу має пріоритет над збереженим
+   типовим значенням, тож `out.wav` ніколи не міститиме байтів MP3.
+3. Налаштоване значення `say.output_format`.
+4. Вимога програвача: WAV для наведених нижче програвачів, що підтримують лише
+   WAV, інакше `mp3_44100_128`.
 
-## Players
+## Програвачі
 
-Playback shells out; nothing is linked into the binary. The first of these
-found on `PATH` wins, unless `--player` or `say config player` names one:
+Для відтворення запускається зовнішня програма; у двійковий файл нічого не
+вбудовано. Використовується перший із цих програвачів, знайдений у `PATH`, якщо
+тільки `--player` або `say config player` не вказує конкретний:
 
-| Player | Reads stdin | Accepts | Notes |
+| Програвач | Читає stdin | Приймає | Примітки |
 |---|---|---|---|
-| `ffplay` | yes | any | from ffmpeg |
-| `mpv` | yes | any | |
-| `afplay` | no | any | macOS, always present |
-| `paplay` | no | WAV only | Linux/PulseAudio |
-| `aplay` | no | WAV only | Linux/ALSA |
-| PowerShell `Media.SoundPlayer` | no | WAV only | Windows |
+| `ffplay` | так | будь-який формат | із пакета ffmpeg |
+| `mpv` | так | будь-який формат | |
+| `afplay` | ні | будь-який формат | macOS, є завжди |
+| `paplay` | ні | лише WAV | Linux/PulseAudio |
+| `aplay` | ні | лише WAV | Linux/ALSA |
+| PowerShell `Media.SoundPlayer` | ні | лише WAV | Windows |
 
-stdin-capable players are preferred because audio starts on the first chunk
-instead of after the whole download. The others get a temp file, played once
-the stream finishes.
+Програвачам, які вміють читати stdin, надається перевага, бо відтворення
+починається з першого фрагмента, а не після завантаження всього файлу. Решта
+отримують тимчасовий файл, який відтворюється після завершення потоку.
 
-`--player` also accepts a command that is not in that table (a wrapper
-script, say). Unknown players are driven conservatively: the audio is written
-to a temp file and the path is passed as the single argument.
+`--player` також приймає команду, якої немає в цій таблиці (скажімо,
+скрипт-обгортку). Невідомими програвачами керують обережно: аудіо записується в
+тимчасовий файл, а шлях до нього передається як єдиний аргумент.
 
-Arguments are always passed individually, never through a shell.
+Аргументи завжди передаються окремо, ніколи через оболонку.
 
-## Troubleshooting
+## Усунення несправностей
 
-**`No audio player found.`** — install ffmpeg or mpv, pass `--player`, or use
-`--output <path>` to skip playback.
+**`No audio player found.`** — встановіть ffmpeg або mpv, передайте `--player`
+або використайте `--output <path>`, щоб пропустити відтворення.
 
-**`Audio player 'x' was not found on PATH.`** — the configured or requested
-player is missing. `elevenlabs say config player --unset` returns to
-auto-detection.
+**`Audio player 'x' was not found on PATH.`** — налаштованого або запитаного
+програвача немає. `elevenlabs say config player --unset` повертає
+автоматичне визначення.
 
 **`The 'aplay' player only handles WAV, but the format is 'mp3_44100_128'.`**
-— either `--output-format wav_44100` or switch to a player that decodes MP3.
+— або вкажіть `--output-format wav_44100`, або перейдіть на програвач, що декодує MP3.
 
-**A 401/422 prints a JSON error envelope and exits non-zero.** The request is
-sent and its status checked *before* any player is spawned or file created,
-so a failed call never plays an error body or leaves a partial file behind.
-Exit codes follow the CLI's convention: `1` for an API error, `3` for a
-validation error.
+**У разі 401/422 виводиться JSON-обгортка з помилкою, а команда завершується з ненульовим кодом.**
+Запит надсилається, а його статус перевіряється *ще до* запуску будь-якого
+програвача чи створення файлу, тож невдалий виклик ніколи не відтворює тіло
+помилки й не залишає після себе частково записаного файлу. Коди виходу
+відповідають домовленостям CLI: `1` — помилка API, `3` — помилка валідації.
 
-**Requests go to the wrong region.** `say` honors `elevenlabs residency`,
-`ELEVENLABS_BASE_URL` and `--base-url` like every other command.
+**Запити надходять не в той регіон.** `say` враховує `elevenlabs residency`,
+`ELEVENLABS_BASE_URL` і `--base-url`, як і будь-яка інша команда.

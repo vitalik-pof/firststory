@@ -1,99 +1,99 @@
 ---
 name: "elevenlabs-voices"
-description: "Access to voices created either by you or ElevenLabs."
+description: "Доступ до голосів, створених вами або ElevenLabs."
 ---
 
 # voices
 
-> **PREREQUISITE:** Read `../elevenlabs-shared/SKILL.md` for auth, global flags, and output formatting. If missing, run `elevenlabs generate-skills` to create it.
+> **ПЕРЕДУМОВА:** Прочитайте `../elevenlabs-shared/SKILL.md` про автентифікацію, глобальні прапорці та форматування виводу. Якщо файлу немає, запустіть `elevenlabs generate-skills`, щоб створити його.
 
 ```bash
 elevenlabs voices <method> [flags]
 ```
 
-## API Resources
+## Ресурси API
 
- - `delete` — Delete voice
- - `find_similar_voices` — List similar voices
- - `get` — Get voice
- - `get_all` — List voices
- - `get_shared` — Get shared voices
- - `replicate_to_isolated_environment` — Replicate Voice To Isolated Environment
- - `search` — List voices
- - `share` — Add shared voice
- - `update` — Edit voice
+ - `delete` — Видалити голос
+ - `find_similar_voices` — Отримати список схожих голосів
+ - `get` — Отримати голос
+ - `get_all` — Отримати список голосів
+ - `get_shared` — Отримати спільні голоси
+ - `replicate_to_isolated_environment` — Реплікувати голос в ізольоване середовище
+ - `search` — Отримати список голосів
+ - `share` — Додати спільний голос
+ - `update` — Редагувати голос
 
 ### accents
 
- - `get` — Get Voice Accents
+ - `get` — Отримати акценти голосів
 
 ### collections
 
- - `add_voice` — Add Voice To Collection
- - `create` — Create Voice Collection
- - `delete` — Delete Voice Collection
- - `get` — Get Voice Collection
- - `list` — List Voice Collections
- - `remove_voice` — Remove Voice From Collection
- - `update` — Update Voice Collection
+ - `add_voice` — Додати голос до колекції
+ - `create` — Створити колекцію голосів
+ - `delete` — Видалити колекцію голосів
+ - `get` — Отримати колекцію голосів
+ - `list` — Отримати список колекцій голосів
+ - `remove_voice` — Вилучити голос із колекції
+ - `update` — Оновити колекцію голосів
 
 ### ivc
 
- - `create` — Create voice clone
+ - `create` — Створити клон голосу
 
 ### pvc
 
- - `create` — Create PVC voice
- - `train` — Run Pvc Training
- - `update` — Edit Pvc Voice
+ - `create` — Створити голос PVC
+ - `train` — Запустити навчання PVC
+ - `update` — Редагувати голос PVC
 
 #### samples
 
- - `create` — Add Samples To Pvc Voice
- - `delete` — Delete Pvc Voice Sample
- - `update` — Update Pvc Voice Sample
+ - `create` — Додати зразки до голосу PVC
+ - `delete` — Видалити зразок голосу PVC
+ - `update` — Оновити зразок голосу PVC
 
 ##### audio
 
- - `get` — Retrieve Voice Sample Audio
+ - `get` — Отримати аудіо зразка голосу
 
 ##### speakers
 
- - `get` — Retrieve Speaker Separation Status
- - `separate` — Start Speaker Separation
+ - `get` — Отримати стан розділення мовців
+ - `separate` — Запустити розділення мовців
 
 ###### audio
 
- - `get` — Retrieve Separated Speaker Audio
+ - `get` — Отримати аудіо відокремленого мовця
 
 ##### waveform
 
- - `get` — Retrieve Voice Sample Visual Waveform
+ - `get` — Отримати візуалізацію хвильової форми зразка голосу
 
 #### verification
 
- - `request` — Request Manual Verification
+ - `request` — Надіслати запит на ручну верифікацію
 
 ##### captcha
 
- - `get` — Get Pvc Voice Captcha
- - `verify` — Verify Pvc Voice Captcha
+ - `get` — Отримати капчу для голосу PVC
+ - `verify` — Перевірити капчу для голосу PVC
 
 ### samples
 
 
 #### audio
 
- - `get` — Get audio from sample
+ - `get` — Отримати аудіо зі зразка
 
 ### settings
 
- - `get` — Get voice settings
- - `get_default` — Get default voice settings
- - `update` — Edit voice settings
-## Discovering Commands
+ - `get` — Отримати налаштування голосу
+ - `get_default` — Отримати типові налаштування голосу
+ - `update` — Редагувати налаштування голосу
+## Як знайти команди
 
-**Agents: always prefer `--schema` over `--help`** — `--schema` returns JSON; `--help` returns human prose.
+**Агентам: завжди надавайте перевагу `--schema`, а не `--help`** — `--schema` повертає JSON; `--help` повертає текст для людей.
 
 ```bash
 # Machine-readable surface (use this)
@@ -105,10 +105,10 @@ elevenlabs voices --help
 ```
 
 
-## Nothing here fits?
+## Нічого не підходить?
 
-`--schema` and `--help` list only what exists. If the user's request cannot be done
-with any command, report the gap — it is how missing commands get built:
+`--schema` і `--help` показують лише те, що існує. Якщо запит користувача неможливо виконати
+жодною командою, повідомте про прогалину — саме так з’являються відсутні команди:
 
 ```bash
 elevenlabs feedback missing-capability "<what you needed>"

@@ -1,50 +1,50 @@
 ---
 name: "elevenlabs-flows"
-description: "Run multi-step generation flows across speech, image and video."
+description: "Запуск багатокрокових потоків генерації мовлення, зображень і відео."
 ---
 
 # flows
 
-> **PREREQUISITE:** Read `../elevenlabs-shared/SKILL.md` for auth, global flags, and output formatting. If missing, run `elevenlabs generate-skills` to create it.
+> **ПЕРЕДУМОВА:** Прочитайте `../elevenlabs-shared/SKILL.md`, щоб дізнатися про автентифікацію, глобальні прапорці та форматування виводу. Якщо файлу немає, виконайте `elevenlabs generate-skills`, щоб його створити.
 
 ```bash
 elevenlabs flows <method> [flags]
 ```
 
-## API Resources
+## Ресурси API
 
 
 ### image
 
- - `create` — Create Image Generation
- - `get` — Get Image Generation
- - `list` — List Image Generations
+ - `create` — Створити генерацію зображення
+ - `get` — Отримати генерацію зображення
+ - `list` — Список генерацій зображень
 
 ### templates
 
- - `get` — Get Template
- - `list` — List Templates
+ - `get` — Отримати шаблон
+ - `list` — Список шаблонів
 
 #### runs
 
- - `create` — Create Template Run
- - `get` — Get Template Run
- - `list` — List Template Runs
+ - `create` — Створити запуск шаблону
+ - `get` — Отримати запуск шаблону
+ - `list` — Список запусків шаблону
 
 ### text-to-speech
 
- - `create` — Create Speech Generation
- - `get` — Get Speech Generation
- - `list` — List Speech Generations
+ - `create` — Створити генерацію мовлення
+ - `get` — Отримати генерацію мовлення
+ - `list` — Список генерацій мовлення
 
 ### video
 
- - `create` — Create Video Generation
- - `get` — Get Video Generation
- - `list` — List Video Generations
-## Discovering Commands
+ - `create` — Створити генерацію відео
+ - `get` — Отримати генерацію відео
+ - `list` — Список генерацій відео
+## Пошук команд
 
-**Agents: always prefer `--schema` over `--help`** — `--schema` returns JSON; `--help` returns human prose.
+**Агенти: завжди надавайте перевагу `--schema` перед `--help`** — `--schema` повертає JSON; `--help` повертає текст для людей.
 
 ```bash
 # Machine-readable surface (use this)
@@ -56,10 +56,10 @@ elevenlabs flows --help
 ```
 
 
-## Nothing here fits?
+## Нічого не підходить?
 
-`--schema` and `--help` list only what exists. If the user's request cannot be done
-with any command, report the gap — it is how missing commands get built:
+`--schema` і `--help` показують лише те, що існує. Якщо запит користувача неможливо виконати
+жодною командою, повідомте про цю прогалину — саме так з'являються відсутні команди:
 
 ```bash
 elevenlabs feedback missing-capability "<what you needed>"
