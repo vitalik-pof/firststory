@@ -12,6 +12,7 @@
     "estimate": "tsx scripts/estimate.ts",
     "voice-previews": "tsx scripts/voice-previews.ts",
     "narrate": "tsx scripts/narrate.ts",
+    "voice-samples": "tsx scripts/voice-samples.ts",
     "character-sheets": "tsx scripts/character-sheets.ts",
     "upload-character-sheet": "tsx scripts/upload-character-sheet.ts",
     "frames": "tsx scripts/frames.ts",

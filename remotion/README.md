@@ -17,7 +17,7 @@ npm install
 
 Браузер. Remotion сам намагається завантажити свій Chrome. Якщо це не вдається, `render.ts` і `remotion.config.ts` беруть `/opt/pw-browsers/chromium` (Chrome for Testing 153). Інший шлях можна задати змінною `REMOTION_BROWSER_EXECUTABLE`.
 
-Переходи на шейдерах (`linearBlur`, `crosswarp`, `zoomInOut`, `dreamyZoom` та інші HTML-in-canvas) потребують WebGL2. У контейнері без GPU він працює тільки з програмним рендерером SwiftShader, тому `render.ts` запускає Chromium з `gl: "swangle"` (змінна `REMOTION_GL` це перекриває). З `angle` або `angle-egl` шейдерні переходи падають з `Failed to create WebGL2 context`.
+Шейдерні переходи на SwiftShader повільні: `linearBlur` рендериться ~24 хв, решта по 1-1,5 хв. Переходи на шейдерах (`linearBlur`, `crosswarp`, `zoomInOut`, `dreamyZoom` та інші HTML-in-canvas) потребують WebGL2. У контейнері без GPU він працює тільки з програмним рендерером SwiftShader, тому `render.ts` запускає Chromium з `gl: "swangle"` (змінна `REMOTION_GL` це перекриває). З `angle` або `angle-egl` шейдерні переходи падають з `Failed to create WebGL2 context`.
 
 ## Як рендерити
 
@@ -41,6 +41,13 @@ nohup npx tsx render.ts --crf 27 > .cache/render.log 2>&1 &
 tail -f .cache/render.log
 ```
 
+Після рендеру стискай до бюджету (14 МБ на всі файли). Рендер дає по ~1,8 МБ на файл, `compress.ts` перекодовує їх ffmpeg у два проходи приблизно до 640 кбіт/с:
+
+```bash
+npx tsx compress.ts            # --budget-mb 13.5 за замовчуванням
+npx tsx render.ts --index-only # оновити index.json із новими розмірами
+```
+
 Параметри: `--only id,id` (лише ці варіанти), `--crf N` (якість, більше означає менший файл), `--out dir` (куди класти, за замовчуванням `work/01-natalia/transitions/`).
 Після повного рендеру пишеться `work/01-natalia/transitions/index.json`: для кожного файлу назва українською, опис, тривалість, розмір.
 
@@ -51,6 +58,7 @@ tail -f .cache/render.log
 
 | Шлях | Що це |
 |---|---|
+| `compress.ts` | Стискає готові MP4 у бюджет (ffmpeg, 2 проходи). |
 | `render.ts` | Збирає бандл і рендерить кожен варіант через `@remotion/renderer`, пише `index.json`. |
 | `remotion.config.ts` | Браузер для CLI і Студії. |
 | `src/Root.tsx` | Композиція `TransitionProbe` 540x960, 30 к/с, і параметри за замовчуванням. |
