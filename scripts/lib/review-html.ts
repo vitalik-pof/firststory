@@ -191,10 +191,10 @@ export function renderReview(d: ReviewData, target: ReviewTarget, title: string,
   const frames = d.storyboard?.frames ?? [];
   const animBody = renderAnimatic({
     timings: d.timings,
-    narrationSrc: rel('narration'),
+    audioSrc: rel('film-mix') ?? rel('narration'),
     items: frames.map((f) => ({ n: f.n, fragment: f.fragment, src: rel(`frame:${f.n}`) })),
     word: 'кадр',
-    intro: "Чорновий перегляд: кадри розкадровки змінюються під озвучення. Кадр з'являється, коли голос доходить до початку його фрагмента; якщо на фрагмент кілька кадрів, його час ділиться між ними порівну. Звук стартує після натискання «Грати».",
+    intro: `Чорновий перегляд: кадри розкадровки змінюються під ${rel('film-mix') ? 'повне зведення фільму (озвучення з музикою й шумами за звуковим брифом)' : 'озвучення'}. Кадр з'являється, коли голос доходить до початку його фрагмента; якщо на фрагмент кілька кадрів, його час ділиться між ними порівну. Звук стартує після натискання «Грати».`,
   });
   section('animatic-section', 'Аніматик', animBody);
 
@@ -291,8 +291,8 @@ export interface AnimaticItem {
   src?: string;
 }
 
-export function renderAnimatic(o: { timings?: TimingsFile; narrationSrc?: string; items: AnimaticItem[]; word: string; intro: string }): string {
-  if (!o.timings || !o.narrationSrc) return `<div class="note">Аніматик недоступний: ${o.timings ? 'немає narration.mp3' : 'немає timings.json'} (крок 6).</div>`;
+export function renderAnimatic(o: { timings?: TimingsFile; audioSrc?: string; items: AnimaticItem[]; word: string; intro: string }): string {
+  if (!o.timings || !o.audioSrc) return `<div class="note">Аніматик недоступний: ${o.timings ? 'немає narration.mp3' : 'немає timings.json'} (крок 6).</div>`;
   const t = o.timings;
   const sched = buildSchedule(t.fragments, o.items.map((f) => ({ n: f.n, fragment: f.fragment })), t.duration, t.silent_fragments ?? []);
   const stageImgs = o.items
@@ -325,7 +325,7 @@ ${stageImgs}
   </div>
   <div class="seek"><input type="range" id="anim-range" min="0" max="${t.duration}" step="0.01" value="0" aria-label="Перемотування"><span class="time" id="anim-time">0:00</span></div>
   <div class="ticks" id="anim-ticks" aria-label="Фрагменти"></div>
-  <audio id="anim-audio" preload="auto" src="${esc(o.narrationSrc)}"></audio>
+  <audio id="anim-audio" preload="auto" src="${esc(o.audioSrc)}"></audio>
   ${notes.map((n) => `<div class="note">${esc(n)}</div>`).join('')}
 </div>
 <script type="application/json" id="review-data">${jsonForScript(data)}</script>`;

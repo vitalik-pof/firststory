@@ -138,6 +138,8 @@ export function gatherReview(story: string, nameOverride?: string): ReviewData {
   const previews = gatherPreviews(story, manifest, add, warnings);
   if (!add('narration', 'audio', paths.workFile(story, 'narration.mp3'), 'media/narration.mp3')) warnings.push('Немає narration.mp3 (крок 6).');
   add('music', 'audio', paths.workFile(story, 'audio', 'music.mp3'), 'media/audio/music.mp3');
+  // Повне зведення (scripts/mix-full.ts): аніматик грає його замість голого озвучення; якщо його немає, лишається озвучення.
+  add('film-mix', 'audio', paths.workFile(story, 'mix.mp3'), 'media/mix.mp3');
   for (const s of sound?.sfx ?? []) {
     const nn = String(s.n).padStart(2, '0');
     if (!add(`sfx:${s.n}`, 'audio', paths.workFile(story, 'audio', `sfx-${nn}.mp3`), `media/audio/sfx-${nn}.mp3`)) warnings.push(`Шум ${s.n}: немає файлу (крок 10).`);
