@@ -1279,6 +1279,23 @@
         "credits_before": 37970
       },
       "note": "Кадр 1 четвертої розкадровки (бронетранспортер): генерацію завершено на сервері, але запуск зупинено до збереження, бо режисер прибрав солдатів і повернув текст історії. Картинка не потрібна."
+    },
+    "frame/01": {
+      "history": [],
+      "regen_count": 0,
+      "pending": {
+        "kind": "initial",
+        "status": "created",
+        "prompt": "Close shot at waist height on a dim Soviet-era stairwell landing, 50mm lens, the camera beside the door. A woman's right hand, in a short terracotta-red cotton sleeve, pulls the handle of a brown leatherette-padded apartment door toward her to check that it is locked; the door stays shut. The key is still in the lock, a small bunch of keys with a terracotta-red tassel hanging from it. Her left hand already grips the strap of a canvas bag on her shoulder at the edge of the frame. Two zipped travel bags stand on the concrete floor by the door. Only her arm, hand and shoulder are in the frame; her face is above the frame. Daylight from a stairwell window behind the camera falls across the rows of upholstery nails on the door; the painted wall beside it is bare. The handle and the hand sit in the centre of the frame; the concrete floor fills the lower fifth.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles and buildings are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering, no logos, no brands, no watermark. Everyone in the picture is an ordinary civilian going about daily life, and every place in it stands whole and peaceful.",
+        "refs": [
+          "asset:pdOJgsg0CdK16mF72UB9"
+        ],
+        "aspect_ratio": "9:16",
+        "resolution": "1K",
+        "requested_at": "2026-11-05T06:29:36.533Z",
+        "generation_id": "HkuWv4eruP2UwOS44jLn",
+        "credits_before": 38376
+      }
     }
   },
   "assets": {
@@ -1534,7 +1551,7 @@
     "created_at": "2026-11-05T00:41:54.681Z",
     "design_credits_source": "docs"
   },
-  "updated_at": "2026-11-05T06:10:59.214Z",
+  "updated_at": "2026-11-05T06:29:36.700Z",
   "narration": {
     "model_id": "eleven_v4",
     "voice_id": "49POAIkFDXsxrtR84sdj",
