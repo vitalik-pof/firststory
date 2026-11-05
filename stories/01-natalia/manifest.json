@@ -1609,6 +1609,19 @@
         "resolution": "1K",
         "credits": 609,
         "completed_at": "2026-11-05T06:46:13.818Z"
+      },
+      "pending": {
+        "kind": "regen",
+        "status": "created",
+        "prompt": "Medium wide shot from the back rows of a small dim hall, camera at seated eye height behind the audience, 35mm lens. A woman of about 30 with chestnut-brown hair in a low ponytail, in a long oatmeal knitted cardigan over a terracotta-red blouse, sits among the audience, seen from behind, her right hand raised high above the heads in front of her and her left hand resting open on her knee. The backs of the chairs, hers among them, are plain dark wood, bare and unlit. On the low floor-level stage ahead, a woman in plain dark clothes standing beside an empty chair has turned toward her and holds out an open palm in her direction; behind, actors in plain black sit on wooden crates along the back wall. Warm stage light on the stage area; the audience is dark silhouettes. Her raised hand sits in the centre of the frame against the lit stage; the dark backs of the chairs fill the lower fifth.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles and buildings are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering, no logos, no brands, no watermark. Everyone in the picture is an ordinary civilian going about daily life, and every place in it stands whole and peaceful.",
+        "refs": [
+          "asset:pdOJgsg0CdK16mF72UB9"
+        ],
+        "aspect_ratio": "9:16",
+        "resolution": "1K",
+        "requested_at": "2026-11-05T06:59:04.263Z",
+        "generation_id": "FUKH0VDyR6RgLpVo7kw0",
+        "credits_before": 54007
       }
     },
     "frame/18": {
@@ -2015,7 +2028,7 @@
     "created_at": "2026-11-05T00:41:54.681Z",
     "design_credits_source": "docs"
   },
-  "updated_at": "2026-11-05T06:54:02.622Z",
+  "updated_at": "2026-11-05T06:59:04.581Z",
   "narration": {
     "model_id": "eleven_v4",
     "voice_id": "49POAIkFDXsxrtR84sdj",
