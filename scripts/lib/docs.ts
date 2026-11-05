@@ -585,6 +585,10 @@ export interface StyleSample {
   fragment?: number;
   heroes: HeroRef[];
   prompt: string;
+  /** Власна роздільність зразка (512, 1K, 2K, 4K) або undefined: тоді діє --resolution (1K). */
+  resolution?: string;
+  /** Власний абзац стилю замість стандартного з art/style.md. */
+  style?: string;
   line: number;
 }
 export interface SamplesDoc {
@@ -599,7 +603,11 @@ const SAMPLE_DEFS = {
   fragment: /^Для фрагмента$/i,
   heroes: /^Герої$/i,
   prompt: /^Для генератора/i,
+  resolution: /^Роздільність$/i,
+  style: /^Стиль для генератора/i,
 };
+
+export const RESOLUTIONS = ['512', '1K', '2K', '4K'];
 
 export function parseSamples(): SamplesDoc {
   const doc = readDoc(paths.samplesDoc(), 'art-director');
@@ -626,7 +634,19 @@ export function parseSamples(): SamplesDoc {
     const fragment = /^(немає|нема|—|–|-|none)/i.test(frv) ? undefined : parseInteger(doc, frv, fr.line, `${where}, Для фрагмента`);
     const hf = fields.heroes;
     if (!hf) fail(doc, s.line, `У розділі «${where}» немає поля «Герої:» (якщо героїв немає, напишіть «немає»).`);
+    let resolution: string | undefined;
+    if (fields.resolution) {
+      const rv = firstLine(fields.resolution.value).replace(/\.$/, '').toUpperCase();
+      if (!RESOLUTIONS.includes(rv)) fail(doc, fields.resolution.line, `${where}: «Роздільність:» має бути ${RESOLUTIONS.join(', ')}, а є «${firstLine(fields.resolution.value)}».`);
+      resolution = rv;
+    }
+    let style: string | undefined;
+    if (fields.style) {
+      style = collapseWs(fields.style.value);
+      if (!style || isPlaceholder(style)) fail(doc, fields.style.line, `${where}: «Стиль для генератора (англійською):» порожній або лишився шаблоном (приберіть поле, щоб діяв стандартний стиль).`);
+    }
     samples.push({
+      resolution, style,
       n,
       shows: requireField(doc, fields, 'shows', 'Що показує', where, s.line).value,
       format: fmt,

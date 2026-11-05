@@ -9,7 +9,7 @@
 
 import { readFileSync } from 'node:fs';
 import { commonFlags, parseCli, runMain } from './lib/cli';
-import { aspectFromFormat, checkSamplesAgainstScript, parseSamples, parseScript, parseStyle } from './lib/docs';
+import { RESOLUTIONS, aspectFromFormat, checkSamplesAgainstScript, parseSamples, parseScript, parseStyle } from './lib/docs';
 import { ElevenLabsClient } from './lib/elevenlabs';
 import { CharacterCache, composePrompt, resolveHeroList } from './lib/frame-refs';
 import { MAX_REFS, expectedImageCredits, getRecord, planJob, runImageJob, type ImageJob } from './lib/image-job';
@@ -23,8 +23,8 @@ const HELP = `Етап 1а: зразки стилю.
 Прапорці:
   --story <id>           історія (обов'язково)
   --run / --limit-credits N   справжній запуск і загальний ліміт кредитів (без --run сухий прогін)
-  --resolution r         512 | 1K (за замовчуванням) | 2K | 4K
-  --image-credits N      очікувана ціна одної картинки цієї роздільності (потрібна, поки в маніфесті немає виміряної)
+  --resolution r         512 | 1K (за замовчуванням) | 2K | 4K; зразок із полем «Роздільність:» використовує свою
+  --image-credits N      очікувана ціна одної картинки (потрібна для кожної роздільності, поки в маніфесті немає виміряної для неї; виміряна ціна 512 і 1K ведеться окремо)
   --only 1,3             лише ці зразки
   --regen N              перегенерувати зразок N (не більше --max-regens разів, за замовчуванням 1)
   --prompt "текст" | --prompt-file f   новий «Для генератора» для --regen (стиль додається скриптом)
@@ -44,7 +44,8 @@ async function main(): Promise<void> {
   const sd = parseSamples();
   checkSamplesAgainstScript(sd, parseScript(story));
   const style = parseStyle().generatorText;
-  const resolution = values.resolution ?? '1K';
+  const defaultResolution = values.resolution ?? '1K';
+  if (!RESOLUTIONS.includes(defaultResolution)) throw new Error(`--resolution має бути ${RESOLUTIONS.join(', ')}.`);
   const maxRegens = Number(values['max-regens'] ?? 1);
   const imageFlag = values['image-credits'] !== undefined ? Number(values['image-credits']) : undefined;
   const nums = sd.samples.map((s) => s.n);
@@ -59,7 +60,7 @@ async function main(): Promise<void> {
   const cache = new CharacterCache();
   const client = new ElevenLabsClient();
   const ctx = new RunContext(client, story, 'samples', flags.run, flags.limit);
-  log(`Зразків у art/samples.md: ${sd.samples.length}. Роздільність ${resolution}, модель gemini-3.1-flash-image. Ціна картинки: ${fmt(estimateImage(imageFlag))}.`);
+  log(`Зразків у art/samples.md: ${sd.samples.length}. Роздільність за замовчуванням ${defaultResolution} (зразок може мати власну в полі «Роздільність:»), модель gemini-3.1-flash-image. Ціна картинки без вимірювання: ${fmt(estimateImage(imageFlag))}.`);
 
   const jobs: Array<{ n: number; job: ImageJob; missing: string[] }> = [];
   for (const s of sd.samples) {
@@ -67,13 +68,14 @@ async function main(): Promise<void> {
     const r = resolveHeroList(s.heroes, `Зразок ${s.n}, «Герої:»`, cache);
     if (r.refs.length + r.missing.length > MAX_REFS) throw new Error(`Зразок ${s.n}: референсів більше ${MAX_REFS}.`);
     const scene = regenN === s.n && newPrompt ? newPrompt : s.prompt;
+    const resolution = s.resolution ?? defaultResolution;
     const job: ImageJob = {
-      key: sampleKey(s.n), label: `зразок ${s.n}`, prompt: composePrompt(scene, style), refs: r.refs, aspect: aspectFromFormat(s.format), resolution,
+      key: sampleKey(s.n), label: `зразок ${s.n}`, prompt: composePrompt(scene, s.style ?? style), refs: r.refs, aspect: aspectFromFormat(s.format), resolution,
       outFile: sampleFile(story, s.n), regen: regenN === s.n, maxRegens, ignorePending: Boolean(values['ignore-pending']), upgrade: Boolean(values.upgrade), expectedCredits: 0,
     };
     jobs.push({ n: s.n, job, missing: r.missing });
     const plan = planJob(story, job);
-    log(`  зразок ${String(s.n).padStart(2)} ${s.format.padEnd(5)} фр. ${s.fragment ?? '—'}: ${plan.action.padEnd(8)} refs=${r.refs.length + r.missing.length}${r.missing.length ? ` (бракує: ${r.missing.join('; ')})` : ''} ${plan.action === 'skip' ? '' : '— ' + plan.why}`);
+    log(`  зразок ${String(s.n).padStart(2)} ${s.format.padEnd(5)} ${resolution.padEnd(3)}${s.style ? ' свій стиль' : ''} фр. ${s.fragment ?? '—'}: ${plan.action.padEnd(8)} refs=${r.refs.length + r.missing.length}${r.missing.length ? ` (бракує: ${r.missing.join('; ')})` : ''} ${plan.action === 'skip' ? '' : '— ' + plan.why}`);
   }
   if (!flags.run) {
     const blocked = jobs.filter((j) => j.missing.length && planJob(story, j.job).action !== 'skip');
@@ -81,7 +83,7 @@ async function main(): Promise<void> {
     if (jobs[0]) log(`Приклад запиту (зразок ${jobs[0].n}):\n---\n${jobs[0].job.prompt}\n---`);
     return;
   }
-  expectedImageCredits(story, imageFlag, resolution); // ранній збій, якщо ціни немає
+  for (const res of new Set(jobs.map((j) => j.job.resolution))) expectedImageCredits(story, imageFlag, res); // ранній збій, якщо ціни для якоїсь роздільності немає
   await ctx.start();
   const refused: string[] = [];
   try {
@@ -90,7 +92,7 @@ async function main(): Promise<void> {
       const r = resolveHeroList(s.heroes, `Зразок ${n}, «Герої:»`, cache);
       if (planJob(story, job).action !== 'skip' && r.missing.length) throw new Error(`Зразок ${n}: не можна генерувати, бракує референсів: ${r.missing.join('; ')}.`);
       job.refs = r.refs;
-      job.expectedCredits = expectedImageCredits(story, imageFlag, resolution);
+      job.expectedCredits = expectedImageCredits(story, imageFlag, job.resolution);
       if ((await runImageJob(ctx, job)) === 'refused') refused.push(job.label);
       const rec = getRecord(story, job.key);
       if (rec) log(`    зразок ${n}: перегенерацій ${rec.regen_count} з ${maxRegens}`);
