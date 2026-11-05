@@ -202,6 +202,9 @@ export interface FilmParams {
   musicDb: (t: number) => number;
   /** Наприкінці фільму музика гасне до нуля за стільки секунд (амплітуда лінійно). */
   endFade: number;
+  /** Вхід музики з нуля на початку фільму (проти клацання), секунд; 0 або без поля: без входу. */
+  musicFadeIn?: number;
+  /** Шумів може не бути: порожній список. */
   sfx: FilmSfx[];
 }
 
@@ -248,7 +251,8 @@ function gainTable(dbFn: (t: number) => number, seconds: number, rmsRatio: numbe
  * Повне зведення: голос на 0 дБ, музика й шуми під ним за кривими (дБ відносно голосу). Рівні
  * музики й шумів міряються так само, як у зразку: RMS музики (від початку, на довжину фільму) і RMS
  * кожного шуму (весь файл) зводяться до RMS голосу на ділянках мовлення, далі додається крива.
- * Довжина результату дорівнює довжині голосу.
+ * Довжина результату дорівнює довжині голосу (voice уже містить тишу затримки на початку, якщо озвучення
+ * стоїть у фільмі не з нуля: див. padVoice).
  */
 export function mixFilm(voice: Float32Array, music: Float32Array, p: FilmParams): FilmResult {
   const frames = voice.length / CH;
@@ -265,6 +269,8 @@ export function mixFilm(voice: Float32Array, music: Float32Array, p: FilmParams)
     let g = mg.at(f);
     const left = filmSec - f / SR;
     if (p.endFade > 0 && left < p.endFade) g *= Math.max(0, left / p.endFade);
+    const tIn = f / SR;
+    if (p.musicFadeIn && tIn < p.musicFadeIn) g *= tIn / p.musicFadeIn;
     for (let c = 0; c < CH; c++) out[f * CH + c] = out[f * CH + c]! + music[f * CH + c]! * g;
   }
   const sfxRmsDb: Array<{ label: string; rmsDb: number }> = [];
@@ -294,4 +300,13 @@ export function mixFilm(voice: Float32Array, music: Float32Array, p: FilmParams)
     for (let i = 0; i < out.length; i++) out[i] = out[i]! * peakScale;
   }
   return { pcm: out, voiceRmsDb: toDb(voiceRms), musicRmsDb: toDb(musicRms), sfxRmsDb, peakScale, musicShorterBy: Math.max(0, filmSec - musicFrames / SR) };
+}
+
+/** Ставить озвучення у фільм із затримкою: перед ним додається тиша delay секунд. */
+export function padVoice(voice: Float32Array, delay: number): Float32Array {
+  const lead = Math.round(delay * SR) * CH;
+  if (lead <= 0) return voice;
+  const out = new Float32Array(lead + voice.length);
+  out.set(voice, lead);
+  return out;
 }

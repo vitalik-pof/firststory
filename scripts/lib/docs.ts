@@ -548,10 +548,11 @@ export function parseSound(story: string): SoundDoc {
   const instF = requireField(doc, mf, 'instrumental', 'Інструментальна', '## Музика', ms.line);
   if (!/^(так|ні|yes|no)\.?$/i.test(instF.value.trim())) fail(doc, instF.line, `«Інструментальна:» має бути «так» або «ні», а є «${instF.value}».`);
 
-  const sfxSection = requireSection(doc, sections, /^Шуми$/i, '## Шуми');
+  // Розділ «Шуми» необов'язковий: фільм може бути без шумів (немає розділу, або він порожній чи «немає»).
+  const sfxSection = sections.find((x) => /^Шуми$/i.test(x.title));
   const sfx: SfxSpec[] = [];
   let prev = 0;
-  for (const s of splitByHeading(sfxSection.body, 3).sections) {
+  for (const s of sfxSection ? splitByHeading(sfxSection.body, 3).sections : []) {
     const m = /^Шум\s+(\d+)$/i.exec(s.title);
     if (!m) fail(doc, s.line, `Заголовок шуму має бути «### Шум N», а є «${s.title}».`);
     const n = Number(m[1]);
