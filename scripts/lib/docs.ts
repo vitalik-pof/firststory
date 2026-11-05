@@ -94,7 +94,7 @@ export function parseVoices(): VoicesDoc {
   const { sections } = splitByHeading(doc.lines, 2);
   const voices: VoiceEntry[] = [];
   for (const s of sections) {
-    if (/^Питання\b/i.test(s.title)) continue;
+    if (/^Питання(\s|$)/i.test(s.title)) continue;
     const { fields } = readFieldsStrict(doc, s.body, VOICE_DEFS);
     const where = `## ${s.title}`;
     const vid = fields.voiceId;

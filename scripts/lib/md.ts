@@ -110,7 +110,7 @@ export type FieldDefs = Record<string, RegExp>;
 function parseFieldLine(text: string): { label: string; rest: string } | null {
   const cleaned = text.replace(/^\s*[-*]\s+/, '').replace(/\*\*/g, '');
   const m = /^\s*([^:：]{1,90}?)\s*[:：]\s*(.*)$/.exec(cleaned);
-  return m ? { label: m[1]!.replace(/[_*`]/g, '').trim(), rest: m[2]! } : null;
+  return m ? { label: m[1]!.replace(/[*`]/g, '').trim(), rest: m[2]! } : null;
 }
 
 /**
@@ -190,7 +190,7 @@ export function parseSeconds(doc: Doc, value: string, line: number, what: string
 /** Розділ «Питання»: непорожній текст без заглушок «немає». */
 export function extractQuestions(doc: Doc): string {
   const { sections } = splitByHeading(doc.lines, 2);
-  const s = sections.find((x) => /^Питання\b/i.test(x.title));
+  const s = sections.find((x) => /^Питання(\s|$)/i.test(x.title));
   if (!s) return '';
   const text = blockText(s.body);
   if (!text || /^(—|-|–|немає\.?|нема\.?|питань немає\.?|none\.?)$/i.test(text.trim())) return '';

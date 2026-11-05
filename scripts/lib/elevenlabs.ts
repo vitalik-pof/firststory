@@ -218,7 +218,7 @@ export class ElevenLabsClient {
   constructor(opts: ClientOptions = {}) {
     this.apiKey = opts.apiKey ?? process.env.ELEVENLABS_API_KEY;
     registerSecret(this.apiKey);
-    this.baseUrl = (opts.baseUrl ?? DEFAULT_BASE_URL).replace(/\/$/, '');
+    this.baseUrl = (opts.baseUrl ?? process.env.ELEVENLABS_BASE_URL ?? DEFAULT_BASE_URL).replace(/\/$/, '');
     this.fetchImpl = opts.fetchImpl ?? fetch;
     this.sleep = opts.sleep ?? ((ms) => new Promise((r) => setTimeout(r, ms)));
     this.random = opts.random ?? Math.random;

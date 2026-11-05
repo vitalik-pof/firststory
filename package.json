@@ -6,7 +6,7 @@
   "engines": { "node": ">=22" },
   "scripts": {
     "typecheck": "tsc --noEmit -p scripts",
-    "test": "node --import tsx --test \"scripts/test/*.test.ts\"",
+    "test": "node --import tsx --test --test-reporter=spec \"scripts/test/*.test.ts\"",
     "estimate": "tsx scripts/estimate.ts",
     "voice-previews": "tsx scripts/voice-previews.ts",
     "narrate": "tsx scripts/narrate.ts",
