@@ -106,6 +106,11 @@ export function parseFilmMix(mixText: string, sfx: SfxSpec[], ctx: MixContext): 
   const shortRise = new RegExp(`підйом іде до\\s+${DB}\\s*дБ\\s+за\\s+${N}\\s*с`, 'i').exec(prose);
   const bumpRise = shortRise ? num(shortRise[2]!) : fade;
 
+  // Рівні шумів: або списком («шум 3: -22, у паузі 5.36–6.32 с -14;»), або реченням («Шум 2 -20 дБ …»).
+  const levels = new Map<number, number>();
+  const afterLast = new Map<number, { db: number; from?: number }>();
+  const bumps = new Map<number, Array<{ from: number; to: number; db: number }>>();
+
   // ---- відхилення від загального правила (пункти списку)
   const musicPatches: EnvPatch[] = [];
   let endFade = 0.75;
@@ -114,7 +119,21 @@ export function parseFilmMix(mixText: string, sfx: SfxSpec[], ctx: MixContext): 
   let endFrom = ctx.lastWordEnd;
   let bumpFall = fade;
   for (const b of bullets) {
-    if (/^\d/.test(b) && /кадр\s+\d+,\s*шум\s+\d+/i.test(b)) continue; // пункти шумів розбираються нижче
+    if (/^\d/.test(b) && /^[\d.,]+\s*[–-]\s*[\d.,]+\s*с,\s*кадр\s+\d+/i.test(b)) continue; // пункти шумів за часом розбираються нижче
+    // шум N: -X[, у паузі a–b с -Y][, після останнього слова[ (з T с)] -Z];
+    const lv = new RegExp(`^шум\\s+(\\d+):\\s*${DB}(?:\\s*дБ)?((?:\\s*,[^;]*?\\s${DB}(?:\\s*дБ)?)*)\\s*[;.]?$`, 'i').exec(b);
+    if (lv) {
+      const n = Number(lv[1]);
+      levels.set(n, num(lv[2]!));
+      for (const part of (lv[3] ?? '').split(',').map((x) => x.trim()).filter(Boolean)) {
+        const pb = new RegExp(`^у паузі\\s+${RANGE}\\s*с\\s+${DB}`, 'i').exec(part);
+        const al = new RegExp(`^після останнього слова(?:\\s*\\(з\\s+${N}\\s*с\\))?\\s+${DB}`, 'i').exec(part);
+        if (pb) bumps.set(n, [...(bumps.get(n) ?? []), { from: num(pb[1]!), to: num(pb[2]!), db: num(pb[3]!) }]);
+        else if (al) afterLast.set(n, { db: num(al[2]!), from: al[1] ? num(al[1]) : undefined });
+        else warnings.push(`Рівні шуму ${n}: частину «${part}» не розібрано, пропущено.`);
+      }
+      continue;
+    }
     // Фрагмент N до слова «…» (a–b с): музика -X дБ під голосом. У паузі c–d с піднімається до -Y дБ, далі до -Z дБ за T с.
     let m = new RegExp(`^Фрагмент\\s+\\d+\\s+до слова[^(]*\\(${RANGE}\\s*с\\):\\s*музика\\s+${DB}\\s*дБ.*?У паузі\\s+${RANGE}\\s*с\\s+піднімається до\\s+${DB}\\s*дБ,\\s*далі до\\s+${DB}\\s*дБ за\\s+${N}\\s*с`, 's').exec(b);
     if (m) {
@@ -192,16 +211,13 @@ export function parseFilmMix(mixText: string, sfx: SfxSpec[], ctx: MixContext): 
   }
 
   // ---- рівні шумів з речень (не з пунктів)
-  const levels = new Map<number, number>();
-  const afterLast = new Map<number, number>();
   for (const m of prose.matchAll(new RegExp(`[Шш]ум\\s+(\\d+)\\s+${DB}\\s*дБ(?:[^;.]*?після останнього слова\\s+${DB}\\s*дБ)?`, 'g'))) {
     levels.set(Number(m[1]), num(m[2]!));
-    if (m[3]) afterLast.set(Number(m[1]), num(m[3]));
+    if (m[3]) afterLast.set(Number(m[1]), { db: num(m[3]) });
   }
   for (const m of prose.matchAll(new RegExp(`[Шш]уми\\s+([\\d–,\\s і-]+?)\\s+${DB}\\s*дБ`, 'g'))) {
     for (const n of parseNumberList(m[1]!)) levels.set(n, num(m[2]!));
   }
-  const bumps = new Map<number, Array<{ from: number; to: number; db: number }>>();
   for (const m of prose.matchAll(new RegExp(`у паузі\\s+${RANGE}\\s*с\\s+шум\\s+(\\d+)\\s+до\\s+${DB}\\s*дБ`, 'gi'))) {
     const n = Number(m[3]);
     bumps.set(n, [...(bumps.get(n) ?? []), { from: num(m[1]!), to: num(m[2]!), db: num(m[4]!) }]);
@@ -210,7 +226,7 @@ export function parseFilmMix(mixText: string, sfx: SfxSpec[], ctx: MixContext): 
   // ---- шуми за часом (пункти «0.3–3.3 с, кадр 1, шум 2. …»)
   const timed = new Map<number, { from: number; to: number; frame: number; rest: string }>();
   for (const b of bullets) {
-    const m = new RegExp(`^${RANGE}\\s*с,\\s*кадр\\s+(\\d+),\\s*шум\\s+(\\d+)\\.\\s*(.*)$`, 's').exec(b);
+    const m = new RegExp(`^${RANGE}\\s*с,\\s*кадр\\s+(\\d+)(?:\\s*\\([^)]*\\))?,\\s*шум\\s+(\\d+)\\.\\s*(.*)$`, 's').exec(b);
     if (m) timed.set(Number(m[4]), { from: num(m[1]!), to: num(m[2]!), frame: Number(m[3]), rest: m[5]! });
   }
 
@@ -228,7 +244,7 @@ export function parseFilmMix(mixText: string, sfx: SfxSpec[], ctx: MixContext): 
     }
     const rest = t?.rest ?? '';
     const fin = new RegExp(`[Вв]ступає за\\s+${N}\\s*с`).exec(rest);
-    const outLenEnd = new RegExp(`гасне за\\s+${N}\\s*с до\\s+${N}\\s*с`, 'i').exec(rest);
+    const outLenEnd = new RegExp(`гасне за\\s+${N}\\s*с(?:\\s+з\\s+${N})?\\s+до\\s+${N}\\s*с`, 'i').exec(rest);
     const outEnd = new RegExp(`гасне до\\s+${N}\\s*с`, 'i').exec(rest);
     const outLast = /гасне за останню секунду/i.test(rest);
     const levelDoc = levels.get(s.n);
@@ -241,7 +257,7 @@ export function parseFilmMix(mixText: string, sfx: SfxSpec[], ctx: MixContext): 
       levelFromDoc: levelDoc !== undefined,
       fadeIn: fin ? num(fin[1]!) : DEFAULT_SFX_FADE,
       fadeOutLen: fadeToFilmEnd ? endFade : outLenEnd ? num(outLenEnd[1]!) : outLast ? 1 : DEFAULT_SFX_FADE,
-      fadeOutEnd: fadeToFilmEnd ? ctx.filmEnd : outLenEnd ? num(outLenEnd[2]!) : outEnd ? num(outEnd[1]!) : undefined,
+      fadeOutEnd: fadeToFilmEnd ? ctx.filmEnd : outLenEnd ? num(outLenEnd[3]!) : outEnd ? num(outEnd[1]!) : undefined,
       fadeToFilmEnd,
       muffled: /приглушено/i.test(rest),
       patches: [],
@@ -259,7 +275,7 @@ export function parseFilmMix(mixText: string, sfx: SfxSpec[], ctx: MixContext): 
     }
     const after = afterLast.get(s.n);
     if (after !== undefined) {
-      plan.patches.push({ label: `після останнього слова до ${after} дБ`, points: [{ t: endFrom, db: 'base' }, { t: ctx.filmEnd, db: after }] });
+      plan.patches.push({ label: `після останнього слова до ${after.db} дБ`, points: [{ t: after.from ?? endFrom, db: 'base' }, { t: ctx.filmEnd, db: after.db }] });
     }
     plans.push(plan);
   }
@@ -268,7 +284,7 @@ export function parseFilmMix(mixText: string, sfx: SfxSpec[], ctx: MixContext): 
     warnings.push(`Шуми ${noLevel.join(', ')}: у «Зведенні» немає рівня в дБ, а поле «Гучність під голосом» словесне; взято ${DEFAULT_QUIET_SFX_DB} дБ.`);
   }
   notes.push(
-    'Шуми: початок файлу ставиться на секунду з поля «Де»; «Вступає за T с» це тривалість наростання з цієї секунди; «гасне до T с» означає, що згасання закінчується на T с, але не пізніше за кінець самого файлу (файл шуму не подовжується), тривалість згасання 1 с, якщо не вказана; рівень шуму береться з речення про рівні в «Зведенні», а не зі слова «тихо» в полі «Гучність під голосом».',
+    'Шуми: початок файлу ставиться на секунду з поля «Де»; «Вступає за T с» це тривалість наростання з цієї секунди; «гасне до T с» означає, що згасання закінчується на T с, але не пізніше за кінець самого файлу (файл шуму не подовжується), тривалість згасання 1 с, якщо не вказана; рівень шуму береться зі списку «шум N: -X» (або з речення про рівні) у «Зведенні», а не зі слова «тихо» в полі «Гучність під голосом».',
   );
   return { underDb, pauseDb, fade, pauseMin, musicPatches, endFade, sfx: plans, notes, warnings };
 }
