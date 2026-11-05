@@ -76,7 +76,14 @@ async function main(): Promise<void> {
   if (values['dry-run']) return void log(`\nСУХИЙ ПРОГІН: файл ${paths.rel(out)} не створено.`);
 
   log('\nДекодую озвучення й музику…');
-  const voice = padVoice(decodeStereo(narration), spec.voiceDelay);
+  let voice = padVoice(decodeStereo(narration), spec.voiceDelay);
+  // MP3 озвучення може бути на кілька десятків мс коротшим за timings.json: фільм має довжину за документом.
+  const wantFrames = Math.round(filmEnd * SR);
+  if (voice.length / CH < wantFrames) {
+    const grown = new Float32Array(wantFrames * CH);
+    grown.set(voice);
+    voice = grown;
+  }
   const music = decodeStereo(musicFile);
   const filmSec = voice.length / CH / SR;
   const intervals = speechIntervals(words, spec.pauseMin);

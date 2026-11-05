@@ -13,6 +13,8 @@ import { type Manifest, readManifest } from './manifest';
 import { type Role, extractQuestions, readDoc, splitByHeading, blockText } from './md';
 import { paths } from './paths';
 import type { TimingsFile } from './timings';
+import { type TitleCard, parseTitleCard } from './title-card';
+import { parseVoiceDelay } from './mix-spec';
 
 export interface MediaItem {
   /** Ключ для зв'язку з HTML: frame:3, sheet:natalia/2014, preview:1, narration, music, sfx:2. */
@@ -42,6 +44,8 @@ export interface ReviewData {
   voiceMd?: VoiceDoc;
   sound?: SoundDoc;
   timings?: TimingsFile;
+  /** Початковий титр з edit.md; немає, якщо файла чи титра нема. */
+  titleCard?: TitleCard;
   manifest: Manifest;
   roleDecisions: RoleDecision[];
   directorQuestions: DirectorQuestions;
@@ -90,6 +94,11 @@ export function gatherReview(story: string, nameOverride?: string): ReviewData {
   const timings = existsSync(timingsFile) ? (JSON.parse(readFileSync(timingsFile, 'utf8')) as TimingsFile) : undefined;
   if (!timings) warnings.push('Немає timings.json: аніматик недоступний (крок 6).');
   const manifest = readManifest(story);
+  const title = parseTitleCard(story);
+  for (const w of title.warnings) warnings.push(w);
+  const delay = sound ? parseVoiceDelay(sound.mix) : undefined;
+  if (title.card && !delay) warnings.push('Є початковий титр (edit.md), але в «Зведенні» sound.md немає «Озвучення стоїть у фільмі з N с»: титр в аніматику не показано.');
+  if (title.card && delay && Math.abs(title.card.duration - delay) > 0.05) warnings.push(`Початковий титр триває ${title.card.duration} с, а озвучення в sound.md стоїть із ${delay} с: аніматик береться за sound.md.`);
 
   // Питання ролей: розділи «Питання» з усіх файлів.
   const questions: QuestionBlock[] = [];
@@ -144,11 +153,12 @@ export function gatherReview(story: string, nameOverride?: string): ReviewData {
     const nn = String(s.n).padStart(2, '0');
     if (!add(`sfx:${s.n}`, 'audio', paths.workFile(story, 'audio', `sfx-${nn}.mp3`), `media/audio/sfx-${nn}.mp3`)) warnings.push(`Шум ${s.n}: немає файлу (крок 10).`);
   }
+  if (title.card && !media.some((m) => m.key === 'film-mix')) warnings.push('Є початковий титр (edit.md), але немає зведення work/<id>/mix.mp3 (scripts/mix-full.ts): титр в аніматику не показано, плеєр грає чисте озвучення.');
   if (sound && !media.some((m) => m.key === 'music')) warnings.push('Немає музики (крок 10).');
 
   const usedBy = new Map<string, string[]>();
   for (const f of storyboard?.frames ?? []) for (const id of f.photoRefs) usedBy.set(id, [...(usedBy.get(id) ?? []), `кадр ${f.n}`]);
   const photoRefs = gatherPhotoRefs(usedBy, media, warnings);
   const name = nameOverride ?? storyAuthorName(story) ?? story;
-  return { story, name, script, style, characters, storyboard, voice, voiceMd, sound, timings, manifest, roleDecisions, directorQuestions, photoRefs, producerDecisions, questions, warnings, media, previews };
+  return { story, name, script, style, characters, storyboard, voice, voiceMd, sound, timings, titleCard: title.card, manifest, roleDecisions, directorQuestions, photoRefs, producerDecisions, questions, warnings, media, previews };
 }
