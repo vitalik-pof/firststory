@@ -6,3 +6,6 @@ out/
 *.wav
 *.mp4
 *.mov
+
+# Огляд для GitHub Pages: у docs/ потрапляють тільки стиснуті JPEG і MP3
+!docs/**/*.mp3
