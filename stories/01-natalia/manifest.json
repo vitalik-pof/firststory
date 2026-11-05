@@ -1,7 +1,7 @@
 {
   "story": "01-natalia",
   "credits": {
-    "total_spent": 27280,
+    "total_spent": 28498,
     "runs": [
       {
         "script": "voice-previews",
@@ -125,6 +125,14 @@
         "credits_before": 11667,
         "credits_after": 26892,
         "spent_run": 15225
+      },
+      {
+        "script": "frames",
+        "started_at": "2026-11-05T04:19:33.597Z",
+        "finished_at": "2026-11-05T04:21:55.120Z",
+        "credits_before": 26892,
+        "credits_after": 28110,
+        "spent_run": 1218
       }
     ]
   },
@@ -923,6 +931,44 @@
         "credits": 609,
         "completed_at": "2026-11-05T04:19:07.552Z"
       }
+    },
+    "frame/06": {
+      "history": [],
+      "regen_count": 0,
+      "current": {
+        "generation_id": "kcg4o1RA74nE8AHa2S6c",
+        "model_id": "gemini-3.1-flash-image",
+        "width": 768,
+        "height": 1376,
+        "prompt": "The same children's room as in the reference painting, painted from exactly the same viewpoint with the same composition, but months later in cold blue-grey dusk, and nobody has come back. The two school backpacks with white hair bows still stand untouched on the bed under a thin layer of dust, and the two small school dresses still hang on the wardrobe door. All warm colour has drained away: even the wooden furniture, the parquet floor and the wallpaper look cold, grey-blue and colourless, and only a thin line of pale light falls across the floor. Through the tulle of the window, far away on the horizon, dark conical coal-mine spoil heaps, a slow column of grey smoke and a faint dull orange glow low in the sky. No people. Quiet loss: the room they never returned to.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles, buildings, signs and lettering are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details; lettering may be soft and only half legible. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles, signs and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering except the Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. Signs of war appear only where and as the description places them, as the main subject or in the background, with no people holding weapons, no blood, no wounded, no explosions or fireballs. No letter Z.",
+        "refs": [
+          "generation:uGCo8AItuQiQ8DmI4L37"
+        ],
+        "file": "work/01-natalia/frames/frame-06.png",
+        "aspect_ratio": "9:16",
+        "resolution": "1K",
+        "credits": 609,
+        "completed_at": "2026-11-05T04:21:01.331Z"
+      }
+    },
+    "frame/10": {
+      "history": [],
+      "regen_count": 0,
+      "current": {
+        "generation_id": "C0tr6LVti2iRZxGM3EO7",
+        "model_id": "gemini-3.1-flash-image",
+        "width": 768,
+        "height": 1376,
+        "prompt": "Close view of a key turned in the lock of a new apartment door in another city: the family's new home. The keys are the main subject in the centre of the frame: the key hangs on the same steel ring with the small terracotta-red tassel keychain as in the reference painting of a hand locking a door, and on that ring still hang the other, older keys from the old home. The door is padded with dark burgundy leatherette and rows of decorative upholstery nails. A small worn rug at the threshold, a painted stairwell wall, soft warm evening light from the stairwell window. No people. A new home found, and the old keys still kept.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles, buildings, signs and lettering are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details; lettering may be soft and only half legible. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles, signs and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering except the Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. Signs of war appear only where and as the description places them, as the main subject or in the background, with no people holding weapons, no blood, no wounded, no explosions or fireballs. No letter Z.",
+        "refs": [
+          "generation:qL5d2v1414b20GsHUAyp"
+        ],
+        "file": "work/01-natalia/frames/frame-10.png",
+        "aspect_ratio": "9:16",
+        "resolution": "1K",
+        "credits": 609,
+        "completed_at": "2026-11-05T04:21:42.518Z"
+      }
     }
   },
   "assets": {
@@ -1178,7 +1224,7 @@
     "created_at": "2026-11-05T00:41:54.681Z",
     "design_credits_source": "docs"
   },
-  "updated_at": "2026-11-05T04:19:20.017Z",
+  "updated_at": "2026-11-05T04:21:55.120Z",
   "narration": {
     "model_id": "eleven_v4",
     "voice_id": "49POAIkFDXsxrtR84sdj",
@@ -1291,7 +1337,7 @@
     "gemini-3.1-flash-image@1K": {
       "max": 1218,
       "last": 609,
-      "count": 39
+      "count": 41
     },
     "gemini-3.1-flash-image@512": {
       "max": 409,
