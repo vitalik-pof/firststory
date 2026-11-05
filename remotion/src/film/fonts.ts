@@ -11,8 +11,14 @@ export const useFonts = (url: string, checks: Array<{ spec: string; text: string
     const link = document.createElement("link");
     link.rel = "stylesheet";
     link.href = url;
+    // @font-face з'являються лише після завантаження таблиці стилів, тому document.fonts.load чекає на неї.
+    const sheet = new Promise<void>((res, rej) => {
+      link.onload = () => res();
+      link.onerror = () => rej(new Error(`Не вдалося завантажити таблицю стилів шрифту: ${url}`));
+    });
     document.head.appendChild(link);
-    Promise.all(checks.map((c) => document.fonts.load(c.spec, c.text)))
+    sheet
+      .then(() => Promise.all(checks.map((c) => document.fonts.load(c.spec, c.text))))
       .then(async (loaded) => {
         const empty = checks.filter((_, i) => loaded[i]?.length === 0);
         if (empty.length) throw new Error(`Шрифт не завантажився: ${empty.map((c) => c.spec).join("; ")} (${url})`);

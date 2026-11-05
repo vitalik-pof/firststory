@@ -87,6 +87,27 @@ export function parseVoiceDelay(text: string): number | undefined {
   return m ? num(m[1]!) : undefined;
 }
 
+/**
+ * Явна довжина фільму з пункту «Зведення»: «- Довжина фільму 134.0 с. …» (число з крапкою чи комою, потім «с»,
+ * решта пункту довільна). Без такого пункту undefined: довжина тоді кінець озвучення плюс затримка.
+ * Два таких пункти з різними числами не розбираються однозначно, тож це помилка.
+ */
+export function parseFilmLength(text: string): number | undefined {
+  const re = new RegExp(`^Довжина\\s+фільму\\s+${N}\\s*с(?![\\p{L}\\d])`, 'iu');
+  const found = text
+    .replace(/−/g, '-')
+    .split('\n')
+    .map((l) => l.trim())
+    .filter((l) => l.startsWith('- '))
+    .map((l) => re.exec(l.slice(2).trim()))
+    .filter((m): m is RegExpExecArray => !!m)
+    .map((m) => num(m[1]!));
+  if (!found.length) return undefined;
+  if (new Set(found).size > 1) throw new Error(`У розділі «Зведення» кілька пунктів «Довжина фільму» з різними числами (${found.join(', ')} с): лишіть один. Роль: composer.`);
+  if (!(found[0]! > 0)) throw new Error('Пункт «Довжина фільму» має додатне число секунд. Роль: composer.');
+  return found[0];
+}
+
 export const DEFAULT_SFX_FADE = 1;
 /** Рівень шуму, якщо числа немає, а в полі «Гучність під голосом» стоїть слово «тихо». */
 export const DEFAULT_QUIET_SFX_DB = -22;
@@ -152,6 +173,11 @@ export function parseFilmMix(mixText: string, sfx: SfxSpec[], ctx: MixContext): 
   let musicFadeIn = 0;
   const music: MusicSource = { offset: 0, speed: 1, boost: [] };
   for (const b of bullets) {
+    // Довжину фільму читає parseFilmLength (її бере mix-full.ts як ctx.filmEnd); тут лише відмічаємо, що пункт прочитано.
+    if (/^Довжина\s+фільму\s+\d/i.test(b)) {
+      notes.push(`Довжина фільму ${fmtSec(ctx.filmEnd)} с (явний пункт): зведення триває рівно стільки, голос після кінця озвучення тиша.`);
+      continue;
+    }
     // Параметри читання файлу музики (див. розділ «Зведення»: «Файл музики і як його читати»).
     const off = new RegExp(`^Музика береться з\\s+${N}\\s*с файлу`, 'i').exec(b);
     if (off) {

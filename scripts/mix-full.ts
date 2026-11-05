@@ -16,7 +16,7 @@ import { parseSound } from './lib/docs';
 import { UsageError, runMain } from './lib/cli';
 import { log } from './lib/log';
 import { CH, SR, baseMusicEnvelope, dbAt, decodeMusic, decodeStereo, encodeStereoMp3, lowpass, mixFilm, padVoice, rmsOver, speechIntervals, withPatches, type FilmSfx } from './lib/mix';
-import { parseFilmMix, parseVoiceDelay } from './lib/mix-spec';
+import { parseFilmLength, parseFilmMix, parseVoiceDelay } from './lib/mix-spec';
 import { assertStoryExists, paths } from './lib/paths';
 import type { TimingsFile } from './lib/timings';
 
@@ -51,11 +51,17 @@ async function main(): Promise<void> {
   const delay = parseVoiceDelay(sound.mix) ?? 0;
   const words = timings.fragments.flatMap((f) => f.words).map((w) => ({ start: w.start + delay, end: w.end + delay }));
   const lastWordEnd = Math.max(...words.map((w) => w.end));
-  const filmEnd = timings.duration + delay;
+  // Довжина фільму: явна («- Довжина фільму 134.0 с.» у «Зведенні»), інакше кінець озвучення плюс затримка.
+  const voiceEnd = timings.duration + delay;
+  const explicitEnd = parseFilmLength(sound.mix);
+  if (explicitEnd !== undefined && explicitEnd < voiceEnd - 0.001) {
+    throw new Error(`«Довжина фільму» ${explicitEnd} с у sound.md коротша за озвучення (${fmt(voiceEnd)} с): голос обрізався б. Роль: composer.`);
+  }
+  const filmEnd = explicitEnd ?? voiceEnd;
   const spec = parseFilmMix(sound.mix, sound.sfx, { filmEnd, lastWordEnd });
-  log(`Зведення фільму ${story}: тривалість ${fmt(filmEnd)} с (озвучення ${fmt(timings.duration)} с, стоїть із ${fmt(spec.voiceDelay)} с), мовлення ${fmt(words[0]!.start)}–${fmt(lastWordEnd)} с.`);
+  log(`Зведення фільму ${story}: тривалість ${fmt(filmEnd)} с${explicitEnd !== undefined ? ' (явна «Довжина фільму»)' : ''} (озвучення ${fmt(timings.duration)} с, стоїть із ${fmt(spec.voiceDelay)} с), мовлення ${fmt(words[0]!.start)}–${fmt(lastWordEnd)} с.`);
   if (sound.totalSeconds !== undefined && Math.abs(sound.totalSeconds - filmEnd) > 0.05) {
-    log(`УВАГА: «Загальна тривалість» у sound.md ${sound.totalSeconds} с, а затримка плюс озвучення за timings.json дають ${fmt(filmEnd)} с.`);
+    log(`УВАГА: «Загальна тривалість» у sound.md ${sound.totalSeconds} с, а довжина зведення ${fmt(filmEnd)} с.`);
   }
   if (spec.music.offset > 0 || spec.music.speed !== 1 || spec.music.boost.length) log(`Читання музики: з ${fmt(spec.music.offset)} с файлу, швидкість ${spec.music.speed}, підсилення початку ${spec.music.boost.length ? spec.music.boost.map((p) => `${p.t} с ${p.db > 0 ? '+' : ''}${p.db}`).join(', ') : 'немає'}.`);
   log(`Музика: під голосом ${spec.underDb} дБ, у паузах довших за ${spec.pauseMin} с ${spec.pauseDb} дБ, зміна гучності ${spec.fade} с; ділянок-винятків ${spec.musicPatches.length}, на кінці згасання ${spec.endFade} с.`);
@@ -84,6 +90,9 @@ async function main(): Promise<void> {
     const grown = new Float32Array(wantFrames * CH);
     grown.set(voice);
     voice = grown;
+  } else if (explicitEnd !== undefined && voice.length / CH > wantFrames) {
+    // Явна довжина фільму: надлишок декодованого MP3 (десятки мс) відрізається, щоб зведення було рівно такої довжини.
+    voice = voice.slice(0, wantFrames * CH);
   }
   // Музика: з секунди offset файлу, зі швидкістю speed; RMS по ділянці оригінального файлу (якщо вона задана), інакше по прочитаному.
   const ms = spec.music;
