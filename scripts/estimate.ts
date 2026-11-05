@@ -51,8 +51,9 @@ async function main(): Promise<void> {
   });
   await attempt('Крок 6', () => {
     const vm = parseVoiceMd(story);
-    const { text } = buildSpeechText(vm.fragments, '\n\n');
-    rows.push({ step: '6', what: 'Озвучення eleven_v4 (один виклик)', units: `${text.length} знаків із тегами, ${vm.fragments.length} фрагментів`, price: estimateTts(text.length, rate) });
+    const groups = vm.fragments.length < 2 ? [vm.fragments] : [[vm.fragments[0]!], vm.fragments.slice(1)];
+    const chars = groups.reduce((n, g) => n + buildSpeechText(g, '\n\n').text.length, 0);
+    rows.push({ step: '6', what: `Озвучення eleven_v4 (${groups.length} виклики: перший фрагмент окремо, решта разом; без першого фрагмента дешевше)`, units: `${chars} знаків із тегами, ${vm.fragments.length} фрагментів`, price: estimateTts(chars, rate) });
   });
   let sheets = 0;
   await attempt('Крок 7', () => {

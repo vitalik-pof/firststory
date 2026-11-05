@@ -27,7 +27,10 @@ export interface Schedule {
 
 const r3 = (x: number): number => Math.round(x * 1000) / 1000;
 
-export function buildSchedule(fragments: FragmentWindowInput[], frames: FrameInput[], duration: number): Schedule {
+export function buildSchedule(fragments: FragmentWindowInput[], frames: FrameInput[], duration: number, silent: number[] = []): Schedule {
+  // Фрагменти без голосу (титр) у вікна не потрапляють: їхні кадри в аніматику не показуємо,
+  // тривалість титру визначає монтажер.
+  frames = frames.filter((f) => !silent.includes(f.fragment));
   for (let i = 1; i < fragments.length; i++) {
     if (fragments[i]!.start < fragments[i - 1]!.start) throw new Error(`timings.json: фрагмент ${fragments[i]!.n} починається раніше за попередній.`);
   }

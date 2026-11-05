@@ -106,10 +106,12 @@ async function main(): Promise<void> {
   }
   const expected = expectedImageCredits(story, imageCreditsFlag);
   await ctx.start();
+  const refused: string[] = [];
   try {
     for (const { job } of jobs) {
       job.expectedCredits = expected;
       const out = await runImageJob(ctx, job);
+      if (out === 'refused') refused.push(job.label);
       if (out === 'generated' || out === 'regenerated') {
         const rec = getRecord(story, job.key)!;
         log(`    лічильник перегенерацій: ${rec.regen_count}. Після затвердження художником: upload-character-sheet.ts.`);
@@ -118,6 +120,7 @@ async function main(): Promise<void> {
   } finally {
     await ctx.finish();
   }
+  if (refused.length) throw new Error(`Відмовлено (ліміт перегенерацій чи попередній обрив): ${refused.join(', ')}. Див. повідомлення вище.`);
 }
 
 function splitRef(s: string): [string, string | undefined] {

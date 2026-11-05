@@ -115,19 +115,23 @@ export function gatherReview(story: string, nameOverride?: string): ReviewData {
     media.push({ key, kind, src, rel });
     return true;
   };
+  const missingFrames: number[] = [];
   if (storyboard) {
     for (const f of storyboard.frames) {
       const nn = String(f.n).padStart(2, '0');
-      if (!add(`frame:${f.n}`, 'image', frameFile(story, f.n), `media/frames/frame-${nn}.jpg`)) warnings.push(`Кадр ${f.n}: немає файлу ${paths.rel(frameFile(story, f.n))}.`);
+      if (!add(`frame:${f.n}`, 'image', frameFile(story, f.n), `media/frames/frame-${nn}.jpg`)) missingFrames.push(f.n);
     }
+    if (missingFrames.length) warnings.push(`Немає файлів кадрів ${missingFrames.join(', ')} (крок 8): на їхньому місці заглушки.`);
   }
+  const missingSheets: string[] = [];
   for (const c of characters) {
     for (const s of c.sheets) {
       if (!add(`sheet:${c.id}/${s.slug}`, 'image', sheetFile(c.id, s.slug), `media/sheets/${s.slug === 'main' ? c.id : `${c.id}--${s.slug}`}.jpg`)) {
-        warnings.push(`Аркуш ${c.id}/${s.label}: немає файлу ${paths.rel(sheetFile(c.id, s.slug))}.`);
+        missingSheets.push(`${c.id}${s.label === 'main' ? '' : ` «${s.label}»`}`);
       }
     }
   }
+  if (missingSheets.length) warnings.push(`Немає аркушів героїв: ${missingSheets.join(', ')} (крок 7).`);
   const previews: ReviewData['previews'] = [];
   const pdir = paths.workFile(story, 'voice-previews');
   const picked = (manifest.voice?.picked_preview as number | undefined) ?? 1;

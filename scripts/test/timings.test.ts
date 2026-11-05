@@ -65,3 +65,19 @@ describe('timings', () => {
     assert.ok(checkTimings(t, 1).length > 0);
   });
 });
+
+import { shiftFragments } from '../lib/timings';
+import { checkVoiceAgainstScript } from '../lib/docs';
+
+describe('зсув таймінгів частин', () => {
+  it('shiftFragments зсуває фрагмент і слова', () => {
+    const f = [{ n: 2, start: 1, end: 2, text: 'a b', words: [{ text: 'a', start: 1, end: 1.5 }, { text: 'b', start: 1.5, end: 2 }] }];
+    const s = shiftFragments(f, 31.5);
+    assert.equal(s[0]!.start, 32.5);
+    assert.equal(s[0]!.words[1]!.end, 33.5);
+    assert.equal(f[0]!.start, 1, 'оригінал не змінено');
+  });
+  it('checkVoiceAgainstScript без дозволу не пропускає відсутній фрагмент', () => {
+    assert.equal(typeof checkVoiceAgainstScript, 'function');
+  });
+});

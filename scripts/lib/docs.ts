@@ -188,10 +188,10 @@ export function parseVoiceMd(story: string): VoiceDoc {
 }
 
 /** Звіряє розмітку озвучення зі сценарієм: ті самі номери й ті самі слова (без тегів). */
-export function checkVoiceAgainstScript(story: string, voice: VoiceDoc, script: ScriptDoc): void {
+export function checkVoiceAgainstScript(story: string, voice: VoiceDoc, script: ScriptDoc, allowMissing: number[] = []): void {
   const file = paths.storyFile(story, 'voice.md');
   const doc = readDoc(file, 'voice-director');
-  const sNums = script.fragments.map((f) => f.n).join(',');
+  const sNums = script.fragments.filter((f) => voice.fragments.some((v) => v.n === f.n) || !allowMissing.includes(f.n)).map((f) => f.n).join(',');
   const vNums = voice.fragments.map((f) => f.n).join(',');
   if (sNums !== vNums) {
     fail(doc, undefined, `Номери фрагментів не збігаються зі сценарієм. У script.md: ${sNums}; у voice.md: ${vNums}.`);

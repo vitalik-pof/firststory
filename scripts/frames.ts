@@ -94,6 +94,7 @@ async function main(): Promise<void> {
   }
   const expected = expectedImageCredits(story, imageCreditsFlag);
   await ctx.start();
+  const refused: string[] = [];
   try {
     for (const { n, job } of jobs) {
       // Референси могли з'явитися під час запуску (кадр-залежність): перераховуємо.
@@ -103,13 +104,14 @@ async function main(): Promise<void> {
       }
       job.refs = r.refs;
       job.expectedCredits = expected;
-      await runImageJob(ctx, job);
+      if ((await runImageJob(ctx, job)) === 'refused') refused.push(job.label);
       const rec = getRecord(story, job.key);
       if (rec) log(`    кадр ${n}: перегенерацій ${rec.regen_count} з ${maxRegens}`);
     }
   } finally {
     await ctx.finish();
   }
+  if (refused.length) throw new Error(`Відмовлено (ліміт перегенерацій чи попередній обрив): ${refused.join(', ')}. Див. повідомлення вище.`);
 }
 
 runMain(main);

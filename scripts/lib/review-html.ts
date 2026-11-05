@@ -94,7 +94,7 @@ export function renderReview(d: ReviewData, target: ReviewTarget, title: string,
   const frames = d.storyboard?.frames ?? [];
   let animBody: string;
   if (d.timings && rel('narration')) {
-    const sched = buildSchedule(d.timings.fragments, frames.map((f) => ({ n: f.n, fragment: f.fragment })), d.timings.duration);
+    const sched = buildSchedule(d.timings.fragments, frames.map((f) => ({ n: f.n, fragment: f.fragment })), d.timings.duration, d.timings.silent_fragments ?? []);
     const stageImgs = frames
       .map((f) => {
         const src = rel(`frame:${f.n}`);
@@ -109,6 +109,8 @@ export function renderReview(d: ReviewData, target: ReviewTarget, title: string,
       fragments: d.timings.fragments.map((f) => ({ n: f.n, start: f.start, end: f.end, words: f.words.map((w) => [w.text, w.start, w.end]) })),
     };
     const notes: string[] = [];
+    const silent = d.timings.silent_fragments ?? [];
+    if (silent.length) notes.push(`Фрагмент ${silent.join(', ')} без голосу (титр): його кадрів в аніматику немає, тривалість титру визначить монтажер.`);
     if (sched.fragmentsWithoutFrames.length) notes.push(`Фрагменти без кадру: ${sched.fragmentsWithoutFrames.join(', ')}. На них лишається попередній кадр.`);
     animBody = `
 <p class="lead">Чорновий перегляд: кадри розкадровки змінюються під озвучення. Кадр з'являється, коли голос доходить до початку його фрагмента; якщо на фрагмент кілька кадрів, його час ділиться між ними порівну. Звук стартує після натискання «Грати».</p>
@@ -141,7 +143,7 @@ ${stageImgs}
     'script',
     'Сценарій',
     `<p class="lead">${esc(d.script.title)}. Мова озвучення: ${esc(d.script.language)}.</p>
-${d.script.fragments.map((f) => `<div class="card"><span class="badge">Фрагмент ${f.n}</span>${timingOf.get(f.n) ? `<span class="badge">${fmtTime(timingOf.get(f.n)!.start)}</span>` : ''}<p style="margin-top:8px">${esc(f.text)}</p></div>`).join('\n')}
+${d.script.fragments.map((f) => `<div class="card"><span class="badge">Фрагмент ${f.n}</span>${timingOf.get(f.n) ? `<span class="badge">${fmtTime(timingOf.get(f.n)!.start)}</span>` : (d.timings?.silent_fragments ?? []).includes(f.n) ? '<span class="badge">без голосу (титр)</span>' : ''}<p style="margin-top:8px">${esc(f.text)}</p></div>`).join('\n')}
 ${d.script.changes ? `<h3>Що змінено порівняно з оригіналом і чому</h3>${mdLite(d.script.changes)}` : ''}`,
   );
 
@@ -234,7 +236,7 @@ ${d.script.changes ? `<h3>Що змінено порівняно з оригін
   if (target === 'artifact') {
     return `<meta name="claude:viewport-fit-sides" content="cover">\n<title>${esc(title)}</title>\n<style>${CSS}</style>\n${content}\n`;
   }
-  return `<!doctype html>\n<html lang="uk">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n<title>${esc(title)}</title>\n<style>${CSS}</style>\n</head>\n<body>\n${content}\n</body>\n</html>\n`;
+  return `<!doctype html>\n<html lang="uk">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n<link rel="icon" href="data:,">\n<title>${esc(title)}</title>\n<style>${CSS}</style>\n</head>\n<body>\n${content}\n</body>\n</html>\n`;
 }
 
 function renderCredits(d: ReviewData): string {

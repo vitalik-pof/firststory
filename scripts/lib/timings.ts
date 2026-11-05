@@ -34,16 +34,32 @@ export interface FragmentTiming {
   words: WordTiming[];
 }
 
+export interface TimingsPart {
+  /** Частини озвучення (окремі виклики API) у порядку звучання. */
+  index: number;
+  /** Номери фрагментів, озвучених цією частиною. */
+  fragments: number[];
+  /** Зсув частини в narration.mp3, секунди. */
+  offset: number;
+  /** Тривалість аудіо частини без паузи після неї. */
+  duration: number;
+}
+
 export interface TimingsFile {
   version: 1;
   story: string;
   model_id: string;
   voice_id: string;
   audio_file: string;
-  /** Тривалість аудіофайла, секунди. */
+  /** Тривалість narration.mp3, секунди. */
   duration: number;
   /** Чим розділені фрагменти в надісланому тексті. */
   fragment_joiner: string;
+  /** Пауза між частинами при склейці, секунди (якщо частин більше однієї). */
+  part_gap: number;
+  parts: TimingsPart[];
+  /** Фрагменти сценарію без голосу (наприклад, титр): у fragments їх немає. */
+  silent_fragments: number[];
   fragments: FragmentTiming[];
 }
 
@@ -174,6 +190,16 @@ export function buildFragmentTimings(
       words,
     };
   });
+}
+
+export function shiftFragments(fragments: FragmentTiming[], offset: number): FragmentTiming[] {
+  if (!offset) return fragments;
+  return fragments.map((f) => ({
+    ...f,
+    start: r3(f.start + offset),
+    end: r3(f.end + offset),
+    words: f.words.map((w) => ({ ...w, start: r3(w.start + offset), end: r3(w.end + offset) })),
+  }));
 }
 
 /** Перевірки здорового глузду. Повертає список попереджень (порожній, якщо все гаразд). */

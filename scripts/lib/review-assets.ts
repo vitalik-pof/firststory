@@ -129,6 +129,7 @@ export const CLIENT_JS = `
   var stageImgs = {};
   Array.prototype.forEach.call(root.querySelectorAll('[data-frame]'), function (n) { stageImgs[n.getAttribute('data-frame')] = n; });
   var duration = D.duration || 0;
+  var EPS = 0.03; // currentTime у браузері округлюється: seek до 32.471 дає 32.470999
   var curSlot = -1, curFrag = -1, curWord = -1, raf = 0;
 
   function fmt(t) { t = Math.max(0, t); var m = Math.floor(t / 60), s = Math.floor(t % 60); return m + ':' + (s < 10 ? '0' : '') + s; }
@@ -136,12 +137,12 @@ export const CLIENT_JS = `
   function slotIndex(t) {
     var S = D.slots; if (!S.length) return -1;
     var lo = 0, hi = S.length - 1, ans = 0;
-    while (lo <= hi) { var mid = (lo + hi) >> 1; if (S[mid].start <= t) { ans = mid; lo = mid + 1; } else hi = mid - 1; }
+    while (lo <= hi) { var mid = (lo + hi) >> 1; if (S[mid].start <= t + EPS) { ans = mid; lo = mid + 1; } else hi = mid - 1; }
     return ans;
   }
   function fragIndex(t) {
     var F = D.fragments, ans = 0;
-    for (var i = 0; i < F.length; i++) { if (F[i].start <= t) ans = i; else break; }
+    for (var i = 0; i < F.length; i++) { if (F[i].start <= t + EPS) ans = i; else break; }
     return ans;
   }
   function renderFrag(i) {
