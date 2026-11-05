@@ -95,7 +95,7 @@ const main = async (): Promise<void> => {
   const common = {
     browserExecutable,
     chromeMode: "chrome-for-testing" as const,
-    chromiumOptions: { gl: "angle" as const, disableWebSecurity: false },
+    chromiumOptions: { gl: (process.env.REMOTION_GL ?? "swangle") as "swangle", disableWebSecurity: false },
     logLevel: "warn" as const,
   };
   const list = VARIANTS.filter((v) => !only || only.includes(v.id));

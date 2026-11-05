@@ -1,4 +1,4 @@
-import { noise3D } from "@remotion/noise";
+import { noise3D } from "./noise";
 import type { WatercolorOptions } from "../types";
 import { buildField, GRID_H, GRID_W, type Field } from "./field";
 
