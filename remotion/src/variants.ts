@@ -1,6 +1,12 @@
 import type { TransitionDescriptor, WatercolorOptions } from "./types";
 
 export type Variant = {
+  // Сповільнення переходу відносно базових 1,2 с. Відсутнє означає звичайну швидкість.
+  slow?: number;
+  // Скільки кадрів фільму брати (з початку). Відсутнє означає всі чотири.
+  frameCount?: number;
+  // Група для index.json і бюджету.
+  group?: "base" | "slow";
   id: string; // коротке англійське ім'я файлу без розширення
   title: string; // назва українською для режисера
   description: string; // одне речення: як виглядає перехід
@@ -95,3 +101,31 @@ export const VARIANTS: Variant[] = [
     }),
   },
 ];
+
+// Повільні версії трьох відібраних режисером переходів: 1,2 с -> 6 с (x5) і 12 с (x10).
+// Беремо тільки склейки 1->2 і 2->3 (три кадри), щоб шість роликів вкластися в бюджет без втрати якості.
+const SLOW_BASE: Array<{ id: string; short: string; title: string }> = [
+  { id: "wc-blots", short: "кілька плям", title: "Акварель: кілька плям" },
+  { id: "wc-wet", short: "намокання паперу", title: "Акварель: намокання паперу" },
+  { id: "wc-wet-edge", short: "намокання з пігментним краєм", title: "Акварель: намокання з теплим пігментним краєм" },
+];
+
+export const SLOW_FACTORS = [5, 10] as const;
+
+export const SLOW_VARIANTS: Variant[] = SLOW_BASE.flatMap((b) => {
+  const base = VARIANTS.find((v) => v.id === b.id);
+  if (!base || base.transition.kind !== "watercolor") throw new Error(`Нема базового варіанта ${b.id}`);
+  const baseOptions = base.transition.options;
+  return SLOW_FACTORS.map((k): Variant => ({
+    id: `${b.id}-x${k}`,
+    slow: k,
+    frameCount: 3,
+    group: "slow",
+    title: `${b.title}, у ${k} разів повільніше`,
+    description: `Той самий перехід «${b.short}», розтягнутий з 1,2 до ${(1.2 * k).toFixed(0)} с, край повільно дихає (показано дві склейки).`,
+    // Дихання краю в реальному часі, щоб довгий перехід не виглядав мертвим.
+    transition: { kind: "watercolor", options: { ...baseOptions, breath: k >= 10 ? 0.014 : 0.012 } },
+  }));
+});
+
+export const ALL_VARIANTS: Variant[] = [...VARIANTS.map((v) => ({ ...v, group: "base" as const })), ...SLOW_VARIANTS];

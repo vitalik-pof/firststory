@@ -6,7 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { defaultProbeProps } from "./src/Root";
 import type { ProbeProps } from "./src/types";
-import { VARIANTS, type Variant } from "./src/variants";
+import { ALL_VARIANTS, type Variant } from "./src/variants";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(here, "..");
@@ -39,46 +39,59 @@ const stageFrames = (): void => {
   }
 };
 
-const propsFor = (v: Variant): ProbeProps => ({ ...defaultProbeProps, transition: v.transition });
+const propsFor = (v: Variant): ProbeProps => ({
+  ...defaultProbeProps,
+  frames: defaultProbeProps.frames.slice(0, v.frameCount ?? defaultProbeProps.frames.length),
+  transitionFrames: defaultProbeProps.transitionFrames * (v.slow ?? 1),
+  transition: v.transition,
+});
 
 const log = (m: string): void => console.log(`[${new Date().toISOString().slice(11, 19)}] ${m}`);
 
+const durationFrames = (v: Variant): number => {
+  const p = propsFor(v);
+  return p.frames.length * p.holdFrames + (p.frames.length - 1) * p.transitionFrames; // чистий показ кадрів плюс переходи
+};
+
+// У бюджет входять три базові акварельні проби й шість повільних. Решта старих файлів лишається в теці, але не рахується.
+const BUDGET_IDS = new Set(["wc-blots", "wc-wet", "wc-wet-edge", ...ALL_VARIANTS.filter((v) => v.slow).map((v) => v.id)]);
+
 const writeIndex = (): void => {
-  const items = VARIANTS.flatMap((v) => {
+  const items = ALL_VARIANTS.flatMap((v) => {
     const file = path.join(outDir, `${v.id}.mp4`);
     if (!existsSync(file)) return [];
+    const size = statSync(file).size;
     return [
       {
         file: `${v.id}.mp4`,
         title: v.title,
         description: v.description,
-        durationSeconds: Number((durationFrames() / defaultProbeProps.fps).toFixed(2)),
-        sizeBytes: statSync(file).size,
-        sizeMB: Number((statSync(file).size / 1e6).toFixed(2)),
+        durationSeconds: Number((durationFrames(v) / defaultProbeProps.fps).toFixed(2)),
+        transitionSeconds: Number(((defaultProbeProps.transitionFrames * (v.slow ?? 1)) / defaultProbeProps.fps).toFixed(2)),
+        sizeBytes: size,
+        sizeMB: Number((size / 1e6).toFixed(2)),
         kind: v.transition.kind === "watercolor" ? "custom-watercolor" : "remotion-builtin",
+        inBudgetSet: BUDGET_IDS.has(v.id),
       },
     ];
   });
-  const total = items.reduce((s, i) => s + i.sizeBytes, 0);
+  const sum = (xs: typeof items) => xs.reduce((s, i) => s + i.sizeBytes, 0);
+  const budgetSet = items.filter((i) => i.inBudgetSet);
   writeFileSync(
     path.join(outDir, "index.json"),
     JSON.stringify(
       {
-        note: "Проби переходів між кадрами 01-04, 540x960, 30 к/с, без звуку. Кожен кадр ~2,5 с, три переходи по 1,2 с.",
-        totalSizeMB: Number((total / 1e6).toFixed(2)),
+        note: "Проби переходів між кадрами 01-04, 540x960, 30 к/с, без звуку. Кадр ~2,5 с, перехід 1,2 с (повільні версії x5 і x10 мають 6 і 12 с). Повільні показують лише склейки 1-2 і 2-3.",
+        totalSizeMB: Number((sum(items) / 1e6).toFixed(2)),
+        budgetSetSizeMB: Number((sum(budgetSet) / 1e6).toFixed(2)),
+        budgetSetNote: "У бюджет 15 МБ входять wc-blots, wc-wet, wc-wet-edge і шість файлів -x5/-x10; решта старих файлів не рахується.",
         variants: items,
       },
       null,
       2,
     ) + "\n",
   );
-  log(`index.json: ${items.length} файлів, ${(total / 1e6).toFixed(2)} МБ`);
-};
-
-const durationFrames = (): number => {
-  const n = defaultProbeProps.frames.length;
-  const { holdFrames: h, transitionFrames: t } = defaultProbeProps;
-  return n * h + (n - 1) * t; // чистий показ кожного кадру плюс переходи
+  log(`index.json: ${items.length} файлів, усього ${(sum(items) / 1e6).toFixed(2)} МБ, у бюджеті ${(sum(budgetSet) / 1e6).toFixed(2)} МБ`);
 };
 
 const main = async (): Promise<void> => {
@@ -102,7 +115,7 @@ const main = async (): Promise<void> => {
     chromiumOptions: { gl: (process.env.REMOTION_GL ?? "swangle") as "swangle", disableWebSecurity: false },
     logLevel: "warn" as const,
   };
-  const list = VARIANTS.filter((v) => !only || only.includes(v.id));
+  const list = ALL_VARIANTS.filter((v) => !only || only.includes(v.id));
   for (const v of list) {
     const inputProps = propsFor(v);
     const composition = await selectComposition({ serveUrl, id: "TransitionProbe", inputProps, ...common });
