@@ -137,7 +137,7 @@ async function main(): Promise<void> {
       rows.push({ step: '10', what: 'Музика', units: `${s.music.seconds} с`, price: estimateMusic(s.music.seconds) });
       const secs = s.sfx.reduce((n, x) => n + x.seconds, 0);
       const sfxCredits = s.sfx.reduce((n, x) => n + (estimateSfx(x.seconds).credits ?? 0), 0);
-      rows.push({ step: '10', what: `Шуми (${s.sfx.length} шт.)`, units: `${secs} с`, price: { credits: sfxCredits, source: 'з документації ElevenLabs', note: '40 кредитів/с' } });
+      if (s.sfx.length) rows.push({ step: '10', what: `Шуми (${s.sfx.length} шт.)`, units: `${secs} с`, price: { credits: sfxCredits, source: 'з документації ElevenLabs', note: '40 кредитів/с' } });
     });
   }
 

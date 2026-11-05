@@ -1,5 +1,8 @@
 // Розбір розділу «Зведення» і шумів з sound.md для повного зведення фільму (scripts/mix-full.ts).
 //
+// Усі секунди в документі рахуються від початку фільму (від музики й титра); озвучення стоїть
+// у фільмі із затримкою «Озвучення стоїть у фільмі з N с» (voiceDelay). Шумів може не бути зовсім.
+//
 // Розділ «Зведення» написаний прозою, тому числа дістаються регулярними виразами за стабільними
 // зворотами композитора («Музика під голосом -20 дБ», «Відхилення від загального правила:» з
 // пунктами, «Шуми за часом» з пунктами «0.3–3.3 с, кадр 1, шум 2.», речення з рівнями шумів).
@@ -41,6 +44,10 @@ export interface SfxPlan {
 }
 
 export interface FilmMixSpec {
+  /** Секунда фільму, з якої стоїть озвучення (з документа; 0, якщо фраза відсутня). */
+  voiceDelay: number;
+  /** Вхід музики з нуля на початку фільму (проти клацання), секунд; 0, якщо не вказано. */
+  musicFadeIn: number;
   underDb: number;
   pauseDb: number;
   fade: number;
@@ -54,8 +61,16 @@ export interface FilmMixSpec {
 }
 
 export interface MixContext {
+  /** Кінець фільму, секунди фільму. */
   filmEnd: number;
+  /** Кінець останнього слова, секунди фільму (вже зі затримкою озвучення). */
   lastWordEnd: number;
+}
+
+/** Затримка озвучення з тексту «Зведення»: «Озвучення стоїть у фільмі з 3.0 с». */
+export function parseVoiceDelay(text: string): number | undefined {
+  const m = new RegExp(`Озвучення\\s+стоїть\\s+у\\s+фільмі\\s+з\\s+${N}\\s*с`, 'i').exec(text);
+  return m ? num(m[1]!) : undefined;
 }
 
 export const DEFAULT_SFX_FADE = 1;
@@ -65,6 +80,7 @@ export const DEFAULT_QUIET_SFX_DB = -22;
 const N = '(\\d+(?:[.,]\\d+)?)';
 const DB = '(-\\d+(?:[.,]\\d+)?)';
 const num = (s: string): number => Number(s.replace(',', '.'));
+const fmtSec = (x: number): string => String(Math.round(x * 1000) / 1000);
 const RANGE = `${N}\\s*[–-]\\s*${N}`;
 
 /** Усі шуми, назви яких у списку «шуми 3–6, 10 і 11», як номери. */
@@ -98,6 +114,7 @@ export function parseFilmMix(mixText: string, sfx: SfxSpec[], ctx: MixContext): 
   const rise = new RegExp(`піднімається до\\s+${DB}\\s*дБ\\s+за\\s+${N}\\s*с`, 'i').exec(prose);
   const pauseMinM = new RegExp(`довших за\\s+${N}\\s*с`, 'i').exec(prose);
   if (!under || !rise) throw new Error('У розділі «Зведення» файлу sound.md не знайдено загального правила («Музика під голосом -N дБ … піднімається до -M дБ за T с»). Роль: composer.');
+  const voiceDelay = parseVoiceDelay(prose) ?? 0;
   const underDb = num(under[1]!);
   const pauseDb = num(rise[1]!);
   const fade = num(rise[2]!);
@@ -118,6 +135,7 @@ export function parseFilmMix(mixText: string, sfx: SfxSpec[], ctx: MixContext): 
   let endMusicDb: number | undefined;
   let endFrom = ctx.lastWordEnd;
   let bumpFall = fade;
+  let musicFadeIn = 0;
   for (const b of bullets) {
     if (/^\d/.test(b) && /^[\d.,]+\s*[–-]\s*[\d.,]+\s*с,\s*кадр\s+\d+/i.test(b)) continue; // пункти шумів за часом розбираються нижче
     // шум N: -X[, у паузі a–b с -Y][, після останнього слова[ (з T с)] -Z];
@@ -134,22 +152,37 @@ export function parseFilmMix(mixText: string, sfx: SfxSpec[], ctx: MixContext): 
       }
       continue;
     }
-    // Фрагмент N до слова «…» (a–b с): музика -X дБ під голосом. У паузі c–d с піднімається до -Y дБ, далі до -Z дБ за T с.
-    let m = new RegExp(`^Фрагмент\\s+\\d+\\s+до слова[^(]*\\(${RANGE}\\s*с\\):\\s*музика\\s+${DB}\\s*дБ.*?У паузі\\s+${RANGE}\\s*с\\s+піднімається до\\s+${DB}\\s*дБ,\\s*далі до\\s+${DB}\\s*дБ за\\s+${N}\\s*с`, 's').exec(b);
+    // Початок (титр, a–b с): музика на -X дБ, …; від t с вона спадає до -Y дБ за T с, … Вхід на 0 с із нуля за F с …
+    let m = new RegExp(`^Початок\\s*\\([^)]*?${RANGE}\\s*с\\):\\s*музика\\s+(?:на\\s+)?${DB}\\s*дБ[^]*?від\\s+${N}\\s*с[^]*?спадає до\\s+${DB}\\s*дБ\\s+за\\s+${N}\\s*с`, 'i').exec(b);
     if (m) {
-      const [, , , lvl, p0, p1, peak, , fall] = m;
+      const [a, z, hi, from, lo, len] = [num(m[1]!), num(m[2]!), num(m[3]!), num(m[4]!), num(m[5]!), num(m[6]!)];
+      const pts: PatchPoint[] = [{ t: a, db: hi }, { t: from, db: hi }, { t: from + len, db: lo }];
+      if (z > from + len) pts.push({ t: z, db: lo });
+      musicPatches.push({ label: `початок: ${hi} дБ до ${from} с, спад до ${lo} дБ за ${len} с`, points: pts });
+      const fin = new RegExp(`Вхід на\\s+${N}\\s*с\\s+із нуля за\\s+${N}\\s*с`, 'i').exec(b);
+      if (fin) {
+        musicFadeIn = num(fin[2]!);
+        if (num(fin[1]!) !== 0) warnings.push(`Початок: вхід музики «на ${fin[1]} с» не з 0 с; вхід з нуля за ${fin[2]} с застосовано на початку фільму.`);
+      }
+      notes.push(`Початок (${a}–${z} с): музика на ${hi} дБ до ${from} с, далі лінійно в дБ до ${lo} дБ за ${len} с (на ${fmtSec(from + len)} с вона вже на рівні під голосом)${fin ? `; вхід з нуля за ${musicFadeIn} с на самому початку` : ''}.`);
+      continue;
+    }
+    // Фрагмент N до слова «…» (a–b с): музика -X дБ під голосом. У паузі c–d с піднімається до -Y дБ, далі до -Z дБ за T с.
+    m = new RegExp(`^Фрагмент\\s+\\d+\\s+до слова[^(]*\\(${RANGE}\\s*с\\):\\s*музика\\s+${DB}\\s*дБ.*?У паузі\\s+${RANGE}\\s*с\\s+піднімається до\\s+${DB}\\s*дБ,\\s*далі до\\s+${DB}\\s*дБ за\\s+${N}\\s*с`, 's').exec(b);
+    if (m) {
+      const [, rangeFrom, , lvl, p0, p1, peak, , fall] = m;
       bumpFall = num(fall!);
       musicPatches.push({
         label: `мовлення до паузи ${num(lvl!)} дБ, підйом у паузі ${p0}–${p1} с до ${num(peak!)} дБ`,
         points: [
-          { t: 0, db: num(lvl!) },
+          { t: num(rangeFrom!), db: num(lvl!) },
           { t: num(p0!), db: num(lvl!) },
           { t: num(p0!) + bumpRise, db: num(peak!) },
           { t: num(p1!), db: num(peak!) },
           { t: num(p1!) + bumpFall, db: 'base' },
         ],
       });
-      notes.push(`Пауза ${p0}–${p1} с: музика від ${num(lvl!)} дБ піднімається до ${num(peak!)} дБ за ${bumpRise} с і за ${bumpFall} с після паузи повертається до рівня під голосом (за правилом «підйом іде до … за ${bumpRise} с» і «далі … за ${bumpFall} с»). Лінійно в дБ; початок фільму (до першого слова) стоїть на ${num(lvl!)} дБ, бо музика грає з першої секунди.`);
+      notes.push(`Пауза ${p0}–${p1} с: музика від ${num(lvl!)} дБ піднімається до ${num(peak!)} дБ за ${bumpRise} с і за ${bumpFall} с після паузи повертається до рівня під голосом (за правилом «підйом іде до … за ${bumpRise} с» і «далі … за ${bumpFall} с»). Лінійно в дБ; мовлення від ${rangeFrom} с до паузи стоїть на ${num(lvl!)} дБ.`);
       continue;
     }
     // Кадр N (…, від a с, … і до початку фрагмента M на b с): музика не піднімається, а тримається на -X дБ … за T с після початку фрагмента M.
@@ -172,11 +205,11 @@ export function parseFilmMix(mixText: string, sfx: SfxSpec[], ctx: MixContext): 
       continue;
     }
     // Кінець (a с і далі): музика до -X дБ, шум N теж виходить уперед, останні T с обидва плавно гаснуть до кінця фільму.
-    m = new RegExp(`^Кінець\\s*\\(${N}\\s*с[^)]*\\):\\s*музика до\\s+${DB}\\s*дБ[^]*?шум\\s+(\\d+)[^]*?останні\\s+${N}\\s*с`, 'i').exec(b);
+    m = new RegExp(`^Кінець\\s*\\(${N}\\s*с[^)]*\\):\\s*музика до\\s+${DB}\\s*дБ(?:[^]*?шум\\s+(\\d+))?[^]*?останні\\s+${N}\\s*с`, 'i').exec(b);
     if (m) {
       endFrom = num(m[1]!);
       endMusicDb = num(m[2]!);
-      endSfx = { n: Number(m[3]) };
+      endSfx = m[3] ? { n: Number(m[3]) } : undefined;
       endFade = num(m[4]!);
       continue;
     }
@@ -207,7 +240,7 @@ export function parseFilmMix(mixText: string, sfx: SfxSpec[], ctx: MixContext): 
         { t: ctx.filmEnd, db: endMusicDb },
       ],
     });
-    notes.push(`Кінець (${endFrom} с і далі): музика піднімається від -20 до ${endMusicDb} дБ рівно за ${(ctx.filmEnd - endFrom).toFixed(2)} с, до цього додається лінійне згасання амплітуди за останні ${endFade} с до кінця фільму (підйом і згасання йдуть одночасно, бо пауза лише ${(ctx.filmEnd - endFrom).toFixed(2)} с; музика ледь «виходить уперед» і гасне).`);
+    notes.push(`Кінець (${endFrom} с і далі): музика піднімається від рівня під голосом до ${endMusicDb} дБ рівно за ${(ctx.filmEnd - endFrom).toFixed(2)} с, до цього додається лінійне згасання амплітуди за останні ${endFade} с до кінця фільму (підйом і згасання йдуть одночасно, бо пауза лише ${(ctx.filmEnd - endFrom).toFixed(2)} с; музика ледь «виходить уперед» і гасне).`);
   }
 
   // ---- рівні шумів з речень (не з пунктів)
@@ -283,8 +316,8 @@ export function parseFilmMix(mixText: string, sfx: SfxSpec[], ctx: MixContext): 
   if (noLevel.length) {
     warnings.push(`Шуми ${noLevel.join(', ')}: у «Зведенні» немає рівня в дБ, а поле «Гучність під голосом» словесне; взято ${DEFAULT_QUIET_SFX_DB} дБ.`);
   }
-  notes.push(
+  if (sfx.length) notes.push(
     'Шуми: початок файлу ставиться на секунду з поля «Де»; «Вступає за T с» це тривалість наростання з цієї секунди; «гасне до T с» означає, що згасання закінчується на T с, але не пізніше за кінець самого файлу (файл шуму не подовжується), тривалість згасання 1 с, якщо не вказана; рівень шуму береться зі списку «шум N: -X» (або з речення про рівні) у «Зведенні», а не зі слова «тихо» в полі «Гучність під голосом».',
   );
-  return { underDb, pauseDb, fade, pauseMin, musicPatches, endFade, sfx: plans, notes, warnings };
+  return { voiceDelay, musicFadeIn, underDb, pauseDb, fade, pauseMin, musicPatches, endFade, sfx: plans, notes, warnings };
 }
