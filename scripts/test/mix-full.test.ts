@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { CH, SR, baseMusicEnvelope, mixFilm, padVoice, rmsOver, speechIntervals, toDb, withPatches } from '../lib/mix';
-import { parseFilmMix, parseNumberList, parseVoiceDelay, parseWhere } from '../lib/mix-spec';
+import { parseFilmLength, parseFilmMix, parseNumberList, parseVoiceDelay, parseWhere } from '../lib/mix-spec';
 import type { SfxSpec } from '../lib/docs';
 
 // Розділ «Зведення» зі sound.md фільму 01-natalia (як його записав композитор).
@@ -459,5 +459,35 @@ describe('музика з секунди файлу на швидкості 0.95
     assert.ok(Math.abs(at(5, 8) - (-10 - 6.02)) < 0.2, `на рівні -10 мінус 6 дБ: ${at(5, 8)}`);
     assert.ok(Math.abs(at(0.0, 0.1) - (-10 - 6.02 + 20 - 0.5)) < 1.5, `на початку підсилення +20: ${at(0.0, 0.1)}`);
     assert.equal(boost.length, 2);
+  });
+});
+
+describe('явна довжина фільму в «Зведенні»', () => {
+  it('розбирає «- Довжина фільму 134.0 с. …» (крапка й кома)', () => {
+    assert.equal(parseFilmLength('Музика під голосом -8 дБ.\n- Довжина фільму 134.0 с. Фільм триває рівно стільки.\n- Інше.'), 134);
+    assert.equal(parseFilmLength('- Довжина фільму 134,5 с.'), 134.5);
+    assert.equal(parseFilmLength('- довжина фільму 120 с'), 120);
+  });
+  it('без пункту повертає undefined (поведінка як раніше)', () => {
+    assert.equal(parseFilmLength('Музика під голосом -8 дБ.\n- Кінець (128.77 с і далі): музика до -2 дБ.'), undefined);
+    // згадка в прозі чи в середині пункту не рахується
+    assert.equal(parseFilmLength('Довжина фільму 134.0 с у тексті.\n- Про довжину фільму 134.0 с.'), undefined);
+  });
+  it('два пункти з різними числами дають помилку, однакові приймаються', () => {
+    assert.throws(() => parseFilmLength('- Довжина фільму 134.0 с.\n- Довжина фільму 130 с.'), /кілька пунктів/);
+    assert.equal(parseFilmLength('- Довжина фільму 134.0 с.\n- Довжина фільму 134 с.'), 134);
+  });
+  it('не плутає з «с» як початком слова', () => {
+    assert.equal(parseFilmLength('- Довжина фільму 134.0 середніх.'), undefined);
+  });
+  it('пункт «Довжина фільму» не заважає розбору решти «Зведення»', () => {
+    const text = `Озвучення стоїть у фільмі з 3.0 с. Музика під голосом -8 дБ, у паузах довших за 1.2 с піднімається до -2 дБ за 0.8 с.
+
+- Довжина фільму 117.5 с. Голос після кінця озвучення тиша, музика читається далі.
+- Кінець (116.72 с і далі): музика до -2 дБ, останні 0.75 с плавно гасне до кінця фільму.`;
+    const spec = parseFilmMix(text, [], { filmEnd: 117.5, lastWordEnd: 116.72 });
+    assert.equal(spec.underDb, -8);
+    assert.equal(spec.endFade, 0.75);
+    assert.equal(parseFilmLength(text), 117.5);
   });
 });

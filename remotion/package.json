@@ -7,7 +7,10 @@
   "scripts": {
     "studio": "remotion studio src/index.ts",
     "typecheck": "tsc --noEmit",
-    "render": "tsx render.ts"
+    "render": "tsx render.ts",
+    "film:props": "tsx render-film.ts --props-only",
+    "film:test": "tsx render-film.ts --test",
+    "film:full": "tsx render-film.ts --full"
   },
   "dependencies": {
     "@remotion/bundler": "4.0.541",

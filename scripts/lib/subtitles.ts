@@ -89,23 +89,33 @@ export function splitPhrases(words: SubWord[], rules: SubtitleRules = DEFAULT_RU
 }
 
 interface Score {
+  violations: number;
   count: number;
   sumSq: number;
   maxLen: number;
   cut: number;
 }
 
-const better = (a: Score, b: Score): boolean => (a.count !== b.count ? a.count < b.count : a.sumSq !== b.sumSq ? a.sumSq < b.sumSq : a.maxLen < b.maxLen);
+const better = (a: Score, b: Score): boolean =>
+  a.violations !== b.violations ? a.violations < b.violations : a.count !== b.count ? a.count < b.count : a.sumSq !== b.sumSq ? a.sumSq < b.sumSq : a.maxLen < b.maxLen;
+
+export interface PhraseSplit {
+  cards: SubWord[][];
+  /** Скільки карток закінчуються словом із 1–2 літер не в кінці фрази: 0, якщо правило виконано повністю. */
+  violations: number;
+}
 
 /**
  * Розкладає фразу на мінімальну кількість карток (до maxWords слів і maxChars символів із пробілами), де жодна картка,
  * крім останньої, не закінчується словом із 1–2 літер. Серед розкладів обирає найрівніший: мінімум суми квадратів
- * кількості слів, далі мінімум найдовшої картки.
+ * кількості слів, далі мінімум найдовшої картки. Якщо розкладу без порушень правила про короткі слова немає
+ * (наприклад «Знаю це не з чуток,»: будь-який розклад на картки до трьох слів лишає «це», «не» чи «з» наприкінці картки),
+ * береться розклад із найменшим числом порушень, а далі за тими самими критеріями; кількість порушень повертається.
  */
-export function splitPhrase(phrase: SubWord[], rules: SubtitleRules = DEFAULT_RULES): SubWord[][] {
+export function splitPhraseDetailed(phrase: SubWord[], rules: SubtitleRules = DEFAULT_RULES): PhraseSplit {
   const n = phrase.length;
   const best: Array<Score | null> = Array.from({ length: n + 1 }, () => null);
-  best[0] = { count: 0, sumSq: 0, maxLen: 0, cut: 0 };
+  best[0] = { violations: 0, count: 0, sumSq: 0, maxLen: 0, cut: 0 };
   for (let end = 1; end <= n; end++) {
     for (let k = 1; k <= rules.maxWords && k <= end; k++) {
       const from = end - k;
@@ -114,15 +124,15 @@ export function splitPhrase(phrase: SubWord[], rules: SubtitleRules = DEFAULT_RU
       const slice = phrase.slice(from, end);
       const text = slice.map((w) => w.text).join(' ');
       if (text.length > rules.maxChars) continue;
-      if (end < n && letters(slice[slice.length - 1]!.text) <= 2) continue;
-      const cand: Score = { count: prev.count + 1, sumSq: prev.sumSq + k * k, maxLen: Math.max(prev.maxLen, text.length), cut: from };
+      const bad = end < n && letters(slice[slice.length - 1]!.text) <= 2 ? 1 : 0;
+      const cand: Score = { violations: prev.violations + bad, count: prev.count + 1, sumSq: prev.sumSq + k * k, maxLen: Math.max(prev.maxLen, text.length), cut: from };
       const cur = best[end];
       if (!cur || better(cand, cur)) best[end] = cand;
     }
   }
   const last = best[n];
   if (!last) {
-    throw new Error(`Субтитри: фразу «${phrase.map((w) => w.text).join(' ')}» не вдається розкласти за правилами (до ${rules.maxWords} слів, до ${rules.maxChars} символів, без картки, що закінчується словом із 1–2 літер).`);
+    throw new Error(`Субтитри: фразу «${phrase.map((w) => w.text).join(' ')}» не вдається розкласти навіть без правила про короткі слова (до ${rules.maxWords} слів, до ${rules.maxChars} символів).`);
   }
   const cards: SubWord[][] = [];
   for (let end = n; end > 0; ) {
@@ -130,11 +140,19 @@ export function splitPhrase(phrase: SubWord[], rules: SubtitleRules = DEFAULT_RU
     cards.unshift(phrase.slice(s.cut, end));
     end = s.cut;
   }
-  return cards;
+  return { cards, violations: last.violations };
 }
 
-export function buildCards(words: SubWord[], rules: SubtitleRules = DEFAULT_RULES): CardRaw[] {
-  return splitPhrases(words, rules).flatMap((p) => splitPhrase(p, rules).map((c) => ({ words: c, text: c.map((w) => w.text).join(' ') })));
+export function splitPhrase(phrase: SubWord[], rules: SubtitleRules = DEFAULT_RULES): SubWord[][] {
+  return splitPhraseDetailed(phrase, rules).cards;
+}
+
+export function buildCards(words: SubWord[], rules: SubtitleRules = DEFAULT_RULES, relaxed?: string[]): CardRaw[] {
+  return splitPhrases(words, rules).flatMap((p) => {
+    const r = splitPhraseDetailed(p, rules);
+    if (r.violations > 0 && relaxed) relaxed.push(`«${p.map((w) => w.text).join(' ')}» (порушень правила про короткі слова: ${r.violations})`);
+    return r.cards.map((c) => ({ words: c, text: c.map((w) => w.text).join(' ') }));
+  });
 }
 
 export interface TimingRules {
