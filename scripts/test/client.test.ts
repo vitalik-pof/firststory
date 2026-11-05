@@ -147,12 +147,10 @@ describe('перевірка запису перед повтором після
   });
 
   it('платний запис без відповіді: лічильник кредитів виріс — PossiblyExecutedError, повтору немає', async () => {
-    let subCalls = 0;
+    let posted = false;
     const s = await start((req, res) => {
-      if (req.url === '/v1/user/subscription') {
-        subCalls++;
-        return json(res, 200, { character_count: subCalls === 1 ? 100 : 160, character_limit: 1000 });
-      }
+      if (req.url === '/v1/user/subscription') return json(res, 200, { character_count: posted ? 160 : 100, character_limit: 1000 });
+      posted = true;
       json(res, 500, {});
     });
     const { client } = mk(s.url);
@@ -269,5 +267,76 @@ describe('картинки: опитування і завантаження', (
     const { client } = mk(s.url);
     const buf = await client.downloadImageGeneration('g', `${s.url}/dead`);
     assert.equal(buf.toString(), 'PNG2');
+  });
+});
+
+describe('лічильник кредитів відстає: стабілізація і історія', () => {
+  it('чекає двох однакових значень підряд, а для платного виклику ще й зростання над базою', async () => {
+    const seq = [0, 0, 0, 294, 294, 294];
+    let i = 0;
+    const s = await start((_q, res) => json(res, 200, { character_count: seq[Math.min(i++, seq.length - 1)], character_limit: 1000 }));
+    const { client, sleeps } = mk(s.url, { stableEveryMs: 10_000, stableMaxMs: 120_000 });
+    const r = await client.waitForStableCredits({ above: 0 });
+    assert.deepEqual(r, { value: 294, stable: true });
+    assert.ok(sleeps.filter((x) => x === 10_000).length >= 3, 'читає кожні 10 с');
+    assert.equal(client.lastStableCredits, 294);
+  });
+
+  it('без above: дві однакові поспіль достатньо (навіть якщо це 0)', async () => {
+    const s = await start((_q, res) => json(res, 200, { character_count: 5, character_limit: 1000 }));
+    const { client } = mk(s.url);
+    assert.deepEqual(await client.waitForStableCredits(), { value: 5, stable: true });
+  });
+
+  it('стеля очікування: лічильник усе росте, повертаємо останнє значення з попередженням', async () => {
+    let n = 0;
+    const s = await start((_q, res) => json(res, 200, { character_count: ++n * 10, character_limit: 1000 }));
+    const { client, printed } = mk(s.url, { stableMaxMs: 30_000 });
+    const r = await client.waitForStableCredits();
+    assert.equal(r.stable, false);
+    assert.ok(printed.some((p) => /не стабілізувався/.test(p)));
+  });
+
+  it('beginSpend.finish рахує різницю стабілізованого лічильника', async () => {
+    const seq = [100, 100, 100, 160, 160];
+    let i = 0;
+    const s = await start((_q, res) => json(res, 200, { character_count: seq[Math.min(i++, seq.length - 1)], character_limit: 1000 }));
+    const { client } = mk(s.url);
+    const sp = await client.beginSpend(); // база стабілізується: 100
+    assert.equal(sp.before, 100);
+    const r = await sp.finish({ expectRise: true });
+    assert.equal(r.spent, 60);
+    assert.equal(r.stable, true);
+  });
+
+  it('вартість озвучення з історії (to мінус from), пагінація історії, очікування запису', async () => {
+    let polls = 0;
+    const s = await start((req, res) => {
+      const u = new URL(req.url!, 'http://x');
+      if (u.pathname !== '/v1/history') return json(res, 404, {});
+      const cur = u.searchParams.get('start_after_history_item_id');
+      if (!cur) {
+        polls++;
+        if (polls < 2) return json(res, 200, { history: [], has_more: false, last_history_item_id: null });
+        return json(res, 200, { history: [{ history_item_id: 'h2', text: 'other', voice_id: 'v', date_unix: 5, character_count_change_from: 200, character_count_change_to: 210, request_id: null, model_id: null }], has_more: true, last_history_item_id: 'h2' });
+      }
+      json(res, 200, { history: [{ history_item_id: 'h1', text: 'потрібний текст', voice_id: 'v', date_unix: 4, character_count_change_from: 43, character_count_change_to: 970, request_id: null, model_id: null }], has_more: false, last_history_item_id: 'h1' });
+    });
+    const { client, printed } = mk(s.url);
+    const r = await client.findTtsCost({ voiceId: 'v', text: 'потрібний текст', sinceUnix: 1 });
+    assert.equal(r?.credits, 927);
+    assert.equal(await client.findTtsCost({ voiceId: 'v', text: 'потрібний текст', sinceUnix: 1 }).catch(() => 'x'), null, 'той самий запис вдруге не віддається');
+    assert.ok(printed.some((p) => /history list: сторінка 2/.test(p)));
+    assert.equal(await mk(s.url, { stableMaxMs: 0 }).client.findTtsCost({ voiceId: 'v', text: 'нема такого', sinceUnix: 1 }), null);
+  });
+
+  it('історія без text/voice_id: єдиний кандидат береться, кілька відкидаються', async () => {
+    const one = { history_item_id: 'a', text: null, voice_id: null, date_unix: 9, character_count_change_from: 0, character_count_change_to: 43, request_id: null, model_id: null };
+    let items = [one];
+    const s = await start((_q, res) => json(res, 200, { history: items, has_more: false, last_history_item_id: null }));
+    const { client } = mk(s.url, { stableMaxMs: 0 });
+    assert.equal((await client.findTtsCost({ voiceId: 'v', text: 'x', sinceUnix: 1 }))?.credits, 43);
+    items = [{ ...one, history_item_id: 'b' }, { ...one, history_item_id: 'c' }];
+    assert.equal(await client.findTtsCost({ voiceId: 'v', text: 'x', sinceUnix: 1 }), null);
   });
 });

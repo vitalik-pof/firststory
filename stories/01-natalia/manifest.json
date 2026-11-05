@@ -1,35 +1,160 @@
 {
   "story": "01-natalia",
   "credits": {
-    "total_spent": 294,
+    "total_spent": 4149,
     "runs": [
       {
         "script": "voice-previews",
         "started_at": "2026-11-05T00:41:42.566Z",
         "finished_at": "2026-11-05T00:41:55.865Z",
         "credits_before": 0,
-        "credits_after": 0,
-        "spent_run": 0
+        "credits_after": 294,
+        "spent_run": 294,
+        "reconciled": true
       },
       {
         "script": "narrate",
         "started_at": "2026-11-05T00:42:08.567Z",
         "finished_at": "2026-11-05T00:42:45.244Z",
-        "credits_before": 0,
-        "credits_after": 294,
-        "spent_run": 294
+        "credits_before": 294,
+        "credits_after": 1264,
+        "spent_run": 970,
+        "reconciled": true
       },
       {
         "script": "sound-samples",
         "started_at": "2026-11-05T00:44:21.957Z",
         "finished_at": "2026-11-05T00:44:43.908Z",
         "credits_before": 1264,
-        "credits_after": 1264,
+        "credits_after": 2119,
+        "spent_run": 855,
+        "reconciled": true
+      },
+      {
+        "script": "samples",
+        "started_at": "2026-11-05T00:51:43.472Z",
+        "finished_at": "2026-11-05T00:52:18.386Z",
+        "credits_before": 2119,
+        "credits_after": 2119,
         "spent_run": 0
+      },
+      {
+        "script": "samples",
+        "started_at": "2026-11-05T00:52:29.146Z",
+        "finished_at": "2026-11-05T00:53:55.388Z",
+        "credits_before": 2119,
+        "credits_after": 2525,
+        "spent_run": 406
+      },
+      {
+        "script": "samples",
+        "started_at": "2026-11-05T00:54:02.428Z",
+        "finished_at": "2026-11-05T00:57:26.536Z",
+        "credits_before": 2525,
+        "credits_after": 4149,
+        "spent_run": 1624
       }
     ]
   },
-  "images": {},
+  "images": {
+    "sample/02": {
+      "history": [],
+      "regen_count": 0,
+      "failures": [
+        {
+          "generation_id": "0KdIngXA8Aonht3Ya33B",
+          "reason": "moderated",
+          "message": "Генерація 0KdIngXA8Aonht3Ya33B не вдалася (moderated): This generation may violate our Terms of Service and has been blocked. You were not charged for this generation.. Кредити за невдалу генерацію не списуються.",
+          "at": "2026-11-05T00:52:05.766Z"
+        }
+      ]
+    },
+    "sample/08": {
+      "history": [],
+      "regen_count": 0,
+      "current": {
+        "generation_id": "Lf3W1gsRqHx9aPhYpQGT",
+        "model_id": "gemini-3.1-flash-image",
+        "width": 768,
+        "height": 1376,
+        "prompt": "A golden evening on the Dnipro riverside embankment. A woman about 42 with chestnut shoulder-length wavy hair, wearing an oatmeal knitted sweater and a terracotta-red scarf fluttering in the wind, stands at the stone railing and looks out over the very wide shining river, seen in three-quarter view from behind. A huge warm sky fills the upper part of the vertical frame, a long bridge in the distance, the high green right bank with apartment blocks and trees, low golden sun on the water. Peaceful, grateful, a life changed for the better.\n\nHand-painted gouache illustration on warm cream textured paper: matte opaque paint, visible brush strokes and dry-brush edges, subtle paper grain showing through, simplified shapes without fine detail, colors held by shape and tone rather than ink outlines, in the calm manner of a contemporary European picture book. Limited muted palette of warm ochre, burnt sienna, dusty rose, steppe olive, grey-blue and deep indigo, with soft natural light from a single source. People are painted in a simplified, non-photographic way with gentle minimal facial features, never a detailed portrait. Everyday Ukrainian setting with authentic local details. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no anime, no comic-book outlines, no lens flare, no neon. No text or lettering except the exact Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. No American objects: no fire hydrants, no yellow school buses, no mailboxes, no US road signs or license plates, no pickup trucks, no American military vehicles, weapons or uniforms. Where war is present it is painted quietly and impersonally, from a distance, with no faces of soldiers, no blood, no wounded, no explosions or fireballs. No flags, colors of flags, patches or insignia except exactly those named in the description; no Russian white-blue-red tricolor flag, no letter Z.",
+        "refs": [],
+        "file": "work/01-natalia/samples/sample-08.png",
+        "aspect_ratio": "9:16",
+        "resolution": "1K",
+        "credits": 406,
+        "completed_at": "2026-11-05T00:53:42.738Z"
+      }
+    },
+    "sample/01": {
+      "history": [],
+      "regen_count": 0,
+      "current": {
+        "generation_id": "KQ2y0DPYU72iaYIFTQhe",
+        "model_id": "gemini-3.1-flash-image",
+        "width": 1024,
+        "height": 1024,
+        "prompt": "A study sheet of five head-and-shoulders portraits of the members of one Ukrainian family, painted on plain warm cream paper with no background scenery, arranged loosely in two rows with space between them: three portraits in the top row, two in the bottom row. Each figure is turned in a gentle three-quarter view, shoulders visible. Top left: a woman about 30 years old, chestnut-brown shoulder-length hair tied in a low ponytail with a few loose strands, a short-sleeved terracotta-red cotton blouse, a calm, collected, slightly tired expression. Top centre: the same woman about 42 years old, chestnut-brown shoulder-length hair worn loose with a soft wave, an oatmeal-colored knitted sweater and a terracotta-red scarf, an open, warm, light smile. Top right: a man about 32 years old, tall and broad-shouldered, short dark-brown hair and a short neat beard, a plain grey t-shirt, a calm steady expression. Bottom left: a little girl about 6 years old with light-brown hair in two braids, a mustard-yellow summer dress. Bottom right: a little girl about 6 years old with light-brown hair in a high ponytail, a mint-green summer dress. The two girls look about the same age, lively and curious. All faces are simplified and gentle in the painted picture-book manner: small simple dot-like eyes, a soft single line for the nose, a soft simple mouth, a few warm tones of skin, no detailed features; these are not portraits of any real people. No text, no labels, no names.\n\nHand-painted gouache illustration on warm cream textured paper: matte opaque paint, visible brush strokes and dry-brush edges, subtle paper grain showing through, simplified shapes without fine detail, colors held by shape and tone rather than ink outlines, in the calm manner of a contemporary European picture book. Limited muted palette of warm ochre, burnt sienna, dusty rose, steppe olive, grey-blue and deep indigo, with soft natural light from a single source. People are painted in a simplified, non-photographic way with gentle minimal facial features, never a detailed portrait. Everyday Ukrainian setting with authentic local details. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no anime, no comic-book outlines, no lens flare, no neon. No text or lettering except the exact Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. No American objects: no fire hydrants, no yellow school buses, no mailboxes, no US road signs or license plates, no pickup trucks, no American military vehicles, weapons or uniforms. Where war is present it is painted quietly and impersonally, from a distance, with no faces of soldiers, no blood, no wounded, no explosions or fireballs. No flags, colors of flags, patches or insignia except exactly those named in the description; no Russian white-blue-red tricolor flag, no letter Z.",
+        "refs": [],
+        "file": "work/01-natalia/samples/sample-01.png",
+        "aspect_ratio": "1:1",
+        "resolution": "1K",
+        "credits": 406,
+        "completed_at": "2026-11-05T00:54:43.932Z"
+      }
+    },
+    "sample/04": {
+      "history": [],
+      "regen_count": 0,
+      "current": {
+        "generation_id": "ZlYKosNbyEoCS1tQAVRh",
+        "model_id": "gemini-3.1-flash-image",
+        "width": 768,
+        "height": 1376,
+        "prompt": "Interior of a small Soviet-era apartment children's room in Donetsk, empty and still in cold blue-grey dusk. Two new matching school backpacks for first-graders stand side by side on a neatly made bed, each with a big fluffy white nylon hair bow placed on top, as Ukrainian girls wear on the first day of school. On the wardrobe door hang two small dark-blue school pinafore dresses with white blouses on hangers. Patterned wallpaper with a child's drawing pinned to it, a worn wooden parquet floor and a woven rug; only a thin line of pale light falls across the floor. Through the light tulle curtain of the window, far away over dark conical coal-mine spoil heaps on the horizon, a slow column of grey smoke rises and a faint dull orange glow lies low in the sky. Dust in the air. No people. Colors drained to grey-blue, quiet loss, a room nobody came back to.\n\nHand-painted gouache illustration on warm cream textured paper: matte opaque paint, visible brush strokes and dry-brush edges, subtle paper grain showing through, simplified shapes without fine detail, colors held by shape and tone rather than ink outlines, in the calm manner of a contemporary European picture book. Limited muted palette of warm ochre, burnt sienna, dusty rose, steppe olive, grey-blue and deep indigo, with soft natural light from a single source. People are painted in a simplified, non-photographic way with gentle minimal facial features, never a detailed portrait. Everyday Ukrainian setting with authentic local details. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no anime, no comic-book outlines, no lens flare, no neon. No text or lettering except the exact Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. No American objects: no fire hydrants, no yellow school buses, no mailboxes, no US road signs or license plates, no pickup trucks, no American military vehicles, weapons or uniforms. Where war is present it is painted quietly and impersonally, from a distance, with no faces of soldiers, no blood, no wounded, no explosions or fireballs. No flags, colors of flags, patches or insignia except exactly those named in the description; no Russian white-blue-red tricolor flag, no letter Z.",
+        "refs": [],
+        "file": "work/01-natalia/samples/sample-04.png",
+        "aspect_ratio": "9:16",
+        "resolution": "1K",
+        "credits": 406,
+        "completed_at": "2026-11-05T00:55:34.241Z"
+      }
+    },
+    "sample/05": {
+      "history": [],
+      "regen_count": 0,
+      "current": {
+        "generation_id": "evgP5swG0gCLHNVUaT7o",
+        "model_id": "gemini-3.1-flash-image",
+        "width": 768,
+        "height": 1376,
+        "prompt": "A dark frosty winter early morning at a bus stop in Pavlohrad. A boxy white Ukrainian intercity midi-bus with a rounded roof and lit yellow windows is pulling up; behind its windshield a route board reads exactly «ПАВЛОГРАД — ТЕРНІВКА» in Ukrainian Cyrillic. A heavily pregnant woman about 31 years old, chestnut-brown hair gathered in a low bun under a terracotta-red knitted hat, a matching terracotta-red knitted scarf, a dark navy winter coat worn open over her round belly, dark trousers and warm boots, holding a handbag, stands at the bus stop, seen from behind and slightly to the side, her face not visible. A single streetlamp, frosty breath in the air, a thin layer of snow, Soviet-era panel buildings with a few lit windows in the background. Cold blue darkness with warm amber light from the bus.\n\nHand-painted gouache illustration on warm cream textured paper: matte opaque paint, visible brush strokes and dry-brush edges, subtle paper grain showing through, simplified shapes without fine detail, colors held by shape and tone rather than ink outlines, in the calm manner of a contemporary European picture book. Limited muted palette of warm ochre, burnt sienna, dusty rose, steppe olive, grey-blue and deep indigo, with soft natural light from a single source. People are painted in a simplified, non-photographic way with gentle minimal facial features, never a detailed portrait. Everyday Ukrainian setting with authentic local details. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no anime, no comic-book outlines, no lens flare, no neon. No text or lettering except the exact Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. No American objects: no fire hydrants, no yellow school buses, no mailboxes, no US road signs or license plates, no pickup trucks, no American military vehicles, weapons or uniforms. Where war is present it is painted quietly and impersonally, from a distance, with no faces of soldiers, no blood, no wounded, no explosions or fireballs. No flags, colors of flags, patches or insignia except exactly those named in the description; no Russian white-blue-red tricolor flag, no letter Z.",
+        "refs": [],
+        "file": "work/01-natalia/samples/sample-05.png",
+        "aspect_ratio": "9:16",
+        "resolution": "1K",
+        "credits": 406,
+        "completed_at": "2026-11-05T00:56:23.863Z"
+      }
+    },
+    "sample/06": {
+      "history": [],
+      "regen_count": 0,
+      "current": {
+        "generation_id": "cfBvl5cwfq82jWC3Ewfk",
+        "model_id": "gemini-3.1-flash-image",
+        "width": 768,
+        "height": 1376,
+        "prompt": "A still living sculpture on a small playback theatre stage, seen straight on from the audience. Six actors of different ages, men and women, all dressed in plain black, stand pressed tightly together body to body, forming one shape like a bouquet of flowers: one sits on the floor at the bottom, one kneels, two lean forward, one stands tall on a wooden crate towering above everyone. All their arms are stretched out toward the audience, each in a different direction, fanning outward like the stems of a bouquet. Among them, a woman about 42 with chestnut shoulder-length wavy hair leans forward, a long terracotta-red fabric flowing from her outstretched hand; another actor holds a deep teal fabric, another an ochre one. Their faces are turned toward the audience and visible, simplified and gentle, calm and open. Warm light from above on the group, deep dark background around them, the edge of the empty floor in the foreground. Frozen, silent, open and generous.\n\nHand-painted gouache illustration on warm cream textured paper: matte opaque paint, visible brush strokes and dry-brush edges, subtle paper grain showing through, simplified shapes without fine detail, colors held by shape and tone rather than ink outlines, in the calm manner of a contemporary European picture book. Limited muted palette of warm ochre, burnt sienna, dusty rose, steppe olive, grey-blue and deep indigo, with soft natural light from a single source. People are painted in a simplified, non-photographic way with gentle minimal facial features, never a detailed portrait. Everyday Ukrainian setting with authentic local details. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no anime, no comic-book outlines, no lens flare, no neon. No text or lettering except the exact Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. No American objects: no fire hydrants, no yellow school buses, no mailboxes, no US road signs or license plates, no pickup trucks, no American military vehicles, weapons or uniforms. Where war is present it is painted quietly and impersonally, from a distance, with no faces of soldiers, no blood, no wounded, no explosions or fireballs. No flags, colors of flags, patches or insignia except exactly those named in the description; no Russian white-blue-red tricolor flag, no letter Z.",
+        "refs": [],
+        "file": "work/01-natalia/samples/sample-06.png",
+        "aspect_ratio": "9:16",
+        "resolution": "1K",
+        "credits": 406,
+        "completed_at": "2026-11-05T00:57:14.105Z"
+      }
+    }
+  },
   "assets": {},
   "audio": {
     "sample-music-1": {
@@ -37,35 +162,38 @@
       "kind": "music",
       "seconds_requested": 30,
       "prompt": "Instrumental, intimate chamber piece for solo upright piano and solo cello, slow tempo around 58 BPM, free and unhurried. Hushed, restrained, dignified, like someone speaking quietly after a long time. Begin with almost nothing: the first four seconds are only a single low sustained cello note with a very soft piano tone far in the background. Then a simple, sparse piano melody in a minor mode, a few notes at a time with long silences between phrases, the cello answering with long soft bowed notes. Dry, close, warm room sound with felt-piano softness, no reverb wash. No drums, no percussion, no strings section swell, no choir, no big crescendo, no dramatic climax. In the last ten seconds the harmony opens up slightly toward a warmer major colour, still very quiet, then the final note is left to fade out slowly. Emotionally plain, not sentimental, not tragic, no cinematic trailer feeling.",
-      "credits": 0,
+      "credits": 455,
       "output_format": "mp3_44100_128",
       "regen_count": 0,
       "generated_at": "2026-11-05T00:44:30.872Z",
       "song_id": "yO9dN2s0UhayQ36nDnWt",
-      "model_id": null
+      "model_id": null,
+      "credits_source": "counter-remainder"
     },
     "sample-music-2": {
       "file": "work/01-natalia/audio/samples/music-2.mp3",
       "kind": "music",
       "seconds_requested": 20,
       "prompt": "Instrumental ambient texture without a melody, slow and weightless, no clear tempo and no beat. A low warm drone of bowed double bass and soft analog synth pad, very quiet, with distant slowly breathing tones, faint bowed glass harmonics and a barely audible detuned piano note appearing now and then, far away, like a memory. Cold, wide, empty and still at first, like early morning frost over a field. Nothing rhythmic, no repeating pattern, no hook. After about twelve seconds one warm string chord slowly blooms out of the drone, stays for a few seconds and dissolves again into the quiet, leaving a thin warm tone at the end. Very low dynamics throughout, no drums, no percussion, no vocals, no heroic or epic build, no cinematic trailer sound.",
-      "credits": 0,
+      "credits": 303,
       "output_format": "mp3_44100_128",
       "regen_count": 0,
       "generated_at": "2026-11-05T00:44:37.972Z",
       "song_id": "mUkRfxTZPlgMxg1lEAHi",
-      "model_id": null
+      "model_id": null,
+      "credits_source": "counter-remainder"
     },
     "sample-sfx-1": {
       "file": "work/01-natalia/audio/samples/sfx-01.mp3",
       "kind": "sfx",
       "seconds_requested": 8,
       "prompt": "A large old military armoured vehicle engine idling at a low steady rumble, heard from some distance across an empty summer courtyard between apartment blocks. Hot still air, distant insects chirping, a faint rhythmic squeak of a metal playground swing moving slightly in the wind. Nothing else: no voices, no gunfire, no explosions, no radio, no music. Calm, impersonal and heavy, constant level, no build-up.",
-      "credits": 0,
+      "credits": 97,
       "output_format": "mp3_44100_128",
       "regen_count": 0,
       "generated_at": "2026-11-05T00:44:42.735Z",
-      "character_cost_header": 97
+      "character_cost_header": 97,
+      "credits_source": "header"
     }
   },
   "voice": {
@@ -92,14 +220,15 @@
         "duration_secs": 22.650875
       }
     ],
-    "design_credits": 0,
+    "design_credits": 294,
     "designed_at": "2026-11-05T00:41:52.348Z",
     "voice_id": "49POAIkFDXsxrtR84sdj",
     "voice_name": "natalia 01-natalia",
     "picked_preview": 1,
-    "created_at": "2026-11-05T00:41:54.681Z"
+    "created_at": "2026-11-05T00:41:54.681Z",
+    "design_credits_source": "docs"
   },
-  "updated_at": "2026-11-05T00:45:19.036Z",
+  "updated_at": "2026-11-05T00:57:26.536Z",
   "narration": {
     "model_id": "eleven_v4",
     "voice_id": "49POAIkFDXsxrtR84sdj",
@@ -111,18 +240,19 @@
         "mp3": "work/01-natalia/narration.part-0f224509bd.mp3",
         "response_file": "work/01-natalia/narration.part-0f224509bd.response.json",
         "chars_sent": 88,
-        "credits": 294,
+        "credits": 43,
         "fragments": [
           1
         ],
-        "generated_at": "2026-11-05T00:42:14.982Z"
+        "generated_at": "2026-11-05T00:42:14.982Z",
+        "credits_source": "history"
       },
       "08bfab8c4b": {
         "hash": "08bfab8c4b",
         "mp3": "work/01-natalia/narration.part-08bfab8c4b.mp3",
         "response_file": "work/01-natalia/narration.part-08bfab8c4b.response.json",
         "chars_sent": 1911,
-        "credits": 0,
+        "credits": 927,
         "fragments": [
           2,
           3,
@@ -142,7 +272,8 @@
           17,
           18
         ],
-        "generated_at": "2026-11-05T00:42:42.708Z"
+        "generated_at": "2026-11-05T00:42:42.708Z",
+        "credits_source": "history"
       }
     },
     "file": "work/01-natalia/narration.mp3",
@@ -173,5 +304,24 @@
     "pause_min": 0.5,
     "credits": 0,
     "generated_at": "2026-11-05T00:45:19.035Z"
+  },
+  "image_sizes": {
+    "gemini-3.1-flash-image@1K@9:16": {
+      "width": 768,
+      "height": 1376,
+      "file": "work/01-natalia/samples/sample-08.png"
+    },
+    "gemini-3.1-flash-image@1K@1:1": {
+      "width": 1024,
+      "height": 1024,
+      "file": "work/01-natalia/samples/sample-01.png"
+    }
+  },
+  "image_prices": {
+    "gemini-3.1-flash-image@1K": {
+      "max": 406,
+      "last": 406,
+      "count": 5
+    }
   }
 }

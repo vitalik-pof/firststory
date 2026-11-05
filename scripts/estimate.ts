@@ -46,7 +46,7 @@ async function main(): Promise<void> {
       .then(fn)
       .catch((e: Error) => void notes.push(`${step}: не пораховано, ${e.message}`));
 
-  const rate = await ttsRate(client, 'eleven_v4');
+  const rate = await ttsRate(client, 'eleven_v4', story);
   // Ціна картинки: виміряна для цієї роздільності (маніфест), інакше --image-credits, інакше невідомо.
   const measured = measuredImageCredits(story, resolution);
   const image: Priced = measured !== undefined ? { credits: measured, source: 'виміряно в маніфесті', note: `максимум для ${resolution}` } : estimateImage(imageFlag);

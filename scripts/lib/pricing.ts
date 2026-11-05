@@ -13,6 +13,7 @@
 //   а після першої згенерованої картинки скрипт бере фактичну вартість із маніфесту.
 
 import type { ElevenLabsClient } from './elevenlabs';
+import { readManifest } from './manifest';
 
 export type PriceSource = 'з API' | 'з документації ElevenLabs' | 'оцінка' | 'не знайдено' | 'виміряно в маніфесті';
 
@@ -26,31 +27,64 @@ export const SFX_CREDITS_PER_SECOND = 40;
 export const MUSIC_CREDITS_PER_MINUTE = 900;
 
 export interface TtsRate {
+  /** Кредитів за знак. */
   multiplier: number;
   source: PriceSource;
   maxChars: number;
+  note: string;
 }
 
-/** Множник за знак для моделі: з API; без ключа чи збої мережі — 1 з позначкою «оцінка». */
-export async function ttsRate(client: ElevenLabsClient, modelId: string): Promise<TtsRate> {
-  if (!client.hasKey) return { multiplier: 1, source: 'оцінка', maxChars: 10_000 };
-  try {
-    const models = await client.listModels();
-    const m = models.find((x) => x.model_id === modelId);
-    if (!m) throw new Error(`Моделі ${modelId} немає у відповіді models list.`);
-    return {
-      multiplier: (m.model_rates?.character_cost_multiplier ?? 1) * (m.model_rates?.cost_discount_multiplier ?? 1),
-      source: 'з API',
-      maxChars: m.maximum_text_length_per_request,
-    };
-  } catch (e) {
-    if (e instanceof Error && e.message.startsWith('Моделі ')) throw e;
-    return { multiplier: 1, source: 'оцінка', maxChars: 10_000 };
+/**
+ * Фактична ціна eleven_v4 на цьому акаунті, виміряна 5 листопада 2026 за історією озвучення:
+ * 970 кредитів за 1999 знаків (разом із тегами) ≈ 0.485 кредита на знак. Множник model_rates
+ * з API (1) цього не відображає, тому як ціну його не використовуємо.
+ */
+export const V4_OBSERVED_CREDITS_PER_CHAR = 970 / 1999;
+
+/** Виміряна ціна знака за маніфестом: сума кредитів частин з історії на суму знаків. */
+export function measuredTtsRate(story: string | undefined): { perChar: number; chars: number } | undefined {
+  if (!story) return undefined;
+  let credits = 0;
+  let chars = 0;
+  const parts = (readManifest(story).narration?.parts ?? {}) as Record<string, { credits?: number; chars_sent?: number; credits_source?: string }>;
+  for (const p of Object.values(parts)) {
+    if (p.credits_source === 'history' && p.credits && p.chars_sent) {
+      credits += p.credits;
+      chars += p.chars_sent;
+    }
   }
+  return chars > 0 ? { perChar: credits / chars, chars } : undefined;
+}
+
+/**
+ * Ціна знака озвучення: виміряна в маніфесті (перевага) → спостережена на акаунті (оцінка) →
+ * множник з API лише для довідки. Ліміт знаків і доступність моделі беремо з models list.
+ */
+export async function ttsRate(client: ElevenLabsClient, modelId: string, story?: string): Promise<TtsRate> {
+  let maxChars = 10_000;
+  let apiMultiplier: number | undefined;
+  if (client.hasKey) {
+    try {
+      const m = (await client.listModels()).find((x) => x.model_id === modelId);
+      if (!m) throw new Error(`Моделі ${modelId} немає у відповіді models list.`);
+      maxChars = m.maximum_text_length_per_request;
+      apiMultiplier = (m.model_rates?.character_cost_multiplier ?? 1) * (m.model_rates?.cost_discount_multiplier ?? 1);
+    } catch (e) {
+      if (e instanceof Error && e.message.startsWith('Моделі ')) throw e;
+    }
+  }
+  const measured = measuredTtsRate(story);
+  if (measured) {
+    return { multiplier: measured.perChar, source: 'виміряно в маніфесті', maxChars, note: `${measured.perChar.toFixed(3)} кредита/знак за історією озвучення (${measured.chars} знаків)${apiMultiplier !== undefined ? `; множник API ${apiMultiplier} цього не відображає` : ''}` };
+  }
+  return {
+    multiplier: V4_OBSERVED_CREDITS_PER_CHAR, source: 'оцінка', maxChars,
+    note: `${V4_OBSERVED_CREDITS_PER_CHAR.toFixed(3)} кредита/знак: спостережено на цьому акаунті (970 за 1999 знаків, 5 листопада 2026)${apiMultiplier !== undefined ? `; множник API (${apiMultiplier}) цього не відображає` : ''}`,
+  };
 }
 
 export function estimateTts(chars: number, rate: TtsRate): Priced {
-  return { credits: Math.ceil(chars * rate.multiplier), source: rate.source === 'з API' ? 'з API' : 'оцінка', note: `${chars} знаків × ${rate.multiplier}` };
+  return { credits: Math.ceil(chars * rate.multiplier), source: rate.source, note: `${chars} знаків × ${rate.multiplier.toFixed(3)}; ${rate.note}` };
 }
 
 export function estimateVoiceDesign(probeChars: number): Priced {

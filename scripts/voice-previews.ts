@@ -89,7 +89,7 @@ async function main(): Promise<void> {
         writeFileSync(file, Buffer.from(p.audio_base_64, 'base64'));
         return { n: i + 1, generated_voice_id: p.generated_voice_id, file: paths.rel(file), duration_secs: p.duration_secs };
       });
-      const { spent } = await sp.finish();
+      const { spent } = await sp.finish({ expectRise: true });
       ctx.recordSpent(spent);
       updateManifest(story, (m) => {
         m.voice = { ...(m.voice ?? {}), voice_entry: entry.id, design_model: designModel, probe_text: probe, previews, design_credits: spent, designed_at: new Date().toISOString() };

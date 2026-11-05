@@ -119,7 +119,7 @@ export async function runImageJob(ctx: RunContext, job: ImageJob): Promise<JobOu
         aspect_ratio: job.aspect, resolution: job.resolution, requested_at: new Date().toISOString(),
       };
     });
-    const before = await client.creditsUsed();
+    const before = await client.baselineCredits();
     const body: Record<string, unknown> = { model_id: IMAGE_MODEL, prompt: job.prompt, aspect_ratio: job.aspect, resolution: job.resolution };
     if (job.refs.length) body.images = job.refs.map(refToApi);
     log(`  ${job.label}: створюємо генерацію (${plan.why})…`);
@@ -143,8 +143,8 @@ export async function runImageJob(ctx: RunContext, job: ImageJob): Promise<JobOu
     const png = await toPng(data, done.content_mime_type ?? null);
     const meta = await sharp(png).metadata();
     const size = { width: meta.width ?? 0, height: meta.height ?? 0 };
-    const after = await client.creditsUsed();
     const before = (pending as unknown as { credits_before?: number }).credits_before;
+    const after = (await client.waitForStableCredits({ above: before })).value;
     const spent = before !== undefined ? ctx.recordSpent(after - before) : null;
 
     // Старий файл архівуємо тільки тепер, коли новий уже в руках.

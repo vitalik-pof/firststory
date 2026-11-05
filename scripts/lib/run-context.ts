@@ -35,7 +35,8 @@ export class RunContext {
   async start(): Promise<void> {
     if (this.dryRun) return;
     const sub = await this.client.getSubscription();
-    this.creditsBefore = sub.character_count;
+    // База: стабілізований лічильник (він відстає, тож без цього різниця приписала б чужі витрати цьому запуску).
+    this.creditsBefore = await this.client.baselineCredits();
     this.started = true;
     const recorded = readManifest(this.story).credits.total_spent;
     log(`Баланс: витрачено ${sub.character_count} із ${sub.character_limit}. У маніфесті записано витрат: ${recorded}. Ліміт: ${this.limit ?? 'не задано'}.`);
@@ -70,7 +71,8 @@ export class RunContext {
   /** Підсумок запуску: різниця лічильника до/після кроку, звірка з сумою за виклики. */
   async finish(): Promise<{ spentRun: number }> {
     if (!this.started) return { spentRun: 0 };
-    const sub = await this.client.getSubscription();
+    const stable = await this.client.waitForStableCredits();
+    const sub = { character_count: stable.value };
     const spentRun = sub.character_count - this.creditsBefore;
     const unattributed = Math.max(0, spentRun - this.itemSpent);
     updateManifest(this.story, (m) => {

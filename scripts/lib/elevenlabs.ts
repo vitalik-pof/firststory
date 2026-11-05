@@ -66,6 +66,9 @@ export interface ClientOptions {
   maxDelayMs?: number;
   /** Пауза перед перевіркою запису: лічильник кредитів і списки оновлюються не миттєво. */
   verifyDelayMs?: number;
+  /** Лічильник кредитів оновлюється з відставанням: інтервал читання і стеля очікування стабілізації. */
+  stableEveryMs?: number;
+  stableMaxMs?: number;
   print?: (message: string) => void;
 }
 
@@ -145,10 +148,30 @@ export interface Asset {
   content_url: string | null;
 }
 
+export interface SpendResult {
+  before: number;
+  after: number;
+  spent: number;
+  /** false: лічильник не встиг стабілізуватися за стелю очікування, число може бути неточним. */
+  stable: boolean;
+}
+
 export interface SpendTracker {
   before: number;
   guard: WriteGuard;
-  finish(): Promise<{ before: number; after: number; spent: number }>;
+  /** expectRise: виклик точно коштує кредитів, тож чекаємо, поки лічильник виросте над «до». */
+  finish(opts?: { expectRise?: boolean }): Promise<SpendResult>;
+}
+
+export interface HistoryItem {
+  history_item_id: string;
+  request_id: string | null;
+  voice_id: string | null;
+  model_id: string | null;
+  text: string | null;
+  date_unix: number;
+  character_count_change_from: number;
+  character_count_change_to: number;
 }
 
 /** Один запис у списку: сторінка, курсор, чи є далі. */
@@ -212,6 +235,10 @@ export class ElevenLabsClient {
   private readonly baseDelayMs: number;
   private readonly maxDelayMs: number;
   private readonly verifyDelayMs: number;
+  private readonly stableEveryMs: number;
+  private readonly stableMaxMs: number;
+  /** Останнє стабілізоване значення лічильника (власні виклики процесу). */
+  lastStableCredits: number | undefined;
   readonly print: (m: string) => void;
   private knownImageIds: Set<string> | undefined;
 
@@ -226,6 +253,9 @@ export class ElevenLabsClient {
     this.baseDelayMs = opts.baseDelayMs ?? 1000;
     this.maxDelayMs = opts.maxDelayMs ?? 30_000;
     this.verifyDelayMs = opts.verifyDelayMs ?? 3000;
+    // ELEVENLABS_STABLE_EVERY_MS / _MAX_MS: лише для тестів на підставному сервері.
+    this.stableEveryMs = opts.stableEveryMs ?? (Number(process.env.ELEVENLABS_STABLE_EVERY_MS) || 10_000);
+    this.stableMaxMs = opts.stableMaxMs ?? (Number(process.env.ELEVENLABS_STABLE_MAX_MS) || 120_000);
     this.print = opts.print ?? log;
   }
 
@@ -354,11 +384,45 @@ export class ElevenLabsClient {
   }
 
   /**
+   * Чекає, поки лічильник кредитів стабілізується: він оновлюється з відставанням до хвилини.
+   * Читає кожні stableEveryMs; стабільним вважає значення, що повторилося двічі підряд (і, якщо
+   * задано `above`, перевищує його). Після стелі очікування повертає останнє значення з stable = false.
+   */
+  async waitForStableCredits(opts: { above?: number } = {}): Promise<{ value: number; stable: boolean }> {
+    let prev = await this.creditsUsed();
+    let waited = 0;
+    for (;;) {
+      if (waited >= this.stableMaxMs) {
+        this.print(`  УВАГА: лічильник кредитів не стабілізувався за ${Math.round(this.stableMaxMs / 1000)} с (${prev}): вартість може бути неточною. Перевірте командою reconcile-credits.ts пізніше.`);
+        this.lastStableCredits = prev;
+        return { value: prev, stable: false };
+      }
+      await this.sleep(this.stableEveryMs);
+      waited += this.stableEveryMs;
+      const cur = await this.creditsUsed();
+      const risen = opts.above === undefined || cur > opts.above;
+      this.print(`  лічильник кредитів: ${cur} (очікуємо стабілізації, ${Math.round(waited / 1000)} с)`);
+      if (cur === prev && risen) {
+        this.lastStableCredits = cur;
+        return { value: cur, stable: true };
+      }
+      prev = cur;
+    }
+  }
+
+  /** Стабілізований лічильник до виклику: власні попередні виклики процесу вже врахованi, тож повторно не чекаємо. */
+  async baselineCredits(): Promise<number> {
+    if (this.lastStableCredits !== undefined) return this.lastStableCredits;
+    return (await this.waitForStableCredits()).value;
+  }
+
+  /**
    * Починає облік витрат. `guard` перевіряє «чи запис виконався» за лічильником кредитів:
    * якщо він виріс відносно моменту до виклику, запис, найімовірніше, виконався.
+   * `finish` чекає стабілізації лічильника, перш ніж рахувати різницю.
    */
   async beginSpend(): Promise<SpendTracker> {
-    const before = await this.creditsUsed();
+    const before = await this.baselineCredits();
     const guard: WriteGuard = {
       describe: 'лічильник кредитів',
       verify: async () => {
@@ -369,11 +433,63 @@ export class ElevenLabsClient {
     return {
       before,
       guard,
-      finish: async () => {
-        const after = await this.creditsUsed();
-        return { before, after, spent: after - before };
+      finish: async (o = {}) => {
+        const r = await this.waitForStableCredits({ above: o.expectRise ? before : undefined });
+        return { before, after: r.value, spent: r.value - before, stable: r.stable };
       },
     };
+  }
+
+  /** Записи історії озвучення (GET /v1/history) із явною пагінацією за start_after_history_item_id. */
+  async listHistory(filters: { voiceId?: string; afterUnix?: number; beforeUnix?: number }): Promise<HistoryItem[]> {
+    const all: HistoryItem[] = [];
+    let cursor: string | undefined;
+    for (let page = 1; ; page++) {
+      const r = (
+        await this.request<{ history: HistoryItem[]; has_more: boolean; last_history_item_id: string | null }>({
+          method: 'GET',
+          path: '/v1/history',
+          query: { page_size: 100, start_after_history_item_id: cursor, voice_id: filters.voiceId, date_after_unix: filters.afterUnix, date_before_unix: filters.beforeUnix, sort_direction: 'desc' },
+          response: 'json',
+          label: 'history list',
+        })
+      ).data;
+      all.push(...r.history);
+      this.print(`  history list: сторінка ${page}, +${r.history.length}, разом ${all.length}${r.has_more ? ', є наступна' : ', кінець'}`);
+      if (!r.has_more) return all;
+      if (!r.last_history_item_id || r.last_history_item_id === cursor) throw new Error('history list: has_more = true, але курсор не просунувся.');
+      cursor = r.last_history_item_id;
+    }
+  }
+
+  private usedHistoryIds = new Set<string>();
+
+  /**
+   * Вартість озвучення за історією (character_count_change_to мінус from): точніша за лічильник.
+   * У списку історії поля text і voice_id можуть бути порожні, тож: якщо текст є, шукаємо за ним;
+   * інакше береться єдиний запис після початку виклику (voice_id фільтрується сервером); кілька
+   * кандидатів означають неоднозначність (повертаємо null). Запис може з'явитися з відставанням,
+   * тому опитуємо кожні stableEveryMs до стелі.
+   */
+  async findTtsCost(q: { voiceId: string; text?: string; sinceUnix: number }): Promise<{ credits: number; item: HistoryItem } | null> {
+    let waited = 0;
+    for (;;) {
+      const items = (await this.listHistory({ voiceId: q.voiceId, afterUnix: q.sinceUnix })).filter((i) => !this.usedHistoryIds.has(i.history_item_id));
+      let hit: HistoryItem | undefined = q.text !== undefined ? items.find((i) => i.text === q.text) : undefined;
+      if (!hit && items.every((i) => !i.text) && items.length === 1) hit = items[0];
+      if (!hit && items.length > 1 && !items.some((i) => i.text)) {
+        this.print(`  УВАГА: в історії ${items.length} кандидатів без тексту, не можна визначити, який наш.`);
+        return null;
+      }
+      if (hit) {
+        this.usedHistoryIds.add(hit.history_item_id);
+        return { credits: hit.character_count_change_to - hit.character_count_change_from, item: hit };
+      }
+      if (waited >= this.stableMaxMs) return null;
+      this.print('  запису в історії ще немає, чекаємо…');
+      await this.sleep(this.stableEveryMs);
+      waited += this.stableEveryMs;
+    }
   }
 
   // ---------------------------------------------------------------- голос

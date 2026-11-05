@@ -71,11 +71,17 @@ export async function runSoundItems(ctx: RunContext, todo: SoundItem[], opts: { 
     mkdirSync(dirname(it.file), { recursive: true });
     if (existsSync(it.file)) renameSync(it.file, `${it.file}.prev`);
     writeFileSync(it.file, audio);
-    const { spent } = await sp.finish();
+    let { spent } = await sp.finish({ expectRise: it.kind === 'music' });
+    let source = 'counter';
+    const hdr = extra.character_cost_header as number | null | undefined;
+    if (it.kind === 'sfx' && spent <= 0 && typeof hdr === 'number' && hdr > 0) {
+      spent = hdr; // лічильник цього не показав, беремо character-cost з відповіді
+      source = 'header';
+    }
     ctx.recordSpent(spent);
     updateManifest(story, (m) => {
       const regen = ((m.audio[it.id]?.regen_count as number | undefined) ?? 0) + (m.audio[it.id] ? 1 : 0);
-      m.audio[it.id] = { file: paths.rel(it.file), kind: it.kind, seconds_requested: it.seconds, prompt: it.prompt, credits: spent, output_format: opts.outFmt, regen_count: regen, generated_at: new Date().toISOString(), ...extra };
+      m.audio[it.id] = { file: paths.rel(it.file), kind: it.kind, seconds_requested: it.seconds, prompt: it.prompt, credits: spent, credits_source: source, output_format: opts.outFmt, regen_count: regen, generated_at: new Date().toISOString(), ...extra };
     });
     log(`  ${it.label}: готово → ${paths.rel(it.file)} (${spent} кредитів)`);
   }

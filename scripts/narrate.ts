@@ -68,6 +68,7 @@ interface CachedPart {
   chars_sent: number;
   credits: number | null;
   fragments: number[];
+  credits_source?: string;
   generated_at: string;
 }
 
@@ -129,7 +130,7 @@ async function main(): Promise<void> {
   });
 
   const client = new ElevenLabsClient();
-  const rate = await ttsRate(client, MODEL_ID);
+  const rate = await ttsRate(client, MODEL_ID, story);
   for (const p of plans) {
     if (p.chars > rate.maxChars) throw new Error(`Частина ${p.index + 1} (${p.chars} знаків із тегами) довша за ліміт моделі ${MODEL_ID} (${rate.maxChars}).`);
   }
@@ -167,18 +168,31 @@ async function main(): Promise<void> {
       ctx.assertBudget(estimateTts(p.chars, rate).credits ?? 0, `озвучення, частина ${p.index + 1}`);
       log(`Озвучуємо частину ${p.index + 1} (${p.chars} знаків, ${cp})…`);
       const sp = await client.beginSpend();
+      const sinceUnix = Math.floor(Date.now() / 1000) - 2;
       const response = await client.textToSpeechWithTimestamps(voice.voiceId, p.body, { output_format: outputFormat }, sp.guard);
       // Спершу зберігаємо сиру відповідь і звук: якщо розбір таймінгів упаде, платити вдруге не доведеться.
       mkdirSync(paths.workDir(story), { recursive: true });
       writeFileSync(p.raw, JSON.stringify(response));
       writeFileSync(p.mp3, Buffer.from(response.audio_base64, 'base64'));
-      const { spent } = await sp.finish();
+      // Вартість озвучення беремо з історії (character_count_change_to мінус from): лічильник підписки відстає.
+      let spent: number;
+      let source: 'history' | 'counter';
+      const h = await client.findTtsCost({ voiceId: voice.voiceId, text: p.text, sinceUnix });
+      if (h) {
+        spent = h.credits;
+        source = 'history';
+        client.lastStableCredits = undefined; // наступний виклик заново стабілізує базу
+      } else {
+        log('  УВАГА: запису в історії не знайдено, беремо різницю стабілізованого лічильника.');
+        spent = (await sp.finish({ expectRise: true })).spent;
+        source = 'counter';
+      }
       ctx.recordSpent(spent);
       updateManifest(story, (m) => {
         const prev = (m.narration ?? {}) as Record<string, unknown>;
         const parts = { ...((prev.parts as Record<string, CachedPart>) ?? {}) };
         parts[p.hash] = {
-          hash: p.hash, mp3: paths.rel(p.mp3), response_file: paths.rel(p.raw), chars_sent: p.chars, credits: spent,
+          hash: p.hash, mp3: paths.rel(p.mp3), response_file: paths.rel(p.raw), chars_sent: p.chars, credits: spent, credits_source: source,
           fragments: p.fragments.map((f) => f.n), generated_at: new Date().toISOString(),
         };
         m.narration = { ...prev, model_id: MODEL_ID, voice_id: voice.voiceId, language_code: langCode ?? null, output_format: outputFormat, parts };
