@@ -1,7 +1,7 @@
 {
   "story": "01-natalia",
   "credits": {
-    "total_spent": 64519,
+    "total_spent": 65128,
     "runs": [
       {
         "script": "voice-previews",
@@ -349,6 +349,14 @@
         "finished_at": "2026-11-05T17:35:32.430Z",
         "credits_before": 77219,
         "credits_after": 77828,
+        "spent_run": 609
+      },
+      {
+        "script": "frames",
+        "started_at": "2026-11-05T17:37:58.715Z",
+        "finished_at": "2026-11-05T17:39:38.795Z",
+        "credits_before": 77828,
+        "credits_after": 78437,
         "spent_run": 609
       }
     ]
@@ -1487,15 +1495,30 @@
           "resolution": "1K",
           "credits": 609,
           "completed_at": "2026-11-05T06:32:24.655Z"
+        },
+        {
+          "generation_id": "9OUpZ4zrAMrdwAYkfl3y",
+          "model_id": "gemini-3.1-flash-image",
+          "width": 768,
+          "height": 1376,
+          "prompt": "Medium wide shot inside a small borrowed room in a village house on a summer afternoon, camera about one metre high, 35mm lens. Two sisters stand with their backs to us in front of the mirror on an old wooden wardrobe door. The younger, a small girl of about six with two short light-brown braids, in a mustard-yellow summer dress, has just put on a new stiff school backpack that covers her back from her shoulders to below her waist, both thumbs hooked under its shoulder straps. Beside her stands her older sister, a slim long-legged girl of about nine with a high light-brown ponytail, in a mint-green summer dress, upright and a head taller, so the younger girl's head reaches only to her shoulder; with one hand she pulls the loose end of a shoulder strap downward, tightening the backpack on her sister's back. Their reflections in the mirror are small and soft, the faces a few brush strokes with an even skin tone. Behind them on a made-up sofa bed lies a second, older school backpack, faded and scuffed at the corners. By the door stand the family's travel bags, still zipped shut, a folded jacket lying on top. Faded floral wallpaper, a tulle curtain, warm afternoon light from a window on the left. The two girls and the mirror sit in the centre of the frame; the painted wooden floor fills the lower fifth.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles and buildings are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering, no logos, no brands, no watermark. Everyone in the picture is an ordinary civilian going about daily life, and every place in it stands whole and peaceful.",
+          "refs": [
+            "asset:4PSC6mUBpTqffrns2ZVp"
+          ],
+          "file": "work/01-natalia/frames/frame-03.v2.png",
+          "aspect_ratio": "9:16",
+          "resolution": "1K",
+          "credits": 609,
+          "completed_at": "2026-11-05T17:32:50.766Z"
         }
       ],
-      "regen_count": 1,
+      "regen_count": 2,
       "current": {
-        "generation_id": "9OUpZ4zrAMrdwAYkfl3y",
+        "generation_id": "kqMJVuKpF0C2tPYTmF2B",
         "model_id": "gemini-3.1-flash-image",
         "width": 768,
         "height": 1376,
-        "prompt": "Medium wide shot inside a small borrowed room in a village house on a summer afternoon, camera about one metre high, 35mm lens. Two sisters stand with their backs to us in front of the mirror on an old wooden wardrobe door. The younger, a small girl of about six with two short light-brown braids, in a mustard-yellow summer dress, has just put on a new stiff school backpack that covers her back from her shoulders to below her waist, both thumbs hooked under its shoulder straps. Beside her stands her older sister, a slim long-legged girl of about nine with a high light-brown ponytail, in a mint-green summer dress, upright and a head taller, so the younger girl's head reaches only to her shoulder; with one hand she pulls the loose end of a shoulder strap downward, tightening the backpack on her sister's back. Their reflections in the mirror are small and soft, the faces a few brush strokes with an even skin tone. Behind them on a made-up sofa bed lies a second, older school backpack, faded and scuffed at the corners. By the door stand the family's travel bags, still zipped shut, a folded jacket lying on top. Faded floral wallpaper, a tulle curtain, warm afternoon light from a window on the left. The two girls and the mirror sit in the centre of the frame; the painted wooden floor fills the lower fifth.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles and buildings are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering, no logos, no brands, no watermark. Everyone in the picture is an ordinary civilian going about daily life, and every place in it stands whole and peaceful.",
+        "prompt": "Medium wide shot inside a small borrowed room in a village house on a summer afternoon, camera about one metre high, 35mm lens. Two sisters stand with their backs to us in front of the mirror on an old wooden wardrobe door. The younger, a small girl of about six with two short light-brown braids, in a mustard-yellow summer dress, has just put on a new stiff school backpack that covers her back from her shoulders to below her waist, both thumbs hooked under its shoulder straps. Beside her stands her older sister, a slim long-legged girl of about nine with a high light-brown ponytail, in a mint-green summer dress, upright and a head taller, so the younger girl's head reaches only to her shoulder; with one hand she pulls the loose end of a shoulder strap downward, tightening the backpack on her sister's back. Their reflections in the mirror are small and soft, the faces a few brush strokes with an even skin tone. Behind them on a made-up sofa bed lies a second school backpack, older and softer in shape, sewn of smooth dark-blue fabric in a single even colour. By the door stand the family's travel bags, still zipped shut, a folded jacket lying on top. Faded floral wallpaper, a tulle curtain, warm afternoon light from a window on the left. The two girls and the mirror sit in the centre of the frame; the painted wooden floor fills the lower fifth.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles and buildings are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering, no logos, no brands, no watermark. Everyone in the picture is an ordinary civilian going about daily life, and every place in it stands whole and peaceful.",
         "refs": [
           "asset:4PSC6mUBpTqffrns2ZVp"
         ],
@@ -1503,20 +1526,7 @@
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 609,
-        "completed_at": "2026-11-05T17:32:50.766Z"
-      },
-      "pending": {
-        "kind": "regen",
-        "status": "created",
-        "prompt": "Medium wide shot inside a small borrowed room in a village house on a summer afternoon, camera about one metre high, 35mm lens. Two sisters stand with their backs to us in front of the mirror on an old wooden wardrobe door. The younger, a small girl of about six with two short light-brown braids, in a mustard-yellow summer dress, has just put on a new stiff school backpack that covers her back from her shoulders to below her waist, both thumbs hooked under its shoulder straps. Beside her stands her older sister, a slim long-legged girl of about nine with a high light-brown ponytail, in a mint-green summer dress, upright and a head taller, so the younger girl's head reaches only to her shoulder; with one hand she pulls the loose end of a shoulder strap downward, tightening the backpack on her sister's back. Their reflections in the mirror are small and soft, the faces a few brush strokes with an even skin tone. Behind them on a made-up sofa bed lies a second school backpack, older and softer in shape, sewn of smooth dark-blue fabric in a single even colour. By the door stand the family's travel bags, still zipped shut, a folded jacket lying on top. Faded floral wallpaper, a tulle curtain, warm afternoon light from a window on the left. The two girls and the mirror sit in the centre of the frame; the painted wooden floor fills the lower fifth.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles and buildings are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering, no logos, no brands, no watermark. Everyone in the picture is an ordinary civilian going about daily life, and every place in it stands whole and peaceful.",
-        "refs": [
-          "asset:4PSC6mUBpTqffrns2ZVp"
-        ],
-        "aspect_ratio": "9:16",
-        "resolution": "1K",
-        "requested_at": "2026-11-05T17:38:12.642Z",
-        "generation_id": "kqMJVuKpF0C2tPYTmF2B",
-        "credits_before": 77828
+        "completed_at": "2026-11-05T17:39:26.363Z"
       }
     },
     "frame/04": {
@@ -2314,7 +2324,7 @@
     "created_at": "2026-11-05T00:41:54.681Z",
     "design_credits_source": "docs"
   },
-  "updated_at": "2026-11-05T17:38:12.914Z",
+  "updated_at": "2026-11-05T17:39:38.795Z",
   "narration": {
     "model_id": "eleven_v4",
     "voice_id": "49POAIkFDXsxrtR84sdj",
@@ -2457,7 +2467,7 @@
     "gemini-3.1-flash-image@1K": {
       "max": 2139,
       "last": 609,
-      "count": 88
+      "count": 89
     },
     "gemini-3.1-flash-image@512": {
       "max": 409,
