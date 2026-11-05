@@ -1241,7 +1241,8 @@
           1
         ],
         "generated_at": "2026-11-05T00:42:14.982Z",
-        "credits_source": "history"
+        "credits_source": "history",
+        "history_item_id": "JNbneKnkWbeYwGv6K6xG"
       },
       "08bfab8c4b": {
         "hash": "08bfab8c4b",
@@ -1269,7 +1270,8 @@
           18
         ],
         "generated_at": "2026-11-05T00:42:42.708Z",
-        "credits_source": "history"
+        "credits_source": "history",
+        "history_item_id": "MQQj9OQMrvZHAboqsF91"
       },
       "044a7de129": {
         "hash": "044a7de129",
@@ -1281,7 +1283,8 @@
         "fragments": [
           1
         ],
-        "generated_at": "2026-11-05T01:05:49.595Z"
+        "generated_at": "2026-11-05T01:05:49.595Z",
+        "history_item_id": "pECys6D3P4cv66umW3pW"
       }
     },
     "file": "work/01-natalia/narration.mp3",
