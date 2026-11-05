@@ -6,6 +6,7 @@
 // цей час до першого слова, підйом після останнього слова. Усе рахується в пам'яті на PCM float32.
 
 import { spawnSync } from 'node:child_process';
+import type { EnvPatch } from './mix-spec';
 
 export const SR = 44100;
 export const CH = 2;
@@ -155,4 +156,142 @@ export function mixVoiceAndMusic(voice: Float32Array, music: Float32Array, p: Mi
     for (let i = 0; i < out.length; i++) out[i] = out[i]! * peakScale;
   }
   return { pcm: out, voiceRmsDb: toDb(voiceRms), musicRmsDb: toDb(musicRms), peakScale, musicShorterBy: Math.max(0, windowSec - musicFrames / SR), intervals, envelope: env };
+}
+
+// ------------------------------------------------------------------ повне зведення фільму
+
+/** Крива «дБ у момент t»: основна функція, поверх якої лягають ділянки (пізніші перекривають раніші). */
+export function withPatches(base: (t: number) => number, patches: EnvPatch[]): (t: number) => number {
+  const resolved = patches
+    .filter((p) => p.points.length >= 2)
+    .map((p) => ({ t0: p.points[0]!.t, t1: p.points[p.points.length - 1]!.t, pts: p.points.map((q) => ({ t: q.t, db: q.db === 'base' ? base(q.t) : q.db })) }));
+  return (t) => {
+    for (let i = resolved.length - 1; i >= 0; i--) {
+      const r = resolved[i]!;
+      if (t >= r.t0 && t <= r.t1) return dbAt(r.pts, t);
+    }
+    return base(t);
+  };
+}
+
+/** Основна крива музики: як у зразку, але якщо мовлення починається раніше за час зміни, музика одразу на рівні «під голосом». */
+export function baseMusicEnvelope(intervals: Interval[], underDb: number, pauseDb: number, fade: number): (t: number) => number {
+  const pts = envelopePoints(intervals, underDb, pauseDb, fade);
+  const first = intervals[0];
+  if (first && first.a < fade) for (const p of pts) if (p.t <= first.a) p.db = underDb;
+  return (t) => dbAt(pts, t);
+}
+
+export interface FilmSfx {
+  label: string;
+  pcm: Float32Array;
+  /** Секунда фільму, на якій починається файл. */
+  start: number;
+  /** Рівень відносно голосу, дБ, у момент t. */
+  levelDb: (t: number) => number;
+  fadeIn: number;
+  fadeOutLen: number;
+  /** Секунда, на якій згасання закінчується (не пізніше за кінець файлу й фільму). */
+  fadeOutEnd: number;
+}
+
+export interface FilmParams {
+  words: Array<{ start: number; end: number }>;
+  pauseMin: number;
+  /** Рівень музики відносно голосу, дБ, у момент t. */
+  musicDb: (t: number) => number;
+  /** Наприкінці фільму музика гасне до нуля за стільки секунд (амплітуда лінійно). */
+  endFade: number;
+  sfx: FilmSfx[];
+}
+
+export interface FilmResult {
+  pcm: Float32Array;
+  voiceRmsDb: number;
+  musicRmsDb: number;
+  sfxRmsDb: Array<{ label: string; rmsDb: number }>;
+  peakScale: number;
+  musicShorterBy: number;
+}
+
+/** Однополюсний фільтр низьких частот (для «приглушеного» шуму), на кожному каналі окремо. */
+export function lowpass(pcm: Float32Array, cutoffHz: number): Float32Array {
+  const a = 1 - Math.exp((-2 * Math.PI * cutoffHz) / SR);
+  const out = new Float32Array(pcm.length);
+  const y = new Array<number>(CH).fill(0);
+  for (let f = 0; f < pcm.length / CH; f++) {
+    for (let c = 0; c < CH; c++) {
+      y[c] = y[c]! + a * (pcm[f * CH + c]! - y[c]!);
+      out[f * CH + c] = y[c]!;
+    }
+  }
+  return out;
+}
+
+/** Рівень (множник) у кожну 5-ту мс, між ними лінійно: дешевше за обчислення кривої на кожному семплі. */
+function gainTable(dbFn: (t: number) => number, seconds: number, rmsRatio: number): { at: (f: number) => number } {
+  const step = Math.round(SR * 0.005);
+  const n = Math.ceil((seconds * SR) / step) + 2;
+  const tab = new Float32Array(n);
+  for (let i = 0; i < n; i++) tab[i] = rmsRatio * 10 ** (dbFn((i * step) / SR) / 20);
+  return {
+    at: (f) => {
+      const k = f / step;
+      const i = Math.floor(k);
+      const fr = k - i;
+      return tab[i]! * (1 - fr) + tab[Math.min(i + 1, n - 1)]! * fr;
+    },
+  };
+}
+
+/**
+ * Повне зведення: голос на 0 дБ, музика й шуми під ним за кривими (дБ відносно голосу). Рівні
+ * музики й шумів міряються так само, як у зразку: RMS музики (від початку, на довжину фільму) і RMS
+ * кожного шуму (весь файл) зводяться до RMS голосу на ділянках мовлення, далі додається крива.
+ * Довжина результату дорівнює довжині голосу.
+ */
+export function mixFilm(voice: Float32Array, music: Float32Array, p: FilmParams): FilmResult {
+  const frames = voice.length / CH;
+  const filmSec = frames / SR;
+  const intervals = speechIntervals(p.words, p.pauseMin);
+  const voiceRms = rmsOver(voice, intervals);
+  if (voiceRms <= 0) throw new Error('Не знайдено мовлення (RMS голосу = 0): перевірте озвучення й timings.json.');
+  const musicFrames = music.length / CH;
+  const musicRms = rmsOver(music, [{ a: 0, b: Math.min(musicFrames / SR, filmSec) }]);
+  if (musicRms <= 0) throw new Error('Музика беззвучна.');
+  const out = new Float32Array(voice);
+  const mg = gainTable(p.musicDb, filmSec, voiceRms / musicRms);
+  for (let f = 0; f < Math.min(frames, musicFrames); f++) {
+    let g = mg.at(f);
+    const left = filmSec - f / SR;
+    if (p.endFade > 0 && left < p.endFade) g *= Math.max(0, left / p.endFade);
+    for (let c = 0; c < CH; c++) out[f * CH + c] = out[f * CH + c]! + music[f * CH + c]! * g;
+  }
+  const sfxRmsDb: Array<{ label: string; rmsDb: number }> = [];
+  for (const s of p.sfx) {
+    const sfxFrames = s.pcm.length / CH;
+    const rms = rmsOver(s.pcm, [{ a: 0, b: sfxFrames / SR }]);
+    if (rms <= 0) throw new Error(`${s.label}: файл беззвучний.`);
+    sfxRmsDb.push({ label: s.label, rmsDb: toDb(rms) });
+    const startFrame = Math.round(s.start * SR);
+    const levelTab = gainTable((t) => s.levelDb(t + s.start), sfxFrames / SR, voiceRms / rms);
+    const outEnd = s.fadeOutEnd - s.start; // відносно початку файлу
+    for (let i = 0; i < sfxFrames; i++) {
+      const f = startFrame + i;
+      if (f >= frames) break;
+      const t = i / SR;
+      let g = levelTab.at(i);
+      if (s.fadeIn > 0 && t < s.fadeIn) g *= t / s.fadeIn;
+      if (s.fadeOutLen > 0 && t > outEnd - s.fadeOutLen) g *= Math.max(0, (outEnd - t) / s.fadeOutLen);
+      for (let c = 0; c < CH; c++) out[f * CH + c] = out[f * CH + c]! + s.pcm[i * CH + c]! * g;
+    }
+  }
+  let peak = 0;
+  for (let i = 0; i < out.length; i++) peak = Math.max(peak, Math.abs(out[i]!));
+  let peakScale = 1;
+  if (peak > 0.98) {
+    peakScale = 0.98 / peak;
+    for (let i = 0; i < out.length; i++) out[i] = out[i]! * peakScale;
+  }
+  return { pcm: out, voiceRmsDb: toDb(voiceRms), musicRmsDb: toDb(musicRms), sfxRmsDb, peakScale, musicShorterBy: Math.max(0, filmSec - musicFrames / SR) };
 }
