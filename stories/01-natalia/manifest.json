@@ -1,7 +1,7 @@
 {
   "story": "01-natalia",
   "credits": {
-    "total_spent": 4149,
+    "total_spent": 4191,
     "runs": [
       {
         "script": "voice-previews",
@@ -53,6 +53,14 @@
         "credits_before": 2525,
         "credits_after": 4149,
         "spent_run": 1624
+      },
+      {
+        "script": "narrate",
+        "started_at": "2026-11-05T01:05:23.446Z",
+        "finished_at": "2026-11-05T01:06:03.868Z",
+        "credits_before": 4149,
+        "credits_after": 4149,
+        "spent_run": 0
       }
     ]
   },
@@ -228,7 +236,7 @@
     "created_at": "2026-11-05T00:41:54.681Z",
     "design_credits_source": "docs"
   },
-  "updated_at": "2026-11-05T00:57:26.536Z",
+  "updated_at": "2026-11-05T01:06:49.325Z",
   "narration": {
     "model_id": "eleven_v4",
     "voice_id": "49POAIkFDXsxrtR84sdj",
@@ -274,36 +282,46 @@
         ],
         "generated_at": "2026-11-05T00:42:42.708Z",
         "credits_source": "history"
+      },
+      "044a7de129": {
+        "hash": "044a7de129",
+        "mp3": "work/01-natalia/narration.part-044a7de129.mp3",
+        "response_file": "work/01-natalia/narration.part-044a7de129.response.json",
+        "chars_sent": 86,
+        "credits": 42,
+        "credits_source": "history",
+        "fragments": [
+          1
+        ],
+        "generated_at": "2026-11-05T01:05:49.595Z"
       }
     },
     "file": "work/01-natalia/narration.mp3",
     "active_parts": [
-      "0f224509bd",
+      "044a7de129",
       "08bfab8c4b"
     ],
     "silent_fragments": [],
     "duration": 112.327,
-    "assembled_at": "2026-11-05T00:42:44.006Z"
+    "assembled_at": "2026-11-05T01:05:50.972Z"
   },
   "mix_sample": {
     "file": "work/01-natalia/audio/mix-sample.mp3",
-    "music_sample": 1,
+    "music_sample": 2,
     "fragments": [
       1,
-      2,
-      3,
-      4
+      2
     ],
     "window": [
       0,
-      24.899
+      18.429
     ],
-    "under_db": -18,
+    "under_db": -20,
     "pause_db": -8,
-    "fade_seconds": 0.6,
+    "fade_seconds": 0.8,
     "pause_min": 0.5,
     "credits": 0,
-    "generated_at": "2026-11-05T00:45:19.035Z"
+    "generated_at": "2026-11-05T01:06:49.325Z"
   },
   "image_sizes": {
     "gemini-3.1-flash-image@1K@9:16": {
