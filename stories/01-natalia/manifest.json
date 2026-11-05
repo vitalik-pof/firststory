@@ -1,0 +1,177 @@
+{
+  "story": "01-natalia",
+  "credits": {
+    "total_spent": 294,
+    "runs": [
+      {
+        "script": "voice-previews",
+        "started_at": "2026-11-05T00:41:42.566Z",
+        "finished_at": "2026-11-05T00:41:55.865Z",
+        "credits_before": 0,
+        "credits_after": 0,
+        "spent_run": 0
+      },
+      {
+        "script": "narrate",
+        "started_at": "2026-11-05T00:42:08.567Z",
+        "finished_at": "2026-11-05T00:42:45.244Z",
+        "credits_before": 0,
+        "credits_after": 294,
+        "spent_run": 294
+      },
+      {
+        "script": "sound-samples",
+        "started_at": "2026-11-05T00:44:21.957Z",
+        "finished_at": "2026-11-05T00:44:43.908Z",
+        "credits_before": 1264,
+        "credits_after": 1264,
+        "spent_run": 0
+      }
+    ]
+  },
+  "images": {},
+  "assets": {},
+  "audio": {
+    "sample-music-1": {
+      "file": "work/01-natalia/audio/samples/music-1.mp3",
+      "kind": "music",
+      "seconds_requested": 30,
+      "prompt": "Instrumental, intimate chamber piece for solo upright piano and solo cello, slow tempo around 58 BPM, free and unhurried. Hushed, restrained, dignified, like someone speaking quietly after a long time. Begin with almost nothing: the first four seconds are only a single low sustained cello note with a very soft piano tone far in the background. Then a simple, sparse piano melody in a minor mode, a few notes at a time with long silences between phrases, the cello answering with long soft bowed notes. Dry, close, warm room sound with felt-piano softness, no reverb wash. No drums, no percussion, no strings section swell, no choir, no big crescendo, no dramatic climax. In the last ten seconds the harmony opens up slightly toward a warmer major colour, still very quiet, then the final note is left to fade out slowly. Emotionally plain, not sentimental, not tragic, no cinematic trailer feeling.",
+      "credits": 0,
+      "output_format": "mp3_44100_128",
+      "regen_count": 0,
+      "generated_at": "2026-11-05T00:44:30.872Z",
+      "song_id": "yO9dN2s0UhayQ36nDnWt",
+      "model_id": null
+    },
+    "sample-music-2": {
+      "file": "work/01-natalia/audio/samples/music-2.mp3",
+      "kind": "music",
+      "seconds_requested": 20,
+      "prompt": "Instrumental ambient texture without a melody, slow and weightless, no clear tempo and no beat. A low warm drone of bowed double bass and soft analog synth pad, very quiet, with distant slowly breathing tones, faint bowed glass harmonics and a barely audible detuned piano note appearing now and then, far away, like a memory. Cold, wide, empty and still at first, like early morning frost over a field. Nothing rhythmic, no repeating pattern, no hook. After about twelve seconds one warm string chord slowly blooms out of the drone, stays for a few seconds and dissolves again into the quiet, leaving a thin warm tone at the end. Very low dynamics throughout, no drums, no percussion, no vocals, no heroic or epic build, no cinematic trailer sound.",
+      "credits": 0,
+      "output_format": "mp3_44100_128",
+      "regen_count": 0,
+      "generated_at": "2026-11-05T00:44:37.972Z",
+      "song_id": "mUkRfxTZPlgMxg1lEAHi",
+      "model_id": null
+    },
+    "sample-sfx-1": {
+      "file": "work/01-natalia/audio/samples/sfx-01.mp3",
+      "kind": "sfx",
+      "seconds_requested": 8,
+      "prompt": "A large old military armoured vehicle engine idling at a low steady rumble, heard from some distance across an empty summer courtyard between apartment blocks. Hot still air, distant insects chirping, a faint rhythmic squeak of a metal playground swing moving slightly in the wind. Nothing else: no voices, no gunfire, no explosions, no radio, no music. Calm, impersonal and heavy, constant level, no build-up.",
+      "credits": 0,
+      "output_format": "mp3_44100_128",
+      "regen_count": 0,
+      "generated_at": "2026-11-05T00:44:42.735Z",
+      "character_cost_header": 97
+    }
+  },
+  "voice": {
+    "voice_entry": "natalia",
+    "design_model": "eleven_multilingual_ttv_v2",
+    "probe_text": "З дому нас вигнали люди зі зброєю. Російські солдати. Дочки мали піти в перший клас. Тому ми думали, що скоро повернемося. Але не судилося. Ближче до вересня зрозуміли, що треба вирішувати, як бути далі. І почали шукати безпечне місце в іншому місті. Там ми дуже швидко знайшли житло та роботу.",
+    "previews": [
+      {
+        "n": 1,
+        "generated_voice_id": "49POAIkFDXsxrtR84sdj",
+        "file": "work/01-natalia/voice-previews/preview-1.mp3",
+        "duration_secs": 23.721875
+      },
+      {
+        "n": 2,
+        "generated_voice_id": "TNPSnb2xvrQH30MFo244",
+        "file": "work/01-natalia/voice-previews/preview-2.mp3",
+        "duration_secs": 20.4305
+      },
+      {
+        "n": 3,
+        "generated_voice_id": "6jIoKYa9HyMWNWbyper9",
+        "file": "work/01-natalia/voice-previews/preview-3.mp3",
+        "duration_secs": 22.650875
+      }
+    ],
+    "design_credits": 0,
+    "designed_at": "2026-11-05T00:41:52.348Z",
+    "voice_id": "49POAIkFDXsxrtR84sdj",
+    "voice_name": "natalia 01-natalia",
+    "picked_preview": 1,
+    "created_at": "2026-11-05T00:41:54.681Z"
+  },
+  "updated_at": "2026-11-05T00:45:19.036Z",
+  "narration": {
+    "model_id": "eleven_v4",
+    "voice_id": "49POAIkFDXsxrtR84sdj",
+    "language_code": "uk",
+    "output_format": "mp3_44100_128",
+    "parts": {
+      "0f224509bd": {
+        "hash": "0f224509bd",
+        "mp3": "work/01-natalia/narration.part-0f224509bd.mp3",
+        "response_file": "work/01-natalia/narration.part-0f224509bd.response.json",
+        "chars_sent": 88,
+        "credits": 294,
+        "fragments": [
+          1
+        ],
+        "generated_at": "2026-11-05T00:42:14.982Z"
+      },
+      "08bfab8c4b": {
+        "hash": "08bfab8c4b",
+        "mp3": "work/01-natalia/narration.part-08bfab8c4b.mp3",
+        "response_file": "work/01-natalia/narration.part-08bfab8c4b.response.json",
+        "chars_sent": 1911,
+        "credits": 0,
+        "fragments": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18
+        ],
+        "generated_at": "2026-11-05T00:42:42.708Z"
+      }
+    },
+    "file": "work/01-natalia/narration.mp3",
+    "active_parts": [
+      "0f224509bd",
+      "08bfab8c4b"
+    ],
+    "silent_fragments": [],
+    "duration": 112.327,
+    "assembled_at": "2026-11-05T00:42:44.006Z"
+  },
+  "mix_sample": {
+    "file": "work/01-natalia/audio/mix-sample.mp3",
+    "music_sample": 1,
+    "fragments": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "window": [
+      0,
+      24.899
+    ],
+    "under_db": -18,
+    "pause_db": -8,
+    "fade_seconds": 0.6,
+    "pause_min": 0.5,
+    "credits": 0,
+    "generated_at": "2026-11-05T00:45:19.035Z"
+  }
+}
