@@ -1,7 +1,7 @@
 {
   "story": "01-natalia",
   "credits": {
-    "total_spent": 65737,
+    "total_spent": 67601,
     "runs": [
       {
         "script": "voice-previews",
@@ -366,6 +366,14 @@
         "credits_before": 78437,
         "credits_after": 79046,
         "spent_run": 609
+      },
+      {
+        "script": "sound",
+        "started_at": "2026-11-05T18:09:14.341Z",
+        "finished_at": "2026-11-05T18:10:22.882Z",
+        "credits_before": 79880,
+        "credits_after": 81744,
+        "spent_run": 1864
       }
     ]
   },
@@ -2172,14 +2180,14 @@
     "music": {
       "file": "work/01-natalia/audio/music.mp3",
       "kind": "music",
-      "seconds_requested": 120,
-      "prompt": "Instrumental ambient texture without a melody, slow and weightless, no clear tempo and no beat, no rhythm, no repeating pattern, no hook, no drums, no percussion, no vocals. Built from a low warm drone of bowed double bass, a soft analog synth pad and a few quiet bowed string layers, with distant slowly breathing tones and faint bowed glass harmonics. A single barely audible detuned piano note appears very rarely, far away, like a memory. Very low dynamics throughout: this is air under a human voice, never a tune. The colour of the music changes over time from cold to warm, and the warmth comes only from slowly blooming string chords, never from a melody. Timeline of about 120 seconds. 0:00 to 0:13: cold, wide, empty and still, like early morning frost over a field; in the first four seconds the drone is almost nothing, barely there. At about 0:05 one warm string chord slowly blooms out of the drone, is at its fullest near 0:06, stays for a few seconds and dissolves again into the quiet by 0:10; from 0:10 to 0:13 it is cold and empty again. At about 0:13 everything thins out to one thin low tone, almost silence, and stays that thin until 0:17. 0:17 to 0:31: a quiet, unsettled, searching night mood; the drone shifts very slowly, sparse glass harmonics; at about 0:24 a wide airy pad slowly opens like the first light before dawn, then settles back down by 0:31. 0:31 to 0:49: narrow, close and restrained tension; from 0:31 the pad draws in and hushes, then a sustained low bowed bass note and a small cluster of close tones, very quiet, stubborn and tired, with no build. 0:49 to 0:54: steadier ground, the cluster loosens into an open stable fifth. At about 0:54 a soft warm chord appears, small and gentle, like something new being born, and holds until 1:01. 1:01 to 1:08: morning light; the pad opens into a brighter, wider, fresh major colour, spacious and calm. 1:08 to 1:40: the warmest part; layered warm string chords bloom slowly one after another, each overlapping the one before, like many people breathing together, adding more and more voices; still no melody, no rhythm, still very quiet and wide. 1:40 to 1:50: the warmth withdraws; everything pulls back to one low bass tone and a single thin warm held note, like one small lamp in a dark room; at about 1:47 a second thin warm tone joins it quietly, a fifth above, with no build. 1:50 to 2:00: the final chord opens wide and slowly, the warmest and widest moment of the whole piece, with a few separate, far-away soft piano notes that do not form a motif, then a long slow fade into a thin warm tone, ending at 2:00. No heroic or epic build, no big crescendo, no climax, no cinematic trailer sound, no sentimental swell.",
-      "credits": 1818,
+      "seconds_requested": 123,
+      "prompt": "Instrumental ambient texture without a melody, slow and weightless, no clear tempo and no beat, no rhythm, no repeating pattern, no hook, no drums, no percussion, no vocals. Built from a low warm drone of bowed double bass, a soft analog synth pad and a few quiet bowed string layers, with distant slowly breathing tones and faint bowed glass harmonics. A single barely audible detuned piano note appears very rarely, far away, like a memory. Very low dynamics throughout: this is air under a human voice, never a tune. The colour of the music changes over time from cold to warm, and the warmth comes only from slowly blooming string chords, never from a melody. Timeline of about 123 seconds. 0:00 to 0:03: a quiet opening under a title card; the cold low drone of bowed bass is already sounding from the very first moment, wide, still and clearly present, with one faint glass harmonic far away, nothing blooms yet, no build. 0:03 to 0:16: cold, wide, empty and still, like early morning frost over a field; from 0:03 to 0:07 the drone settles even quieter, almost nothing, barely there. At about 0:08 one warm string chord slowly blooms out of the drone, is at its fullest near 0:09, stays for a few seconds and dissolves again into the quiet by 0:13; from 0:13 to 0:16 it is cold and empty again. At about 0:16 everything thins out to one thin low tone, almost silence, and stays that thin until 0:20. 0:20 to 0:34: a quiet, unsettled, searching night mood; the drone shifts very slowly, sparse glass harmonics; at about 0:27 a wide airy pad slowly opens like the first light before dawn, then settles back down by 0:34. 0:34 to 0:52: narrow, close and restrained tension; from 0:34 the pad draws in and hushes, then a sustained low bowed bass note and a small cluster of close tones, very quiet, stubborn and tired, with no build. 0:52 to 0:57: steadier ground, the cluster loosens into an open stable fifth. At about 0:57 a soft warm chord appears, small and gentle, like something new being born, and holds until 1:04. 1:04 to 1:11: morning light; the pad opens into a brighter, wider, fresh major colour, spacious and calm. 1:11 to 1:43: the warmest part; layered warm string chords bloom slowly one after another, each overlapping the one before, like many people breathing together, adding more and more voices; still no melody, no rhythm, still very quiet and wide. 1:43 to 1:53: the warmth withdraws; everything pulls back to one low bass tone and a single thin warm held note, like one small lamp in a dark room; at about 1:50 a second thin warm tone joins it quietly, a fifth above, with no build. 1:53 to 2:03: the final chord opens wide and slowly, the warmest and widest moment of the whole piece, with a few separate, far-away soft piano notes that do not form a motif, then a long slow fade into a thin warm tone, ending at 2:03. No heroic or epic build, no big crescendo, no climax, no cinematic trailer sound, no sentimental swell.",
+      "credits": 1864,
       "credits_source": "counter",
       "output_format": "mp3_44100_128",
-      "regen_count": 1,
-      "generated_at": "2026-11-05T07:47:40.152Z",
-      "song_id": "45yo4BpBN5YsqIB09nIO",
+      "regen_count": 2,
+      "generated_at": "2026-11-05T18:10:10.014Z",
+      "song_id": "hBaOJHTSDl8zenLAHaER",
       "model_id": null
     },
     "sfx-1": {
@@ -2347,7 +2355,7 @@
     "created_at": "2026-11-05T00:41:54.681Z",
     "design_credits_source": "docs"
   },
-  "updated_at": "2026-11-05T17:40:57.901Z",
+  "updated_at": "2026-11-05T18:10:22.882Z",
   "narration": {
     "model_id": "eleven_v4",
     "voice_id": "49POAIkFDXsxrtR84sdj",
