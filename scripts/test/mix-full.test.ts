@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { CH, SR, baseMusicEnvelope, mixFilm, rmsOver, speechIntervals, toDb, withPatches } from '../lib/mix';
-import { parseFilmMix, parseNumberList, parseWhere } from '../lib/mix-spec';
+import { CH, SR, baseMusicEnvelope, mixFilm, padVoice, rmsOver, speechIntervals, toDb, withPatches } from '../lib/mix';
+import { parseFilmMix, parseNumberList, parseVoiceDelay, parseWhere } from '../lib/mix-spec';
 import type { SfxSpec } from '../lib/docs';
 
 // Розділ «Зведення» зі sound.md фільму 01-natalia (як його записав композитор).
@@ -256,5 +256,118 @@ describe('повне зведення на синусоїдах', () => {
   it('шум довший за фільм обрізається, довжина не росте', () => {
     const long = mixFilm(voice, music, { ...params, sfx: [{ ...params.sfx[0]!, start: 11, fadeOutEnd: 12 }] });
     assert.equal(long.pcm.length, voice.length);
+  });
+});
+
+// ---------------------------------------------------------------- фільм з початковим титром: відлік від початку фільму, без шумів
+
+// Розділ «Зведення» зі sound.md після переробки (озвучення стоїть на 3.0 с, шумів немає).
+const MIX_TEXT_V3 = `Відлік часу в цьому розділі: секунди фільму, від початку музики й титра. Озвучення стоїть у фільмі з 3.0 с: перше слово на 3.08 с, останнє закінчується на 119.72 с, фільм закінчується на 120.473 с. Паузи й слова в \`timings.json\` (секунди від початку голосу) для цього розділу зсунуті на +3.0 с. Звучать лише голос і музика.
+
+Голос завжди головний і стоїть на 0 дБ. Музика під голосом -16 дБ відносно голосу, у паузах голосу довших за 0.8 с піднімається до -6 дБ за 0.8 с і так само повертається. Пауза визначається за таймінгами слів. Поріг 0.8 с, а не 0.4 с зразка: фрагменти тут майже без пауз між собою (0.07–0.56 с), і з плавною зміною 0.8 с коротша пауза дала б тільки вібрацію гучності. За таймінгами така пауза всередині фільму одна: 8.36–9.32 с (між «Донецька» і «до Донецької області», 0.96 с). У ній музика лише ледь встигає піднятися, тому там підйом іде до -8 дБ за 0.5 с, щоб теплий акорд справді прозвучав. На кінці фільму пауза 119.72–120.473 с (0.75 с) теж рахується як пауза, див. нижче. У решті місць музика просто лишається на -16 дБ. Музика грає з першої секунди фільму, змінюється тільки її гучність. Порівняно з попередньою версією (під голосом -20 дБ, у паузах -8 дБ) вона піднята на 4 дБ під голосом і на 2 дБ у паузах.
+
+Відхилення від загального правила:
+- Початок (титр, 0–3.08 с): музика на -6 дБ, єдиний звук у кадрі; від 1.8 с вона спадає до -20 дБ за 1.28 с, щоб на першому слові (3.08 с) стояти на рівні під голосом. Вхід на 0 с із нуля за 0.3 с лише проти клацання.
+- Фрагмент 1 до слова «Донецька» (3.08–8.36 с): музика -20 дБ під голосом. У паузі 8.36–9.32 с піднімається до -8 дБ, далі до -16 дБ за 0.8 с.
+- Кадр 4, «Але не судилося» (від 17.08 с, кінця слова «повернемося», і до початку фрагмента 4 на 19.24 с): музика не піднімається, а тримається на -10 дБ найтоншою нотою (треку в цей час майже немає, тож -10 дБ це чутна одна нота, а не гучність). Звідти до -16 дБ повертається за 0.8 с після початку фрагмента 4. Якщо монтажер розтягне кадр 4 довше за фразу, ця тиша триває стільки, скільки він поставить, а все зведення далі зсувається на ту саму різницю.
+- Кадр 18 («букет», 75.2–79.3 с): музика на -16 дБ, акорд тримається.
+- Фрагмент 16 (103.61–112.6 с): музика -18 дБ, бо тоншає сама.
+- Кінець (119.72 с і далі): музика до -6 дБ, останні 0.75 с плавно гасне до кінця фільму.
+
+Голос сам, без музики на першому плані: ніде. Найближче до цього кадр 4 і кадр 18, де музика найтонша. Початковий титр, навпаки, єдине місце, де музика одна.`;
+const CTX3 = { filmEnd: 120.473, lastWordEnd: 119.72 };
+
+describe('розбір «Зведення»: відлік від початку фільму, титр, без шумів', () => {
+  const spec = parseFilmMix(MIX_TEXT_V3, [], CTX3);
+
+  it('затримка озвучення береться з документа', () => {
+    assert.equal(parseVoiceDelay(MIX_TEXT_V3), 3);
+    assert.equal(spec.voiceDelay, 3);
+    assert.equal(parseVoiceDelay(MIX_TEXT_V3.replace('з 3.0 с', 'з 4.5 с')), 4.5);
+    assert.equal(parseVoiceDelay('Голос на 0 дБ.'), undefined);
+    assert.equal(parseFilmMix(MIX_TEXT_V3.replace('з 3.0 с', 'з 4.5 с'), [], CTX3).voiceDelay, 4.5);
+  });
+
+  it('жодного попередження, жодного шуму, ніяких приміток про шуми', () => {
+    assert.deepEqual(spec.warnings, []);
+    assert.deepEqual(spec.sfx, []);
+    assert.equal(spec.notes.some((n) => /^Шуми:/.test(n)), false);
+  });
+
+  it('загальне правило: -16 під голосом, -6 у паузах, 0.8 с, поріг 0.8 с', () => {
+    assert.equal(spec.underDb, -16);
+    assert.equal(spec.pauseDb, -6);
+    assert.equal(spec.fade, 0.8);
+    assert.equal(spec.pauseMin, 0.8);
+    assert.equal(spec.endFade, 0.75);
+    assert.equal(spec.musicFadeIn, 0.3);
+  });
+
+  it('шість ділянок музики, у т.ч. «Початок» і «Кінець»', () => {
+    assert.equal(spec.musicPatches.length, 6);
+    const env = withPatches((t) => (t < 100 ? -16 : -10), spec.musicPatches);
+    assert.equal(env(0), -6, 'титр: -6 дБ з першої секунди');
+    assert.equal(env(1.8), -6);
+    assert.ok(Math.abs(env(1.8 + 0.64) - -13) < 1e-9, 'посередині спаду -6 -> -20');
+    assert.ok(Math.abs(env(3.08) - -20) < 1e-9, 'на першому слові -20');
+    assert.equal(env(5), -20, 'фрагмент 1 до «Донецька»');
+    assert.equal(env(8.36 + 0.5), -8, 'у паузі підйом до -8 за 0.5 с');
+    assert.equal(env(9.32), -8);
+    assert.equal(env(18), -10, 'кадр 4 тримається на -10');
+    assert.equal(env(19.24 + 0.8), -16);
+    assert.equal(env(77), -16, 'кадр 18');
+    assert.equal(env(105), -18, 'фрагмент 16');
+    assert.equal(env(120.473), -6, 'кінець: до -6');
+  });
+
+  it('«Початок»: ділянка від 0 до 3.08 с, без порожніх місць', () => {
+    const p = spec.musicPatches.find((x) => /^початок/.test(x.label))!;
+    assert.deepEqual(p.points, [{ t: 0, db: -6 }, { t: 1.8, db: -6 }, { t: 3.08, db: -20 }]);
+  });
+
+  it('документ без «Початок» і «Кінець» без шуму теж розбирається (стара форма «Кінець» із шумом лишається)', () => {
+    const noTitle = MIX_TEXT_V3.split('\n').filter((l) => !l.startsWith('- Початок')).join('\n');
+    const s = parseFilmMix(noTitle, [], CTX3);
+    assert.equal(s.musicPatches.length, 5);
+    assert.equal(s.musicFadeIn, 0);
+    assert.deepEqual(s.warnings, []);
+  });
+
+  it('нерозібраний пункт «Початок» не ховається', () => {
+    const bad = MIX_TEXT_V3.replace('від 1.8 с вона спадає до -20 дБ', 'потім вона якось стишується');
+    assert.match(parseFilmMix(bad, [], CTX3).warnings.join(' '), /не розібрано/);
+  });
+});
+
+describe('повне зведення з затримкою озвучення і музикою з нуля', () => {
+  const delay = 3;
+  const filmSec = 12;
+  const speech: Array<[number, number]> = [[delay + 1, delay + 4]];
+  const voice0 = sine(filmSec - delay, 220, 0.3, [[1, 4]]);
+  const voice = padVoice(voice0, delay);
+  const music = sine(14, 880, 0.05);
+  const words = [{ start: delay + 1, end: delay + 4 }];
+  const musicDb = withPatches(baseMusicEnvelope(speechIntervals(words, 0.8), -16, -6, 0.8), [{ label: 'титр', points: [{ t: 0, db: -6 }, { t: 1.2, db: -6 }, { t: 4, db: -16 }] }]);
+  const r = mixFilm(voice, music, { words, pauseMin: 0.8, musicDb, endFade: 0.75, musicFadeIn: 0.3, sfx: [] });
+  const res = new Float32Array(voice.length);
+  for (let i = 0; i < res.length; i++) res[i] = r.pcm[i]! - voice[i]!;
+  const voiceRms = rmsOver(voice, speech.map(([a, b]) => ({ a, b })));
+  const lvl = (a: number, b: number) => toDb(rmsOver(res, [{ a, b }])) - toDb(voiceRms);
+
+  it('озвучення зсунуте: до затримки голосу немає, довжина = затримка + озвучення', () => {
+    assert.equal(voice.length, Math.round(delay * SR) * CH + voice0.length);
+    assert.equal(rmsOver(voice, [{ a: 0, b: delay }]), 0);
+    assert.equal(r.pcm.length, voice.length);
+    assert.equal(padVoice(voice0, 0), voice0, 'без затримки нічого не міняється');
+  });
+
+  it('музика звучить з першої секунди (титр) на -6 дБ, на словах -16 дБ, без шумів', () => {
+    assert.ok(Math.abs(lvl(0.5, 1.1) - -6) < 0.3, 'титр ' + lvl(0.5, 1.1));
+    assert.ok(Math.abs(lvl(5.5, 6.5) - -16) < 0.4, 'під голосом ' + lvl(5.5, 6.5));
+    assert.deepEqual(r.sfxRmsDb, []);
+  });
+
+  it('вхід музики з нуля проти клацання', () => {
+    assert.ok(rmsOver(res, [{ a: 0, b: 0.02 }]) < rmsOver(res, [{ a: 0.5, b: 0.52 }]) * 0.3);
   });
 });

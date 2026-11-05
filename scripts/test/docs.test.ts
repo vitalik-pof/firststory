@@ -141,6 +141,27 @@ describe('суворість: документ не за форматом дає
     assert.throws(() => parseSound(STORY), /очікувались секунди/);
     writeFileSync(f, orig);
   });
+  it('sound.md без розділу «Шуми» (і з порожнім): шумів немає, музика розбирається як завжди', () => {
+    const f = paths.storyFile(STORY, 'sound.md');
+    const orig = readFileSync(f, 'utf8');
+    const without = orig.replace(/## Шуми[\s\S]*?(?=## Зведення)/, '');
+    assert.ok(!/## Шуми/.test(without));
+    writeFileSync(f, without);
+    let s = parseSound(STORY);
+    assert.deepEqual(s.sfx, []);
+    assert.equal(s.music.seconds, 12);
+    writeFileSync(f, orig.replace(/## Шуми[\s\S]*?(?=## Зведення)/, '## Шуми\nНемає.\n\n'));
+    s = parseSound(STORY);
+    assert.deepEqual(s.sfx, []);
+    writeFileSync(f, orig);
+  });
+  it('sound.md: «Загальна тривалість» лише числом', () => {
+    const f = paths.storyFile(STORY, 'sound.md');
+    const orig = readFileSync(f, 'utf8');
+    writeFileSync(f, orig.replace('Загальна тривалість: 12 секунд', 'Загальна тривалість: 120.473'));
+    assert.equal(parseSound(STORY).totalSeconds, 120.473);
+    writeFileSync(f, orig);
+  });
   it('script.md: немає розділу Фрагменти', () => {
     const f = paths.storyFile(STORY, 'script.md');
     const orig = readFileSync(f, 'utf8');
