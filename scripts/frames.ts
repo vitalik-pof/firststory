@@ -93,7 +93,7 @@ async function main(): Promise<void> {
     if (jobs[0]) log(`Приклад запиту (кадр ${jobs[0].n}):\n---\n${jobs[0].job.prompt}\n---`);
     return;
   }
-  const expected = expectedImageCredits(story, imageCreditsFlag, resolution);
+  expectedImageCredits(story, imageCreditsFlag, resolution); // ранній збій, якщо ціни немає
   await ctx.start();
   const refused: string[] = [];
   try {
@@ -104,7 +104,7 @@ async function main(): Promise<void> {
         throw new Error(`Кадр ${n}: не можна генерувати, бракує референсів: ${r.missing.join('; ')}.`);
       }
       job.refs = r.refs;
-      job.expectedCredits = expected;
+      job.expectedCredits = expectedImageCredits(story, imageCreditsFlag, resolution);
       if ((await runImageJob(ctx, job)) === 'refused') refused.push(job.label);
       const rec = getRecord(story, job.key);
       if (rec) log(`    кадр ${n}: перегенерацій ${rec.regen_count} з ${maxRegens}`);

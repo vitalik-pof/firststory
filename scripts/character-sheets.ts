@@ -105,12 +105,12 @@ async function main(): Promise<void> {
     log(`\nСУХИЙ ПРОГІН: нічого не викликано. Приклад першого аркуша:\n---\n${jobs[0]?.job.prompt}\n---\nДодайте --run --limit-credits N --image-credits N.`);
     return;
   }
-  const expected = expectedImageCredits(story, imageCreditsFlag, resolution);
+  expectedImageCredits(story, imageCreditsFlag, resolution); // ранній збій, якщо ціни немає
   await ctx.start();
   const refused: string[] = [];
   try {
     for (const { job } of jobs) {
-      job.expectedCredits = expected;
+      job.expectedCredits = expectedImageCredits(story, imageCreditsFlag, resolution);
       const out = await runImageJob(ctx, job);
       if (out === 'refused') refused.push(job.label);
       if (out === 'generated' || out === 'regenerated') {
