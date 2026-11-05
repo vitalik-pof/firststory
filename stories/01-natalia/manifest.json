@@ -1,7 +1,7 @@
 {
   "story": "01-natalia",
   "credits": {
-    "total_spent": 68867,
+    "total_spent": 70955,
     "runs": [
       {
         "script": "voice-previews",
@@ -374,6 +374,14 @@
         "credits_before": 79880,
         "credits_after": 81744,
         "spent_run": 1864
+      },
+      {
+        "script": "voice-samples",
+        "started_at": "2026-11-05T18:53:58.829Z",
+        "finished_at": "2026-11-05T19:02:10.304Z",
+        "credits_before": 86015,
+        "credits_after": 89369,
+        "spent_run": 3354
       }
     ]
   },
@@ -2355,7 +2363,7 @@
     "created_at": "2026-11-05T00:41:54.681Z",
     "design_credits_source": "docs"
   },
-  "updated_at": "2026-11-05T18:57:09.556Z",
+  "updated_at": "2026-11-05T19:02:10.305Z",
   "narration": {
     "model_id": "eleven_v4",
     "voice_id": "49POAIkFDXsxrtR84sdj",
@@ -2582,6 +2590,102 @@
         "credits": 211,
         "credits_source": "history",
         "generated_at": "2026-11-05T18:57:09.554Z"
+      },
+      "365c10e80e": {
+        "hash": "365c10e80e",
+        "slug": "olena",
+        "voice_id": "ARxhnQPZCfSLpMBASSii",
+        "name": "Olena",
+        "raw_file": "work/01-natalia/voice-samples/raw/olena.mp3",
+        "response_file": "work/01-natalia/voice-samples/raw/olena.response.json",
+        "chars_sent": 436,
+        "credits": 451,
+        "credits_source": "history",
+        "generated_at": "2026-11-05T18:57:39.829Z"
+      },
+      "566e601b38": {
+        "hash": "566e601b38",
+        "slug": "kate-ukraine",
+        "voice_id": "FqTvupDLWXjo91Dte1vR",
+        "name": "Kate Ukraine",
+        "raw_file": "work/01-natalia/voice-samples/raw/kate-ukraine.mp3",
+        "response_file": "work/01-natalia/voice-samples/raw/kate-ukraine.response.json",
+        "chars_sent": 436,
+        "credits": 371,
+        "credits_source": "history",
+        "generated_at": "2026-11-05T18:58:19.671Z"
+      },
+      "35c001fac7": {
+        "hash": "35c001fac7",
+        "slug": "torri-miles",
+        "voice_id": "a30ekmfK56EKHR341YaO",
+        "name": "Torri_Miles",
+        "raw_file": "work/01-natalia/voice-samples/raw/torri-miles.mp3",
+        "response_file": "work/01-natalia/voice-samples/raw/torri-miles.response.json",
+        "chars_sent": 436,
+        "credits": 211,
+        "credits_source": "history",
+        "generated_at": "2026-11-05T18:58:39.541Z"
+      },
+      "837ee78640": {
+        "hash": "837ee78640",
+        "slug": "bella-professional-bright-warm",
+        "voice_id": "hpp4J3VqNfWAUOO0d1Us",
+        "name": "Bella - Professional, Bright, Warm",
+        "raw_file": "work/01-natalia/voice-samples/raw/bella-professional-bright-warm.mp3",
+        "response_file": "work/01-natalia/voice-samples/raw/bella-professional-bright-warm.response.json",
+        "chars_sent": 436,
+        "credits": 211,
+        "credits_source": "history",
+        "generated_at": "2026-11-05T18:59:10.206Z"
+      },
+      "e293442f20": {
+        "hash": "e293442f20",
+        "slug": "sarah-mature-reassuring-confident",
+        "voice_id": "EXAVITQu4vr4xnSDxMaL",
+        "name": "Sarah - Mature, Reassuring, Confident",
+        "raw_file": "work/01-natalia/voice-samples/raw/sarah-mature-reassuring-confident.mp3",
+        "response_file": "work/01-natalia/voice-samples/raw/sarah-mature-reassuring-confident.response.json",
+        "chars_sent": 436,
+        "credits": 211,
+        "credits_source": "history",
+        "generated_at": "2026-11-05T18:59:50.911Z"
+      },
+      "6724508503": {
+        "hash": "6724508503",
+        "slug": "alice-clear-engaging-educator",
+        "voice_id": "Xb7hH8MSUJpSbSDYk0k2",
+        "name": "Alice - Clear, Engaging Educator",
+        "raw_file": "work/01-natalia/voice-samples/raw/alice-clear-engaging-educator.mp3",
+        "response_file": "work/01-natalia/voice-samples/raw/alice-clear-engaging-educator.response.json",
+        "chars_sent": 436,
+        "credits": 211,
+        "credits_source": "history",
+        "generated_at": "2026-11-05T19:00:20.551Z"
+      },
+      "c552e048cf": {
+        "hash": "c552e048cf",
+        "slug": "matilda-knowledgable-professional",
+        "voice_id": "XrExE9yKIg1WjnnlVkGX",
+        "name": "Matilda - Knowledgable, Professional",
+        "raw_file": "work/01-natalia/voice-samples/raw/matilda-knowledgable-professional.mp3",
+        "response_file": "work/01-natalia/voice-samples/raw/matilda-knowledgable-professional.response.json",
+        "chars_sent": 436,
+        "credits": 211,
+        "credits_source": "history",
+        "generated_at": "2026-11-05T19:00:50.771Z"
+      },
+      "d715178470": {
+        "hash": "d715178470",
+        "slug": "lily-velvety-actress",
+        "voice_id": "pFZP5JQG7iQjIQuC4Bku",
+        "name": "Lily - Velvety Actress",
+        "raw_file": "work/01-natalia/voice-samples/raw/lily-velvety-actress.mp3",
+        "response_file": "work/01-natalia/voice-samples/raw/lily-velvety-actress.response.json",
+        "chars_sent": 436,
+        "credits": 211,
+        "credits_source": "history",
+        "generated_at": "2026-11-05T19:01:21.376Z"
       }
     }
   }
