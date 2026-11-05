@@ -1,6 +1,7 @@
 // Спільний розбір прапорців. Платні скрипти за замовчуванням нічого не витрачають.
 
 import { parseArgs } from 'node:util';
+import { redact } from './log';
 
 export interface CommonFlags {
   story: string;
@@ -54,7 +55,7 @@ export function commonFlags(
 export function runMain(main: () => Promise<void>): void {
   main().catch((e: unknown) => {
     const msg = e instanceof Error ? e.message : String(e);
-    console.error(`\nПОМИЛКА: ${msg}`);
+    console.error(redact(`\nПОМИЛКА: ${msg}`));
     if (e instanceof UsageError) console.error('Підказка: додайте --help.');
     process.exitCode = 1;
   });

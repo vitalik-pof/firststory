@@ -23,7 +23,7 @@ export class ApiError extends Error {
     public body: string,
     public path: string,
   ) {
-    super(message);
+    super(redact(message));
     this.name = 'ApiError';
   }
 }
