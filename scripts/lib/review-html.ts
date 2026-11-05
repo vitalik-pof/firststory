@@ -352,6 +352,17 @@ export function renderVoiceBody(d: { voice?: VoiceEntry; previews: Array<{ n: nu
 
 }
 
+// Людський підпис ключа з manifest.images. Незнайомий ключ лишається як є.
+export function imageLabel(key: string): string {
+  if (key.startsWith('sheet/')) return `Аркуш ${key.slice(6)}`;
+  if (key.startsWith('sample/')) return `Зразок ${Number(key.slice(7))}`;
+  const cur = /^frame\/(\d+)$/.exec(key);
+  if (cur) return `Кадр ${Number(cur[1])}`;
+  const arch = /^frame-(v\d+)\/(\d+)$/.exec(key);
+  if (arch) return `Кадр ${Number(arch[2])}, розкадровка ${arch[1]} (архів)`;
+  return key;
+}
+
 export function renderCredits(m: Manifest): string {
   const rows: Array<[string, string, string]> = [];
   const v = m.voice as { design_credits?: number } | undefined;
@@ -360,7 +371,7 @@ export function renderCredits(m: Manifest): string {
   if (n) rows.push(['Озвучення', `${n.chars_sent ?? '?'} знаків`, String(n.credits ?? '?')]);
   for (const [key, rec] of Object.entries(m.images)) {
     const spent = [rec.current, ...rec.history].reduce((a, x) => a + (x?.credits ?? 0), 0);
-    const label = key.startsWith('sheet/') ? `Аркуш ${key.slice(6)}` : key.startsWith('sample/') ? `Зразок ${Number(key.slice(7))}` : `Кадр ${Number(key.slice(6))}`;
+    const label = imageLabel(key);
     const cur = rec.current;
     rows.push([label, `перегенерацій: ${rec.regen_count}${cur?.width ? `, ${cur.width}×${cur.height} px (запитано ${cur.resolution})` : ''}`, String(spent)]);
   }
