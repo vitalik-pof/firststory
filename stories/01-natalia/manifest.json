@@ -1,7 +1,7 @@
 {
   "story": "01-natalia",
   "credits": {
-    "total_spent": 5283,
+    "total_spent": 5692,
     "runs": [
       {
         "script": "voice-previews",
@@ -69,6 +69,14 @@
         "credits_before": 4191,
         "credits_after": 5283,
         "spent_run": 1092
+      },
+      {
+        "script": "samples",
+        "started_at": "2026-11-05T02:19:17.608Z",
+        "finished_at": "2026-11-05T02:21:06.068Z",
+        "credits_before": 5283,
+        "credits_after": 5692,
+        "spent_run": 409
       }
     ]
   },
@@ -237,9 +245,45 @@
         "credits": 273,
         "completed_at": "2026-11-05T01:12:39.961Z"
       }
+    },
+    "sample/13": {
+      "history": [],
+      "regen_count": 0,
+      "current": {
+        "generation_id": "Rqs9cyJ7dXehWiIC6HDA",
+        "model_id": "gemini-3.1-flash-image",
+        "width": 384,
+        "height": 688,
+        "prompt": "A fragment of a memory: a dark frosty winter early morning at a bus stop in Pavlohrad, Ukraine, seen close. The front part of a white Ukrainian Bogdan A092 intercity midi-bus fills the left and upper part of the frame, cropped by the frame edge: a compact boxy white body on an Isuzu truck chassis with a thin coloured stripe along the side, a short flat upright front with a large one-piece windshield and headlights low on the front, a single front door that is open, warm yellow light from the interior spilling out onto the snow. Behind the windshield a white route board reads exactly «ПАВЛОГРАД — ТЕРНІВКА» in clear Ukrainian Cyrillic capital letters, and the board stays crisp and readable while everything around it is soft; beside it on the dashboard stands a small national flag of Ukraine, blue over yellow. In the right foreground, a heavily pregnant woman with chestnut hair in a low bun under a terracotta-red knitted hat, a matching terracotta-red knitted scarf and a dark navy winter coat worn open over her round belly, holding a handbag, seen from behind and slightly to the side as she is about to step toward the open door; her face is not visible. A single streetlamp with a soft glowing halo, frosty breath, fine falling snow, the misty shapes of five-storey Soviet-era panel buildings with a few lit windows behind. The lower fifth of the frame is calm trampled snow at the bus stop. Cold blue darkness and the warm amber light of the bus.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. Any lettering named in the description stays crisp and exact even though everything around it is soft. Photo references, when given, are used only for the correct shape and details of real Ukrainian objects; everything is still painted in watercolour. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting with authentic local details. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering except the exact Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. No American objects: no fire hydrants, no yellow school buses, no mailboxes, no US road signs or license plates, no pickup trucks, no American military vehicles or uniforms. Where war is present it stays quietly in the background, with no people holding weapons, no blood, no wounded, no explosions or fireballs. No letter Z.",
+        "refs": [
+          "asset:UZYawogNdmWq89sm1FL3"
+        ],
+        "file": "work/01-natalia/samples/sample-13.png",
+        "aspect_ratio": "9:16",
+        "resolution": "512",
+        "credits": 409,
+        "completed_at": "2026-11-05T02:20:53.619Z"
+      }
     }
   },
-  "assets": {},
+  "assets": {
+    "references": {
+      "bogdan-a092": {
+        "files": {
+          "bogdan-a092-1.png": {
+            "asset_id": "UZYawogNdmWq89sm1FL3",
+            "name": "reference-bogdan-a092-bogdan-a092-1-a03506ae",
+            "sha1": "a03506aecbd6968b0ae786e068640dff6df69c71",
+            "order": 0,
+            "width": 739,
+            "height": 415,
+            "source": "надано режисером у чаті, 5 листопада 2026",
+            "uploaded_at": "2026-11-05T02:19:17.139Z"
+          }
+        }
+      }
+    }
+  },
   "audio": {
     "sample-music-1": {
       "file": "work/01-natalia/audio/samples/music-1.mp3",
@@ -312,7 +356,7 @@
     "created_at": "2026-11-05T00:41:54.681Z",
     "design_credits_source": "docs"
   },
-  "updated_at": "2026-11-05T01:12:52.407Z",
+  "updated_at": "2026-11-05T02:21:06.068Z",
   "narration": {
     "model_id": "eleven_v4",
     "voice_id": "49POAIkFDXsxrtR84sdj",
@@ -423,9 +467,9 @@
       "count": 5
     },
     "gemini-3.1-flash-image@512": {
-      "max": 273,
-      "last": 273,
-      "count": 4
+      "max": 409,
+      "last": 409,
+      "count": 5
     }
   }
 }

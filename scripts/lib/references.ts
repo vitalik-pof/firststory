@@ -46,11 +46,19 @@ export function parseReferences(): ReferenceObject[] {
   return out;
 }
 
-export type LicenseKind = 'CC0' | 'CC-BY' | 'CC-BY-SA' | 'PD';
+export type LicenseKind = 'CC0' | 'CC-BY' | 'CC-BY-SA' | 'PD' | 'director';
 
-/** Вільні ліцензії: CC0, CC-BY, CC-BY-SA, суспільне надбання. NC і ND відхиляються. */
+/** Походження «надано режисером»: фото без вільної ліцензії, лише вхід для генератора (на сторінку й у docs/ не потрапляє). */
+export const DIRECTOR_PROVIDED = 'надано режисером';
+
+export function isDirectorProvided(s: Pick<ReferenceSource, 'licenseKind'>): boolean {
+  return s.licenseKind === 'director';
+}
+
+/** Вільні ліцензії: CC0, CC-BY, CC-BY-SA, суспільне надбання, а також окреме походження «надано режисером». NC і ND відхиляються. */
 export function licenseKind(text: string): LicenseKind | null {
   const t = text.trim();
+  if (t.toLowerCase().replace(/[.\s]+$/, '') === DIRECTOR_PROVIDED) return 'director';
   if (/(^|[\s-])(nc|nd)([\s-]|$)/i.test(t)) return null;
   if (/^cc[\s-]*0/i.test(t)) return 'CC0';
   if (/^cc[\s-]*by[\s-]*sa/i.test(t)) return 'CC-BY-SA';
@@ -152,19 +160,25 @@ export function parseReferenceSources(): ReferenceSource[] {
     const object = cleanCell(get('object', "Об'єкт").v);
     const lic = get('license', 'Ліцензія');
     const kind = licenseKind(cleanCell(lic.v));
-    if (!kind) fail(doc, lic.line, `Ліцензія «${cleanCell(lic.v)}» не вільна: дозволені лише CC0, CC-BY, CC-BY-SA і суспільне надбання (NC й ND не підходять).`);
+    if (!kind) fail(doc, lic.line, `Ліцензія «${cleanCell(lic.v)}» не вільна: дозволені лише CC0, CC-BY, CC-BY-SA, суспільне надбання і «${DIRECTOR_PROVIDED}» (NC й ND не підходять).`);
     const urls: Record<string, string> = {};
     for (const [k, label] of [['source', 'Джерело'], ['licenseUrl', 'Посилання на ліцензію']] as const) {
       const f = get(k, label);
+      if (kind === 'director') {
+        // Фото від режисера: джерело текстом, посилання на ліцензію «немає».
+        urls[k] = k === 'licenseUrl' ? '' : cleanCell(f.v);
+        continue;
+      }
       const u = cleanUrl(f.v);
       if (!/^https?:\/\/[^\s"<>]+$/i.test(u)) fail(doc, f.line, `«${label}:» має бути посиланням http(s), а є «${cleanCell(f.v)}».`);
       urls[k] = u;
     }
+    const dateF = kind === 'director' && !rec.values.date ? undefined : get('date', 'Дата завантаження');
     const file = cleanCell(get('file', 'Файл').v);
     if (!/^[\w.-]+\.(jpe?g|png|webp)$/i.test(file)) fail(doc, rec.values.file!.line, `«Файл:» має бути іменем файлу jpg/png/webp без шляху, а є «${file}».`);
     out.push({
       object, file, source: urls.source!, author: cleanCell(get('author', 'Автор').v), license: cleanCell(lic.v), licenseKind: kind,
-      licenseUrl: urls.licenseUrl!, date: cleanCell(get('date', 'Дата завантаження').v), line: rec.line,
+      licenseUrl: urls.licenseUrl!, date: dateF ? cleanCell(dateF.v) : '', line: rec.line,
     });
   }
   if (!out.length) fail(doc, undefined, 'У файлі немає жодного запису (очікуються поля «Об\'єкт:», «Файл:», «Джерело:», «Автор:», «Ліцензія:», «Посилання на ліцензію:», «Дата завантаження:»).');

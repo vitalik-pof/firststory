@@ -3,7 +3,7 @@
 
 import { existsSync } from 'node:fs';
 import type { MediaItem } from './review-build';
-import { checkSourcesAgainstObjects, parseReferenceSources, parseReferences, photoExists, photoFilePath, photosOf, type ReferenceObject, type ReferenceSource } from './references';
+import { checkSourcesAgainstObjects, parseReferenceSources, parseReferences, isDirectorProvided, photoExists, photoFilePath, photosOf, type ReferenceObject, type ReferenceSource } from './references';
 import { paths } from './paths';
 
 export interface PhotoRefBlock {
@@ -24,6 +24,8 @@ export function gatherPhotoRefs(usedBy: Map<string, string[]>, media: MediaItem[
     if (!obj) throw new Error(`Фото-референс «${id}» використано (${where.join(', ')}), але його немає в art/references.md.`);
     const photos = photosOf(sources, id, obj.count).map((s, i) => {
       const key = `ref:${id}/${s.file}`;
+      // Фото від режисера лише вхід для генератора: ні в media (docs/, тека огляду), ні мініатюрою.
+      if (isDirectorProvided(s)) return { source: s, key };
       if (photoExists(s)) media.push({ key, kind: 'image', src: photoFilePath(id, s.file), rel: `media/references/${id}-${i + 1}.jpg`, maxWidth: 640 });
       else warnings.push(`Фото-референс ${id}: немає файлу ${paths.rel(photoFilePath(id, s.file))}.`);
       return { source: s, key };

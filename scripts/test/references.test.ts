@@ -108,6 +108,43 @@ describe('art/references-sources.md', () => {
   });
 });
 
+const SOURCES_DIRECTOR = `# Джерела фото-референсів
+
+- Об'єкт: bohdan-bus
+  Файл: bus1.jpg
+  Джерело: надано режисером у чаті, 5 листопада 2026
+  Автор: невідомо
+  Ліцензія: надано режисером
+  Посилання на ліцензію: немає
+`;
+
+describe('фото, надане режисером', () => {
+  it('приймається; інші невільні ліцензії лишаються відхиленими', () => {
+    writeFileSync(srcFile(), SOURCES_DIRECTOR);
+    const a = parseReferenceSources();
+    assert.deepEqual(a.map((s) => [s.object, s.file, s.licenseKind, s.author, s.licenseUrl, s.date]), [['bohdan-bus', 'bus1.jpg', 'director', 'невідомо', '', '']]);
+    assert.equal(licenseKind('All rights reserved'), null);
+    assert.equal(licenseKind('CC BY-NC 4.0'), null);
+    assert.equal(licenseKind('CC-BY-ND'), null);
+    writeFileSync(srcFile(), SOURCES_DIRECTOR.replace('надано режисером\n  Посилання', 'All rights reserved\n  Посилання'));
+    assert.throws(() => parseReferenceSources(), /не вільна/);
+    writeFileSync(srcFile(), SOURCES_LIST);
+  });
+
+  it('на сторінці: не в media, без мініатюри, є рядок про фото від режисера', () => {
+    writeFileSync(srcFile(), SOURCES_DIRECTOR);
+    mkdirSync(join(root, 'work', 'references', 'bohdan-bus'), { recursive: true });
+    writeFileSync(join(root, 'work', 'references', 'bohdan-bus', 'bus1.jpg'), 'x');
+    const media: unknown[] = [];
+    const blocks = gatherPhotoRefs(new Map([['bohdan-bus', ['зразок 13']]]), media as never[], []);
+    assert.equal(media.length, 0);
+    const html = renderPhotoRefs(blocks, () => 'media/references/x.jpg');
+    assert.match(html, /використано фото, надане режисером; на сторінку не виводиться/);
+    assert.doesNotMatch(html, /<img|<figure|Автор:/);
+    writeFileSync(srcFile(), SOURCES_LIST);
+  });
+});
+
 describe('поле «Фото-референси»', () => {
   it('у зразках і кадрах, з перевіркою id', () => {
     const sf = paths.samplesDoc();

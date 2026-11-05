@@ -153,6 +153,7 @@ export function renderPhotoRefs(blocks: PhotoRefBlock[], rel: (key: string) => s
         (b) => `<div class="card"><h3 style="margin-top:0">${esc(b.object.name)} <span class="muted">(${esc(b.object.id)})</span></h3><p class="muted">Використано: ${esc(b.usedIn.join(', '))}</p><div class="sheets">${
           b.photos
             .map((p) => {
+              if (p.source.licenseKind === 'director') return '<p class="muted">використано фото, надане режисером; на сторінку не виводиться</p>';
               const src = rel(p.key);
               return `<figure class="sheet" style="margin:0">${src ? `<img src="${esc(src)}" alt="${esc(b.object.name)}" loading="lazy">` : '<div class="ph" style="aspect-ratio:4/3">Файлу немає</div>'}<figcaption class="muted">Автор: ${esc(p.source.author)}<br>Ліцензія: ${link(p.source.licenseUrl, p.source.license)}<br>Джерело: ${link(p.source.source, 'сторінка фото')}</figcaption></figure>`;
             })
