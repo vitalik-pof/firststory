@@ -1,7 +1,7 @@
 {
   "story": "01-natalia",
   "credits": {
-    "total_spent": 56107,
+    "total_spent": 57282,
     "runs": [
       {
         "script": "voice-previews",
@@ -286,6 +286,14 @@
         "credits_before": 56823,
         "credits_after": 56823,
         "spent_run": 0
+      },
+      {
+        "script": "narrate",
+        "started_at": "2026-11-05T07:39:23.693Z",
+        "finished_at": "2026-11-05T07:40:34.358Z",
+        "credits_before": 59126,
+        "credits_after": 60301,
+        "spent_run": 1175
       }
     ]
   },
@@ -1345,6 +1353,19 @@
         "resolution": "1K",
         "credits": 609,
         "completed_at": "2026-11-05T06:30:27.813Z"
+      },
+      "pending": {
+        "kind": "regen",
+        "status": "created",
+        "prompt": "Close shot at waist height on a dim Soviet-era stairwell landing, 50mm lens, the camera beside the door. A woman's right hand, in a short terracotta-red cotton sleeve, pulls the handle of a brown leatherette-padded apartment door toward her to check that it is locked; the door stays shut. The key is still in the lock, a small bunch of keys with a terracotta-red tassel hanging from it. Her left hand already grips the strap of a plain dark-blue canvas bag on her shoulder at the edge of the frame. Two zipped travel bags stand on the concrete floor by the door, one dark blue and one rust-brown, each sewn of smooth fabric in a single even colour. Only her arm, hand and shoulder are in the frame; her face is above the frame. Daylight from a stairwell window behind the camera falls across the rows of upholstery nails on the door; the painted wall beside it is bare. The handle and the hand sit in the centre of the frame; the concrete floor fills the lower fifth.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles and buildings are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering, no logos, no brands, no watermark. Everyone in the picture is an ordinary civilian going about daily life, and every place in it stands whole and peaceful.",
+        "refs": [
+          "asset:pdOJgsg0CdK16mF72UB9"
+        ],
+        "aspect_ratio": "9:16",
+        "resolution": "1K",
+        "requested_at": "2026-11-05T07:41:28.775Z",
+        "generation_id": "FZTwmGAeC7PEckrdycDK",
+        "credits_before": 60301
       }
     },
     "frame/02": {
@@ -2120,7 +2141,7 @@
     "created_at": "2026-11-05T00:41:54.681Z",
     "design_credits_source": "docs"
   },
-  "updated_at": "2026-11-05T07:04:37.669Z",
+  "updated_at": "2026-11-05T07:41:29.750Z",
   "narration": {
     "model_id": "eleven_v4",
     "voice_id": "49POAIkFDXsxrtR84sdj",
@@ -2181,16 +2202,43 @@
         ],
         "generated_at": "2026-11-05T01:05:49.595Z",
         "history_item_id": "pECys6D3P4cv66umW3pW"
+      },
+      "68bfbf0258": {
+        "hash": "68bfbf0258",
+        "mp3": "work/01-natalia/narration.part-68bfbf0258.mp3",
+        "response_file": "work/01-natalia/narration.part-68bfbf0258.response.json",
+        "chars_sent": 2107,
+        "credits": 1022,
+        "credits_source": "history",
+        "fragments": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17
+        ],
+        "generated_at": "2026-11-05T07:40:08.855Z"
       }
     },
     "file": "work/01-natalia/narration.mp3",
     "active_parts": [
-      "044a7de129",
-      "08bfab8c4b"
+      "68bfbf0258"
     ],
     "silent_fragments": [],
-    "duration": 112.327,
-    "assembled_at": "2026-11-05T01:05:50.972Z"
+    "duration": 117.473,
+    "assembled_at": "2026-11-05T07:40:09.428Z"
   },
   "mix_sample": {
     "file": "work/01-natalia/audio/mix-sample.mp3",
