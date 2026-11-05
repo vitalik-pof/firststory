@@ -141,6 +141,8 @@ export async function runImageJob(ctx: RunContext, job: ImageJob): Promise<JobOu
     const done = await client.waitForImage(pendingId);
     const data = await client.downloadImageGeneration(pendingId, done.content_url);
     const png = await toPng(data, done.content_mime_type ?? null);
+    const meta = await sharp(png).metadata();
+    const size = { width: meta.width ?? 0, height: meta.height ?? 0 };
     const after = await client.creditsUsed();
     const before = (pending as unknown as { credits_before?: number }).credits_before;
     const spent = before !== undefined ? ctx.recordSpent(after - before) : null;
@@ -160,12 +162,15 @@ export async function runImageJob(ctx: RunContext, job: ImageJob): Promise<JobOu
         if (pending.kind === 'regen') rec.regen_count += 1;
       }
       const v: ImageVersion = {
-        generation_id: pendingId!, model_id: IMAGE_MODEL, prompt: pending.prompt, refs: pending.refs, file: paths.rel(job.outFile),
+        generation_id: pendingId!, model_id: IMAGE_MODEL, ...size, prompt: pending.prompt, refs: pending.refs, file: paths.rel(job.outFile),
         aspect_ratio: pending.aspect_ratio, resolution: pending.resolution, credits: spent,
         completed_at: new Date().toISOString(),
       };
       rec.current = v;
       delete rec.pending;
+      const sk = `${IMAGE_MODEL}@${pending.resolution}@${pending.aspect_ratio}`;
+      const sz = (m.image_sizes ??= {});
+      sz[sk] ??= { ...size, file: paths.rel(job.outFile) };
       if (spent !== null && spent > 0) {
         const pk = priceKey(pending.resolution);
         const pr = (m.image_prices ??= {});
@@ -173,7 +178,7 @@ export async function runImageJob(ctx: RunContext, job: ImageJob): Promise<JobOu
         pr[pk] = { max: Math.max(old?.max ?? 0, spent), last: spent, count: (old?.count ?? 0) + 1 };
       }
     });
-    log(`  ${job.label}: готово → ${paths.rel(job.outFile)} (${spent ?? '?'} кредитів)`);
+    log(`  ${job.label}: готово → ${paths.rel(job.outFile)}, ${size.width}×${size.height} px (запитано ${pending.resolution}, ${pending.aspect_ratio}), ${spent ?? '?'} кредитів`);
     return pending.kind === 'regen' ? 'regenerated' : 'generated';
   } catch (e) {
     if (e instanceof GenerationFailedError) {

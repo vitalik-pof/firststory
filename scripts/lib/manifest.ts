@@ -15,6 +15,9 @@ export interface ImageVersion {
   aspect_ratio: string;
   resolution: string;
   credits: number | null;
+  /** Фактичні розміри файлу в пікселях (запитана роздільність може не застосуватися). */
+  width?: number;
+  height?: number;
   completed_at: string;
 }
 
@@ -57,6 +60,8 @@ export interface Manifest {
   audio: Record<string, Record<string, unknown>>;
   /** Виміряна ціна картинки окремо для кожної пари «модель@роздільність». */
   image_prices?: Record<string, { max: number; last: number; count: number }>;
+  /** Фактичні розміри перших згенерованих картинок для пари «модель@роздільність@формат». */
+  image_sizes?: Record<string, { width: number; height: number; file: string }>;
   [k: string]: unknown;
 }
 

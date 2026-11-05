@@ -575,6 +575,219 @@ export function parseSound(story: string): SoundDoc {
   };
 }
 
+// ------------------------------------------------------------------ зразки стилю (Етап 1б)
+
+export interface StyleSample {
+  n: number;
+  shows: string;
+  format: string;
+  /** Номер фрагмента сценарію або undefined, якщо «немає». */
+  fragment?: number;
+  heroes: HeroRef[];
+  prompt: string;
+  line: number;
+}
+export interface SamplesDoc {
+  idea: string;
+  samples: StyleSample[];
+  questions: string;
+}
+
+const SAMPLE_DEFS = {
+  shows: /^Що показує$/i,
+  format: /^Формат$/i,
+  fragment: /^Для фрагмента$/i,
+  heroes: /^Герої$/i,
+  prompt: /^Для генератора/i,
+};
+
+export function parseSamples(): SamplesDoc {
+  const doc = readDoc(paths.samplesDoc(), 'art-director');
+  const { preamble, sections } = splitByHeading(doc.lines, 2);
+  const { fields: head } = readFieldsStrict(doc, preamble, { idea: /^Задум$/i });
+  const samples: StyleSample[] = [];
+  let prev = 0;
+  for (const s of sections) {
+    const m = /^Зразок\s+(\d+)$/i.exec(s.title);
+    if (!m) continue;
+    const n = Number(m[1]);
+    if (n <= prev) fail(doc, s.line, `Номери зразків мають зростати: після ${prev} іде ${n}.`);
+    prev = n;
+    const { fields } = readFieldsStrict(doc, s.body, SAMPLE_DEFS);
+    const where = `## ${s.title}`;
+    const fmt = firstLine(requireField(doc, fields, 'format', 'Формат', where, s.line).value);
+    try {
+      aspectFromFormat(fmt);
+    } catch (e) {
+      fail(doc, fields.format!.line, `${where}: ${(e as Error).message}`);
+    }
+    const fr = requireField(doc, fields, 'fragment', 'Для фрагмента', where, s.line);
+    const frv = firstLine(fr.value);
+    const fragment = /^(немає|нема|—|–|-|none)/i.test(frv) ? undefined : parseInteger(doc, frv, fr.line, `${where}, Для фрагмента`);
+    const hf = fields.heroes;
+    if (!hf) fail(doc, s.line, `У розділі «${where}» немає поля «Герої:» (якщо героїв немає, напишіть «немає»).`);
+    samples.push({
+      n,
+      shows: requireField(doc, fields, 'shows', 'Що показує', where, s.line).value,
+      format: fmt,
+      fragment,
+      heroes: parseHeroRefs(doc, hf.value, hf.line, n),
+      prompt: collapseWs(requireField(doc, fields, 'prompt', 'Для генератора (англійською)', where, s.line).value),
+      line: s.line,
+    });
+  }
+  if (!samples.length) fail(doc, undefined, 'Немає жодного розділу «## Зразок N».');
+  return { idea: head.idea?.value ?? '', samples, questions: extractQuestions(doc) };
+}
+
+export function checkSamplesAgainstScript(sd: SamplesDoc, script: ScriptDoc): void {
+  const doc = readDoc(paths.samplesDoc(), 'art-director');
+  const known = new Set(script.fragments.map((f) => f.n));
+  for (const s of sd.samples) {
+    if (s.fragment !== undefined && !known.has(s.fragment)) fail(doc, s.line, `Зразок ${s.n}: фрагмента ${s.fragment} немає у script.md (є: ${[...known].join(', ')}).`);
+  }
+}
+
+// ------------------------------------------------------------------ зразки звуку (Етап 1б)
+
+export interface MusicSample {
+  n: number;
+  prompt: string;
+  seconds: number;
+  instrumental: boolean;
+  shows: string;
+  line: number;
+}
+export interface SfxSample {
+  n: number;
+  prompt: string;
+  seconds: number;
+  shows: string;
+  line: number;
+}
+export interface MixSpec {
+  musicSample: number;
+  fragments: number[];
+  underDb: number;
+  pauseDb: number;
+  fadeSeconds: number;
+  idea: string;
+  line: number;
+}
+export interface SoundSamplesDoc {
+  idea: string;
+  music: MusicSample[];
+  sfx: SfxSample[];
+  mix: MixSpec;
+  questions: string;
+}
+
+/** Число з необов'язковим знаком (допускається «−» і «–»), комою чи крапкою, одиницею. */
+export function parseNumber(doc: Doc, value: string, line: number, what: string, unit = ''): number {
+  const m = new RegExp(`^([+\\-−–]?)\\s*(\\d+(?:[.,]\\d+)?)\\s*${unit}\\.?$`, 'i').exec(firstLine(value));
+  if (!m) fail(doc, line, `${what}: очікувалось число${unit ? ` (можна з «${unit.replace(/[()|?]/g, '')}»)` : ''}, а є «${firstLine(value)}».`);
+  const v = Number(m[2]!.replace(',', '.'));
+  return m[1] && m[1] !== '+' ? -v : v;
+}
+
+/** «1–6», «1-6», «3», «2, 4, 5», «1–3, 5» → відсортований список номерів. */
+export function parseFragmentRange(doc: Doc, value: string, line: number): number[] {
+  const out = new Set<number>();
+  for (const part of firstLine(value).split(/[,;]/).map((x) => x.trim()).filter(Boolean)) {
+    const m = /^(\d+)(?:\s*[-–—−]\s*(\d+))?$/.exec(part);
+    if (!m) fail(doc, line, `Фрагменти для зразка: очікувалось «1–6», «3» чи «2, 4, 5», а є «${part}».`);
+    const a = Number(m[1]);
+    const b = m[2] ? Number(m[2]) : a;
+    if (b < a) fail(doc, line, `Фрагменти для зразка: діапазон «${part}» зворотний.`);
+    for (let i = a; i <= b; i++) out.add(i);
+  }
+  if (!out.size) fail(doc, line, 'Фрагменти для зразка: порожньо.');
+  return [...out].sort((x, y) => x - y);
+}
+
+export function parseSoundSamples(story: string): SoundSamplesDoc {
+  const doc = readDoc(paths.soundSamplesDoc(story), 'composer');
+  const { preamble, sections } = splitByHeading(doc.lines, 2);
+  const { fields: head } = readFieldsStrict(doc, preamble, { idea: /^Задум$/i });
+  const music: MusicSample[] = [];
+  const ms = requireSection(doc, sections, /^Музика$/i, '## Музика');
+  let prev = 0;
+  for (const s of splitByHeading(ms.body, 3).sections) {
+    const m = /^Зразок\s+(\d+)$/i.exec(s.title);
+    if (!m) fail(doc, s.line, `Заголовок зразка музики має бути «### Зразок N», а є «${s.title}».`);
+    const n = Number(m[1]);
+    if (n <= prev) fail(doc, s.line, `Номери зразків музики мають зростати: після ${prev} іде ${n}.`);
+    prev = n;
+    const { fields } = readFieldsStrict(doc, s.body, { prompt: /^Для генератора музики/i, seconds: /^Тривалість$/i, instrumental: /^Інструментальна$/i, shows: /^Що показує$/i });
+    const where = `Музика, ### ${s.title}`;
+    const sf = requireField(doc, fields, 'seconds', 'Тривалість', where, s.line);
+    const seconds = parseSeconds(doc, sf.value, sf.line, `${where}, Тривалість`);
+    if (seconds < MUSIC_MIN_SECONDS || seconds > MUSIC_MAX_SECONDS) fail(doc, sf.line, `Тривалість музики ${seconds} с поза межами API (${MUSIC_MIN_SECONDS}–${MUSIC_MAX_SECONDS} с).`);
+    const inf = requireField(doc, fields, 'instrumental', 'Інструментальна', where, s.line);
+    if (!/^(так|ні|yes|no)\.?$/i.test(firstLine(inf.value))) fail(doc, inf.line, `«Інструментальна:» має бути «так» або «ні», а є «${inf.value}».`);
+    music.push({
+      n, seconds, line: s.line, instrumental: /^(так|yes)/i.test(firstLine(inf.value)),
+      prompt: collapseWs(requireField(doc, fields, 'prompt', 'Для генератора музики (англійською)', where, s.line).value),
+      shows: requireField(doc, fields, 'shows', 'Що показує', where, s.line).value,
+    });
+  }
+  if (!music.length) fail(doc, ms.line, 'У розділі «Музика» немає жодного «### Зразок N».');
+
+  const sfx: SfxSample[] = [];
+  const ns = requireSection(doc, sections, /^Шуми$/i, '## Шуми');
+  prev = 0;
+  for (const s of splitByHeading(ns.body, 3).sections) {
+    const m = /^Шум\s+(\d+)$/i.exec(s.title);
+    if (!m) fail(doc, s.line, `Заголовок шуму має бути «### Шум N», а є «${s.title}».`);
+    const n = Number(m[1]);
+    if (n <= prev) fail(doc, s.line, `Номери шумів мають зростати: після ${prev} іде ${n}.`);
+    prev = n;
+    const { fields } = readFieldsStrict(doc, s.body, { prompt: /^Для генератора/i, seconds: /^Тривалість$/i, shows: /^Що показує$/i });
+    const where = `Шуми, ### ${s.title}`;
+    const sf = requireField(doc, fields, 'seconds', 'Тривалість', where, s.line);
+    const seconds = parseSeconds(doc, sf.value, sf.line, `${where}, Тривалість`);
+    if (seconds < SFX_MIN_SECONDS || seconds > SFX_MAX_SECONDS) fail(doc, sf.line, `Тривалість шуму ${seconds} с поза межами API (${SFX_MIN_SECONDS}–${SFX_MAX_SECONDS} с).`);
+    sfx.push({
+      n, seconds, line: s.line,
+      prompt: collapseWs(requireField(doc, fields, 'prompt', 'Для генератора (англійською)', where, s.line).value),
+      shows: requireField(doc, fields, 'shows', 'Що показує', where, s.line).value,
+    });
+  }
+
+  const zs = requireSection(doc, sections, /^Зведення$/i, '## Зведення');
+  const { fields: zf } = readFieldsStrict(doc, zs.body, {
+    musicSample: /^Зразок музики$/i,
+    fragments: /^Фрагменти для зразка$/i,
+    under: /^Музика під голосом/i,
+    pause: /^Музика в паузах/i,
+    fade: /^Час зміни гучності/i,
+    idea: /^Задум зведення$/i,
+  });
+  const W = '## Зведення';
+  const msF = requireField(doc, zf, 'musicSample', 'Зразок музики', W, zs.line);
+  const musicSample = parseInteger(doc, firstLine(msF.value), msF.line, 'Зведення, Зразок музики');
+  if (!music.some((x) => x.n === musicSample)) fail(doc, msF.line, `Зразка музики ${musicSample} немає серед «### Зразок N» (є: ${music.map((x) => x.n).join(', ')}).`);
+  const frF = requireField(doc, zf, 'fragments', 'Фрагменти для зразка', W, zs.line);
+  const uF = requireField(doc, zf, 'under', 'Музика під голосом, дБ відносно голосу', W, zs.line);
+  const pF = requireField(doc, zf, 'pause', 'Музика в паузах, дБ відносно голосу', W, zs.line);
+  const fdF = requireField(doc, zf, 'fade', 'Час зміни гучності, с', W, zs.line);
+  const underDb = parseNumber(doc, uF.value, uF.line, 'Музика під голосом', '(дБ|dB)?');
+  const pauseDb = parseNumber(doc, pF.value, pF.line, 'Музика в паузах', '(дБ|dB)?');
+  const fadeSeconds = parseNumber(doc, fdF.value, fdF.line, 'Час зміни гучності', '(с|сек|s)?');
+  for (const [v, f, what] of [[underDb, uF, 'Музика під голосом'], [pauseDb, pF, 'Музика в паузах']] as const) {
+    if (v < -60 || v > 12) fail(doc, f.line, `${what}: ${v} дБ поза розумними межами (−60…+12).`);
+  }
+  if (pauseDb < underDb) fail(doc, pF.line, `У паузах музика (${pauseDb} дБ) тихіша, ніж під голосом (${underDb} дБ): очікується навпаки.`);
+  if (fadeSeconds < 0.05 || fadeSeconds > 10) fail(doc, fdF.line, `Час зміни гучності ${fadeSeconds} с поза межами 0.05–10 с.`);
+  return {
+    idea: head.idea?.value ?? '',
+    music,
+    sfx,
+    mix: { musicSample, fragments: parseFragmentRange(doc, frF.value, frF.line), underDb, pauseDb, fadeSeconds, idea: zf.idea?.value ?? '', line: zs.line },
+    questions: extractQuestions(doc),
+  };
+}
+
 // ------------------------------------------------------------------ допоміжне
 
 /** Автор і назва історії для заголовка огляду: «Автор: Наталя, м. Донецьк» → «Наталя». */

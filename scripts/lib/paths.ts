@@ -26,6 +26,8 @@ export const paths = {
   characterDoc: (id: string) => join(root, 'characters', `${id}.md`),
   voicesDoc: () => join(root, 'voices.md'),
   styleDoc: () => join(root, 'art', 'style.md'),
+  samplesDoc: () => join(root, 'art', 'samples.md'),
+  soundSamplesDoc: (story: string) => join(root, 'stories', story, 'sound-samples.md'),
   rel: (abs: string) => (abs.startsWith(root + '/') ? abs.slice(root.length + 1) : abs),
 };
 
