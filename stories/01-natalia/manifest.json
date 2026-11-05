@@ -1,7 +1,7 @@
 {
   "story": "01-natalia",
   "credits": {
-    "total_spent": 4191,
+    "total_spent": 5283,
     "runs": [
       {
         "script": "voice-previews",
@@ -61,6 +61,14 @@
         "credits_before": 4149,
         "credits_after": 4149,
         "spent_run": 0
+      },
+      {
+        "script": "samples",
+        "started_at": "2026-11-05T01:09:37.817Z",
+        "finished_at": "2026-11-05T01:12:52.407Z",
+        "credits_before": 4191,
+        "credits_after": 5283,
+        "spent_run": 1092
       }
     ]
   },
@@ -161,6 +169,74 @@
         "credits": 406,
         "completed_at": "2026-11-05T00:57:14.105Z"
       }
+    },
+    "sample/09": {
+      "history": [],
+      "regen_count": 0,
+      "current": {
+        "generation_id": "4Z2kkX0Otpx7zCbJFLBm",
+        "model_id": "gemini-3.1-flash-image",
+        "width": 384,
+        "height": 688,
+        "prompt": "A fragment of a memory: a dark frosty winter early morning at a bus stop in Pavlohrad, seen close. The front part of a Ukrainian Bogdan A092 intercity midi-bus fills the left and upper part of the frame, cropped by the frame edge: a white body with a thin coloured stripe, a flat upright front with a large one-piece windshield, a warm yellow lit interior, the single front door open with warm light spilling onto the snow; behind the windshield a route board reads exactly «ПАВЛОГРАД — ТЕРНІВКА» in Ukrainian Cyrillic, and beside it on the dashboard stands a small national flag of Ukraine, blue over yellow. In the right foreground, a heavily pregnant woman with chestnut hair in a low bun under a terracotta-red knitted hat, a matching terracotta-red knitted scarf and a dark navy winter coat worn open over her round belly, holding a handbag, seen from behind and slightly to the side as she is about to step toward the door; her face is not visible. A streetlamp, frosty breath, fine falling snow, the dim shapes of five-storey Soviet-era panel buildings with a few lit windows behind. Cold blue darkness and the warm amber light of the bus.\n\nLoose traditional watercolour on white cold-pressed watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, soft blurred edges, pigment blooms and granulation, the white of the paper left as the light, a faint pencil underdrawing showing through in places. Forms are suggested rather than defined and small details dissolve into wet colour, like a scene half remembered. Limited muted palette of indigo, grey-blue, Payne's grey and warm amber, with a single note of terracotta red. People are painted loosely and simply, never a detailed portrait. Everyday Ukrainian setting with authentic local details. The painting fills the whole vertical frame edge to edge, with no border, no margin and no blank paper around it; keep the lower fifth of the scene calm, without important details. No photorealism, no 3D render, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no lens flare, no neon. No text or lettering except the exact Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. No American objects: no yellow school buses, no US road signs or license plates, no fire hydrants.",
+        "refs": [],
+        "file": "work/01-natalia/samples/sample-09.png",
+        "aspect_ratio": "9:16",
+        "resolution": "512",
+        "credits": 273,
+        "completed_at": "2026-11-05T01:10:28.421Z"
+      }
+    },
+    "sample/10": {
+      "history": [],
+      "regen_count": 0,
+      "current": {
+        "generation_id": "5Iou4cA2iF7Mxeq0Ccdm",
+        "model_id": "gemini-3.1-flash-image",
+        "width": 384,
+        "height": 688,
+        "prompt": "A fragment of a memory: a dark frosty winter early morning at a bus stop in Pavlohrad, seen close. The front part of a Ukrainian Bogdan A092 intercity midi-bus fills the left and upper part of the frame, cropped by the frame edge: a white body with a thin coloured stripe, a flat upright front with a large one-piece windshield, a warm yellow lit interior, the single front door open with warm light spilling onto the snow; behind the windshield a route board reads exactly «ПАВЛОГРАД — ТЕРНІВКА» in Ukrainian Cyrillic, and beside it on the dashboard stands a small national flag of Ukraine, blue over yellow. In the right foreground, a heavily pregnant woman with chestnut hair in a low bun under a terracotta-red knitted hat, a matching terracotta-red knitted scarf and a dark navy winter coat worn open over her round belly, holding a handbag, seen from behind and slightly to the side as she is about to step toward the door; her face is not visible. A streetlamp, frosty breath, fine falling snow, the dim shapes of five-storey Soviet-era panel buildings with a few lit windows behind. Cold blue darkness and the warm amber light of the bus.\n\nHand-drawn graphite and coloured-pencil drawing on warm grey toned paper: everything is built from visible pencil strokes, loose hatching and cross-hatching, directional strokes following the forms, soft finger smudges, the grain of the paper catching the pigment, loose unfinished edges. Mostly graphite and dark indigo pencil; colour appears only where there is light and warmth: the amber glow of the bus windows and the open door, and the terracotta-red hat and scarf. Soft focus and slightly imprecise, searching lines, like a drawing made from memory years later. People are drawn simply, never a detailed portrait. Everyday Ukrainian setting with authentic local details. The drawing fills the whole vertical frame edge to edge, with no border, no margin and no blank paper around it; keep the lower fifth of the scene calm, without important details. No photorealism, no 3D render, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no lens flare, no neon. No text or lettering except the exact Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. No American objects: no yellow school buses, no US road signs or license plates, no fire hydrants.",
+        "refs": [],
+        "file": "work/01-natalia/samples/sample-10.png",
+        "aspect_ratio": "9:16",
+        "resolution": "512",
+        "credits": 273,
+        "completed_at": "2026-11-05T01:11:15.944Z"
+      }
+    },
+    "sample/11": {
+      "history": [],
+      "regen_count": 0,
+      "current": {
+        "generation_id": "mOxRbZvBMbvIyYEaXJff",
+        "model_id": "gemini-3.1-flash-image",
+        "width": 384,
+        "height": 688,
+        "prompt": "A fragment of a memory: a dark frosty winter early morning at a bus stop in Pavlohrad, seen close. The front part of a Ukrainian Bogdan A092 intercity midi-bus fills the left and upper part of the frame, cropped by the frame edge: a white body with a thin coloured stripe, a flat upright front with a large one-piece windshield, a warm yellow lit interior, the single front door open with warm light spilling onto the snow; behind the windshield a route board reads exactly «ПАВЛОГРАД — ТЕРНІВКА» in Ukrainian Cyrillic, and beside it on the dashboard stands a small national flag of Ukraine, blue over yellow. In the right foreground, a heavily pregnant woman with chestnut hair in a low bun under a terracotta-red knitted hat, a matching terracotta-red knitted scarf and a dark navy winter coat worn open over her round belly, holding a handbag, seen from behind and slightly to the side as she is about to step toward the door; her face is not visible. A streetlamp, frosty breath, fine falling snow, the dim shapes of five-storey Soviet-era panel buildings with a few lit windows behind. Cold blue darkness and the warm amber light of the bus.\n\nMixed media on a page of an artist's sketchbook: loose watercolour washes in indigo, grey-blue and warm amber laid over a free graphite and charcoal pencil drawing, with energetic pencil hatching on top in the shadows; lines overshoot and repeat, some areas are left as bare pencil, and the colour sits slightly off the lines. The image is most complete in the centre and dissolves toward the edges into loose strokes, drips and bare cream paper, like a memory that fades at its borders. The terracotta-red hat and scarf are the strongest colour. People are drawn simply, never a detailed portrait. Everyday Ukrainian setting with authentic local details. Keep the lower fifth of the image calm, without important details. No photorealism, no 3D render, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no lens flare, no neon. No text or lettering except the exact Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. No American objects: no yellow school buses, no US road signs or license plates, no fire hydrants.",
+        "refs": [],
+        "file": "work/01-natalia/samples/sample-11.png",
+        "aspect_ratio": "9:16",
+        "resolution": "512",
+        "credits": 273,
+        "completed_at": "2026-11-05T01:11:52.319Z"
+      }
+    },
+    "sample/12": {
+      "history": [],
+      "regen_count": 0,
+      "current": {
+        "generation_id": "gs0YJu9Jmbqf71I6fVKT",
+        "model_id": "gemini-3.1-flash-image",
+        "width": 384,
+        "height": 688,
+        "prompt": "A fragment of a memory: a dark frosty winter early morning at a bus stop in Pavlohrad, seen close. The front part of a Ukrainian Bogdan A092 intercity midi-bus fills the left and upper part of the frame, cropped by the frame edge: a white body with a thin coloured stripe, a flat upright front with a large one-piece windshield, a warm yellow lit interior, the single front door open with warm light spilling onto the snow; behind the windshield a route board reads exactly «ПАВЛОГРАД — ТЕРНІВКА» in Ukrainian Cyrillic, and beside it on the dashboard stands a small national flag of Ukraine, blue over yellow. In the right foreground, a heavily pregnant woman with chestnut hair in a low bun under a terracotta-red knitted hat, a matching terracotta-red knitted scarf and a dark navy winter coat worn open over her round belly, holding a handbag, seen from behind and slightly to the side as she is about to step toward the door; her face is not visible. A streetlamp, frosty breath, fine falling snow, the dim shapes of five-storey Soviet-era panel buildings with a few lit windows behind. Cold blue darkness and the warm amber light of the bus.\n\nSoft pastel and charcoal on dark blue-grey paper, heavily smudged and blended by finger: very soft focus, as if seen through frosted glass or through tears, the edges of all forms dissolving into haze, glowing halos of warm light around the lit bus windows, the open door and the streetlamp, visible chalky strokes and fine paper grain. Only the warm light and the terracotta-red hat and scarf keep their colour; everything else melts into misty blue darkness. A dreamlike, atmospheric image of a memory rather than a sharp scene; the route board may be soft, but its letters stay exactly as given. People are drawn simply, never a detailed portrait. Everyday Ukrainian setting with authentic local details. The image fills the whole vertical frame edge to edge, with no border, no margin and no blank paper around it; keep the lower fifth of the scene calm, without important details. No photorealism, no 3D render, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no lens flare, no neon. No text or lettering except the exact Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. No American objects: no yellow school buses, no US road signs or license plates, no fire hydrants.",
+        "refs": [],
+        "file": "work/01-natalia/samples/sample-12.png",
+        "aspect_ratio": "9:16",
+        "resolution": "512",
+        "credits": 273,
+        "completed_at": "2026-11-05T01:12:39.961Z"
+      }
     }
   },
   "assets": {},
@@ -236,7 +312,7 @@
     "created_at": "2026-11-05T00:41:54.681Z",
     "design_credits_source": "docs"
   },
-  "updated_at": "2026-11-05T01:06:49.325Z",
+  "updated_at": "2026-11-05T01:12:52.407Z",
   "narration": {
     "model_id": "eleven_v4",
     "voice_id": "49POAIkFDXsxrtR84sdj",
@@ -333,6 +409,11 @@
       "width": 1024,
       "height": 1024,
       "file": "work/01-natalia/samples/sample-01.png"
+    },
+    "gemini-3.1-flash-image@512@9:16": {
+      "width": 384,
+      "height": 688,
+      "file": "work/01-natalia/samples/sample-09.png"
     }
   },
   "image_prices": {
@@ -340,6 +421,11 @@
       "max": 406,
       "last": 406,
       "count": 5
+    },
+    "gemini-3.1-flash-image@512": {
+      "max": 273,
+      "last": 273,
+      "count": 4
     }
   }
 }
