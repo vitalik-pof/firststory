@@ -29,13 +29,14 @@ const HELP = `Крок 8: кадри.
   --max-regens N         дозволена кількість перегенерацій на картинку (1 на Етапі 1)
   --aspect A:B           замість «Формат кадру» з розкадровки
   --resolution r         512 | 1K (за замовчуванням) | 2K | 4K
+  --upgrade              замінити наявні картинки іншої роздільності (не рахується як перегенерація; старий файл лишається як .r<роздільність>.png)
   --ignore-pending       продовжити, хоча попередній запуск обірвався між запитом і відповіддю`;
 
 async function main(): Promise<void> {
   const { values } = parseCli({
     'image-credits': { type: 'string' }, only: { type: 'string' }, regen: { type: 'string' }, prompt: { type: 'string' },
     'prompt-file': { type: 'string' }, 'max-regens': { type: 'string' }, aspect: { type: 'string' }, resolution: { type: 'string' },
-    'ignore-pending': { type: 'boolean' },
+    'ignore-pending': { type: 'boolean' }, upgrade: { type: 'boolean' },
   });
   if (values.help) return void log(HELP);
   const flags = commonFlags(values, { paid: true });
@@ -80,7 +81,7 @@ async function main(): Promise<void> {
     const scene = regenN === f.n && newPrompt ? newPrompt : f.prompt;
     const job: ImageJob = {
       key: frameKey(f.n), label: `кадр ${f.n}`, prompt: composePrompt(scene, style), refs: r.refs, aspect, resolution,
-      outFile: frameFile(story, f.n), regen: regenN === f.n, maxRegens, ignorePending: Boolean(values['ignore-pending']), expectedCredits: 0,
+      outFile: frameFile(story, f.n), regen: regenN === f.n, maxRegens, ignorePending: Boolean(values['ignore-pending']), upgrade: Boolean(values.upgrade), expectedCredits: 0,
     };
     jobs.push({ n: f.n, job, missing: r.missing });
     const plan = planJob(story, job);
@@ -92,7 +93,7 @@ async function main(): Promise<void> {
     if (jobs[0]) log(`Приклад запиту (кадр ${jobs[0].n}):\n---\n${jobs[0].job.prompt}\n---`);
     return;
   }
-  const expected = expectedImageCredits(story, imageCreditsFlag);
+  const expected = expectedImageCredits(story, imageCreditsFlag, resolution);
   await ctx.start();
   const refused: string[] = [];
   try {

@@ -27,6 +27,7 @@ const HELP = `Крок 7: аркуші героїв.
   --regen <герой[:версія]>   перегенерувати один аркуш (не більше --max-regens разів, за замовчуванням 1)
   --prompt "текст" | --prompt-file f   новий текст для генератора при --regen (без стилю: його додає скрипт)
   --max-regens N         дозволена кількість перегенерацій на картинку (1 на Етапі 1)
+  --upgrade              замінити наявні картинки іншої роздільності (не рахується як перегенерація; старий файл лишається як .r<роздільність>.png)
   --ignore-pending       продовжити, хоча попередній запуск обірвався між запитом і відповіддю`;
 
 interface SheetTarget {
@@ -39,7 +40,7 @@ interface SheetTarget {
 async function main(): Promise<void> {
   const { values } = parseCli({
     'image-credits': { type: 'string' }, character: { type: 'string' }, aspect: { type: 'string' }, resolution: { type: 'string' },
-    regen: { type: 'string' }, prompt: { type: 'string' }, 'prompt-file': { type: 'string' }, 'max-regens': { type: 'string' }, 'ignore-pending': { type: 'boolean' },
+    regen: { type: 'string' }, prompt: { type: 'string' }, 'prompt-file': { type: 'string' }, 'max-regens': { type: 'string' }, 'ignore-pending': { type: 'boolean' }, upgrade: { type: 'boolean' },
   });
   if (values.help) return void log(HELP);
   const flags = commonFlags(values, { paid: true });
@@ -89,7 +90,7 @@ async function main(): Promise<void> {
       t,
       job: {
         key, label: `${t.doc.id}${t.label === 'main' ? '' : ` «${t.label}»`}`, prompt: composePrompt(scene, style), refs: [], aspect, resolution,
-        outFile: sheetFile(t.doc.id, t.slug), regen: Boolean(regenKey), maxRegens, ignorePending: Boolean(values['ignore-pending']),
+        outFile: sheetFile(t.doc.id, t.slug), regen: Boolean(regenKey), maxRegens, ignorePending: Boolean(values['ignore-pending']), upgrade: Boolean(values.upgrade),
         expectedCredits: 0,
       },
     });
@@ -104,7 +105,7 @@ async function main(): Promise<void> {
     log(`\nСУХИЙ ПРОГІН: нічого не викликано. Приклад першого аркуша:\n---\n${jobs[0]?.job.prompt}\n---\nДодайте --run --limit-credits N --image-credits N.`);
     return;
   }
-  const expected = expectedImageCredits(story, imageCreditsFlag);
+  const expected = expectedImageCredits(story, imageCreditsFlag, resolution);
   await ctx.start();
   const refused: string[] = [];
   try {

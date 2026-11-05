@@ -80,6 +80,13 @@ function heroRefToAsset(cache: CharacterCache, ref: HeroRef, where: string, out:
   else out.missing.push(`аркуш ${ref.id}${sheet.label === 'main' ? '' : ` «${sheet.label}»`} ще не завантажено (upload-character-sheet)`);
 }
 
+/** Референси за списком героїв («Герої:» кадру чи зразка): аркуші із «Ресурси» файлів героїв. */
+export function resolveHeroList(heroes: HeroRef[], where: string, cache: CharacterCache): ResolvedRefs {
+  const out: ResolvedRefs = { refs: [], deps: [], missing: [] };
+  for (const h of heroes) heroRefToAsset(cache, h, where, out);
+  return out;
+}
+
 export function resolveFrameRefs(story: string, frame: StoryboardFrame, overrides: FrameRefsFile, cache: CharacterCache): ResolvedRefs {
   const out: ResolvedRefs = { refs: [], deps: [], missing: [] };
   const where = `Кадр ${frame.n}`;

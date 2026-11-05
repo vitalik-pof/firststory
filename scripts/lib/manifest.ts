@@ -8,6 +8,7 @@ import { paths } from './paths';
 
 export interface ImageVersion {
   generation_id: string;
+  model_id?: string;
   prompt: string;
   refs: string[];
   file: string;
@@ -18,7 +19,7 @@ export interface ImageVersion {
 }
 
 export interface PendingImage {
-  kind: 'initial' | 'regen';
+  kind: 'initial' | 'regen' | 'upgrade';
   status: 'requested' | 'created';
   prompt: string;
   refs: string[];
@@ -54,6 +55,8 @@ export interface Manifest {
   images: Record<string, ImageRecord>;
   assets: Record<string, Record<string, unknown>>;
   audio: Record<string, Record<string, unknown>>;
+  /** Виміряна ціна картинки окремо для кожної пари «модель@роздільність». */
+  image_prices?: Record<string, { max: number; last: number; count: number }>;
   [k: string]: unknown;
 }
 
