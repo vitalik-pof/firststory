@@ -1,7 +1,7 @@
 {
   "story": "01-natalia",
   "credits": {
-    "total_spent": 10575,
+    "total_spent": 11243,
     "runs": [
       {
         "script": "voice-previews",
@@ -93,6 +93,14 @@
         "credits_before": 6101,
         "credits_after": 8537,
         "spent_run": 2436
+      },
+      {
+        "script": "sound",
+        "started_at": "2026-11-05T03:45:21.500Z",
+        "finished_at": "2026-11-05T03:48:58.493Z",
+        "credits_before": 8537,
+        "credits_after": 10855,
+        "spent_run": 2318
       }
     ]
   },
@@ -501,6 +509,66 @@
       "regen_count": 0,
       "generated_at": "2026-11-05T03:47:09.271Z",
       "character_cost_header": 48
+    },
+    "sfx-5": {
+      "file": "work/01-natalia/audio/sfx-05.mp3",
+      "kind": "sfx",
+      "seconds_requested": 5,
+      "prompt": "The inside of an old bus in the early morning, heard from a seat by the window: a steady low diesel engine drone, the soft vibration and rattle of window glass and metal panels, tyres humming on a cold road, a faint squeak of a handrail. Muffled, tired, monotonous, constant level. No voices, no music.",
+      "credits": 61,
+      "credits_source": "header",
+      "output_format": "mp3_44100_128",
+      "regen_count": 0,
+      "generated_at": "2026-11-05T03:47:23.937Z",
+      "character_cost_header": 61
+    },
+    "sfx-6": {
+      "file": "work/01-natalia/audio/sfx-06.mp3",
+      "kind": "sfx",
+      "seconds_requested": 7,
+      "prompt": "A spring morning above a very wide river: soft wind, quiet lapping of water against a stone embankment, a few gulls calling far away, the faint steady hum of cars crossing a long bridge in the distance, then small spring birds nearby and the soft rolling of a stroller wheels on a paved path. Fresh, open and calm. No voices, no music.",
+      "credits": 242,
+      "credits_source": "counter",
+      "output_format": "mp3_44100_128",
+      "regen_count": 0,
+      "generated_at": "2026-11-05T03:47:49.981Z",
+      "character_cost_header": 85
+    },
+    "sfx-7": {
+      "file": "work/01-natalia/audio/sfx-07.mp3",
+      "kind": "sfx",
+      "seconds_requested": 5,
+      "prompt": "Warm applause from a small audience of about thirty people in a modest hall at the end of a show, starting softly, growing to a natural full applause and then settling, a couple of faint cheers far in the back. No music, no speech.",
+      "credits": 61,
+      "credits_source": "header",
+      "output_format": "mp3_44100_128",
+      "regen_count": 0,
+      "generated_at": "2026-11-05T03:48:05.323Z",
+      "character_cost_header": 61
+    },
+    "sfx-8": {
+      "file": "work/01-natalia/audio/sfx-08.mp3",
+      "kind": "sfx",
+      "seconds_requested": 6,
+      "prompt": "A winter night in a big city during a power blackout: almost silence, a very low distant hum of a diesel generator far away, a soft wind passing over snow-covered streets and rooftops, a faint metallic creak somewhere. No sirens, no explosions, no voices, no music. Empty, cold and quiet.",
+      "credits": 73,
+      "credits_source": "header",
+      "output_format": "mp3_44100_128",
+      "regen_count": 0,
+      "generated_at": "2026-11-05T03:48:20.418Z",
+      "character_cost_header": 73
+    },
+    "sfx-9": {
+      "file": "work/01-natalia/audio/sfx-09.mp3",
+      "kind": "sfx",
+      "seconds_requested": 8,
+      "prompt": "A calm golden evening on a riverside embankment: a soft wind, gentle water against stone, far-away gulls, a faint flutter of fabric in the breeze, a slow wide sense of open space, getting slightly more spacious toward the end. No engines, no voices, no music.",
+      "credits": 231,
+      "credits_source": "counter",
+      "output_format": "mp3_44100_128",
+      "regen_count": 0,
+      "generated_at": "2026-11-05T03:48:46.026Z",
+      "character_cost_header": 97
     }
   },
   "voice": {
@@ -535,7 +603,7 @@
     "created_at": "2026-11-05T00:41:54.681Z",
     "design_credits_source": "docs"
   },
-  "updated_at": "2026-11-05T03:47:09.271Z",
+  "updated_at": "2026-11-05T03:48:58.493Z",
   "narration": {
     "model_id": "eleven_v4",
     "voice_id": "49POAIkFDXsxrtR84sdj",
