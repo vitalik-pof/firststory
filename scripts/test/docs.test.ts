@@ -163,8 +163,11 @@ describe('суворість: документ не за форматом дає
 describe('зразки Етапу 1а', () => {
   it('art/samples.md', () => {
     const sd = parseSamples();
-    assert.equal(sd.samples.length, 3);
-    assert.deepEqual(sd.samples.map((s) => s.fragment), [undefined, 1, 3]);
+    assert.equal(sd.samples.length, 4);
+    assert.deepEqual(sd.samples.map((s) => s.fragment), [undefined, 1, 3, 2]);
+    assert.deepEqual(sd.samples.map((s) => s.resolution), [undefined, undefined, undefined, '512']);
+    assert.match(sd.samples[3]!.style!, /watercolor/);
+    assert.equal(sd.samples[0]!.style, undefined);
     assert.deepEqual(sd.samples[2]!.heroes, [{ id: 'natalia', version: '2014' }]);
     assert.equal(sd.samples[0]!.format, '1:1');
     assert.match(sd.questions, /палітра/);
@@ -179,6 +182,12 @@ describe('зразки Етапу 1а', () => {
     assert.throws(() => parseSamples(), /Не вдалося визначити співвідношення/);
     writeFileSync(f, orig.replace('Герої: немає\nДля генератора (англійською): A hot', 'Для генератора (англійською): A hot'));
     assert.throws(() => parseSamples(), /немає поля «Герої:»/);
+    writeFileSync(f, orig.replace('Роздільність: 512', 'Роздільність: 640x480'));
+    assert.throws(() => parseSamples(), /«Роздільність:» має бути 512, 1K, 2K, 4K, а є «640x480»/);
+    writeFileSync(f, orig.replace('Роздільність: 512', 'Роздільність: 1k.'));
+    assert.equal(parseSamples().samples[3]!.resolution, '1K');
+    writeFileSync(f, orig.replace(/Стиль для генератора \(англійською\): .*/, 'Стиль для генератора (англійською):'));
+    assert.throws(() => parseSamples(), /Стиль для генератора[^]*порожній/);
     writeFileSync(f, orig);
   });
   it('sound-samples.md: музика, шум, параметри зведення (мінус-знаки, кома)', () => {

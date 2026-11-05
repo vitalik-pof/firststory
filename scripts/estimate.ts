@@ -24,13 +24,13 @@ interface Row {
 }
 
 async function main(): Promise<void> {
-  let values: { story?: string; 'image-credits'?: string; stage?: string; resolution?: string; help?: boolean };
+  let values: { story?: string; 'image-credits'?: string; stage?: string; resolution?: string; prices?: string; help?: boolean };
   try {
-    values = parseArgs({ options: { story: { type: 'string' }, 'image-credits': { type: 'string' }, stage: { type: 'string' }, resolution: { type: 'string' }, help: { type: 'boolean' } }, strict: true }).values;
+    values = parseArgs({ options: { story: { type: 'string' }, 'image-credits': { type: 'string' }, stage: { type: 'string' }, resolution: { type: 'string' }, prices: { type: 'string' }, help: { type: 'boolean' } }, strict: true }).values;
   } catch (e) {
     throw new UsageError((e as Error).message);
   }
-  if (values.help) return void log('Кошторис: --story <id> [--stage full|samples] [--resolution 1K] [--image-credits N]');
+  if (values.help) return void log('Кошторис: --story <id> [--stage full|samples] [--resolution 1K] [--image-credits N] [--prices 512=40,1K=100]');
   if (!values.story) throw new UsageError('Потрібен --story <id>.');
   const story = values.story;
   assertStoryExists(story);
@@ -50,6 +50,19 @@ async function main(): Promise<void> {
   // Ціна картинки: виміряна для цієї роздільності (маніфест), інакше --image-credits, інакше невідомо.
   const measured = measuredImageCredits(story, resolution);
   const image: Priced = measured !== undefined ? { credits: measured, source: 'виміряно в маніфесті', note: `максимум для ${resolution}` } : estimateImage(imageFlag);
+  const manual = new Map<string, number>();
+  for (const part of (values.prices ?? '').split(',').map((x) => x.trim()).filter(Boolean)) {
+    const m = /^(512|1K|2K|4K)=(\d+(?:\.\d+)?)$/i.exec(part);
+    if (!m) throw new UsageError(`--prices: очікується «512=40,1K=100», а є «${part}».`);
+    manual.set(m[1]!.toUpperCase(), Number(m[2]));
+  }
+  /** Ціна картинки для роздільності: виміряна в маніфесті, потім --prices, потім --image-credits, інакше невідомо. */
+  const priceFor = (res: string): Priced => {
+    const got = measuredImageCredits(story, res);
+    if (got !== undefined) return { credits: got, source: 'виміряно в маніфесті', note: `максимум для ${res}` };
+    const man = manual.get(res) ?? imageFlag;
+    return man !== undefined ? { credits: man, source: 'оцінка', note: `значення з ${manual.has(res) ? '--prices' : '--image-credits'} для ${res}` } : { credits: null, source: 'не знайдено', note: `ціну ${res} у документації не знайдено; задайте --prices ${res}=N` };
+  };
   const imgTwice = (n: number): Priced => (image.credits === null ? image : { ...image, credits: image.credits * n * 2 });
 
   let sheets = 0;
@@ -68,19 +81,26 @@ async function main(): Promise<void> {
     await attempt('Зразки стилю', () => {
       const sd = parseSamples();
       frames = sd.samples.length;
-      const withHeroes = sd.samples.filter((s) => s.heroes.length);
-      rows.push({
-        step: 'зр.', what: `Зразки стилю (art/samples.md), ${resolution}`, units: `${sd.samples.length} картинок (${sd.samples.filter((s) => s.heroes.length).length} з героями; формати: ${[...new Set(sd.samples.map((s) => s.format))].join(', ')})`,
-        price: { ...image, credits: image.credits === null ? null : image.credits * sd.samples.length }, max: imgTwice(sd.samples.length),
-      });
+      const byRes = new Map<string, number>();
+      for (const smp of sd.samples) byRes.set(smp.resolution ?? resolution, (byRes.get(smp.resolution ?? resolution) ?? 0) + 1);
+      for (const [res, n] of [...byRes].sort()) {
+        const p = priceFor(res);
+        const own = sd.samples.filter((x) => (x.resolution ?? resolution) === res);
+        rows.push({
+          step: 'зр.', what: `Зразки стилю (art/samples.md), ${res}${own.some((x) => x.style) ? `, з власним стилем: ${own.filter((x) => x.style).map((x) => x.n).join(', ')}` : ''}`,
+          units: `${n} картинок (зразки ${own.map((x) => x.n).join(', ')}; формати: ${[...new Set(own.map((x) => x.format))].join(', ')})`,
+          price: { ...p, credits: p.credits === null ? null : p.credits * n }, max: p.credits === null ? p : { ...p, credits: p.credits * n * 2 },
+        });
+      }
       // Референси героїв, яких ще немає: аркуш треба згенерувати й завантажити до зразків.
       const cache = new CharacterCache();
       const missing = new Set<string>();
-      for (const s of withHeroes) for (const m of resolveHeroList(s.heroes, `Зразок ${s.n}`, cache).missing) missing.add(m);
+      for (const smp of sd.samples.filter((x) => x.heroes.length)) for (const mm of resolveHeroList(smp.heroes, `Зразок ${smp.n}`, cache).missing) missing.add(mm);
       sheets = missing.size;
+      const sp = priceFor(resolution);
       rows.push({
-        step: 'зр.', what: `Аркуші героїв, які ще треба згенерувати для зразків${missing.size ? `: ${[...missing].join('; ')}` : ''}`, units: `${missing.size} картинок`,
-        price: missing.size === 0 ? { credits: 0, source: 'оцінка', note: 'усі потрібні аркуші вже є' } : { ...image, credits: image.credits === null ? null : image.credits * missing.size }, max: missing.size === 0 ? undefined : imgTwice(missing.size),
+        step: 'зр.', what: `Аркуші героїв, які ще треба згенерувати для зразків${missing.size ? `: ${[...missing].join('; ')}` : ''} (${resolution})`, units: `${missing.size} картинок`,
+        price: missing.size === 0 ? { credits: 0, source: 'оцінка', note: 'усі потрібні аркуші вже є' } : { ...sp, credits: sp.credits === null ? null : sp.credits * missing.size }, max: missing.size === 0 ? undefined : sp.credits === null ? sp : { ...sp, credits: sp.credits * missing.size * 2 },
       });
     });
     await attempt('Зразки звуку', () => {
@@ -133,9 +153,10 @@ async function main(): Promise<void> {
   const known = rows.reduce((n, r) => n + (r.price.credits ?? 0), 0);
   const knownMax = rows.reduce((n, r) => n + ((r.max ?? r.price).credits ?? 0), 0);
   log(`\nРазом (без картинок, якщо їхню ціну не задано): ~${known} кредитів.`);
-  if (image.credits === null) {
+  const unknown = rows.some((r) => r.price.credits === null || (r.max !== undefined && r.max.credits === null));
+  if (unknown) {
     log(`Картинок: ${sheets + frames} (${sheets} аркушів + ${frames} ${stage === 'samples' ? 'зразків' : 'кадрів'}), до ${2 * (sheets + frames)} з перегенераціями. Ціну картинки gemini-3.1-flash-image у документації ElevenLabs не знайдено,`);
-    log('тому підсумок із картинками не порахувано. Задайте --image-credits N (подивіться ціну в інтерфейсі Image & Video) або згенеруйте одну картинку і візьміть фактичну з маніфесту.');
+    log('тому підсумок із картинками не порахувано. Задайте --image-credits N або --prices 512=N,1K=M (подивіться ціну в інтерфейсі Image & Video) або згенеруйте одну картинку і візьміть фактичну з маніфесту.');
   } else {
     log(`Разом з картинками: ~${known} [оцінка], верхня межа з перегенераціями: ~${knownMax} [оцінка].`);
     log(`Пропонований ліміт: ~${Math.ceil(knownMax * 1.1)} (верхня межа + 10% запасу) [оцінка].`);

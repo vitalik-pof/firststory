@@ -230,6 +230,15 @@ export const SAMPLES_MD = `# Зразки стилю: Тестова істор�
 Герої: natalia (версія «2014», у кардигані)
 Для генератора (англійською): A woman standing in a children's room at dusk.
 
+## Зразок 4
+Що показує: автобус у розмитій акварелі, малий розмір.
+Формат: 9:16
+Для фрагмента: 2
+Герої: немає
+Роздільність: 512
+Стиль для генератора (англійською): Loose watercolor with soft blurred edges and visible pencil strokes on cream paper.
+Для генератора (англійською): A white minibus on a rainy road at dawn.
+
 ## Питання
 
 1. Режисерові. Чи подобається палітра?

@@ -140,12 +140,15 @@ export function renderSamplesReview(d: SamplesReviewData, target: ReviewTarget, 
       const ratio = s.format.match(/(\d+)\s*[:х×x/]\s*(\d+)/i);
       const ar = ratio ? `${ratio[1]} / ${ratio[2]}` : '9 / 16';
       const t = s.fragment !== undefined ? d.timings?.fragments.find((f) => f.n === s.fragment) : undefined;
+      const cur = d.manifest.images[`sample/${pad2(s.n)}`]?.current;
+      const res = cur?.resolution ?? s.resolution ?? '1K';
       return `<div class="card" id="sample-${s.n}">
-  <p><span class="badge">Зразок ${s.n}</span><span class="badge">${esc(s.format)}</span><span class="badge">${s.fragment !== undefined ? `фрагмент ${s.fragment}${t ? `, ${fmtTime(t.start)}` : ''}` : 'без фрагмента'}</span></p>
+  <p><span class="badge">Зразок ${s.n}</span><span class="badge">${esc(s.format)}</span><span class="badge">запитано ${esc(res)}${cur?.width ? `, вийшло ${cur.width}×${cur.height} px` : ''}</span><span class="badge">${s.fragment !== undefined ? `фрагмент ${s.fragment}${t ? `, ${fmtTime(t.start)}` : ''}` : 'без фрагмента'}</span></p>
   ${src ? `<img src="${esc(src)}" alt="Зразок ${s.n}" loading="lazy" style="max-width:min(100%, ${ar.startsWith('9') ? '360px' : '640px'})">` : `<div class="ph" style="aspect-ratio:${ar}">Зразок ${s.n} ще не згенеровано</div>`}
   <p style="margin-top:10px"><strong>Що показує:</strong> ${esc(s.shows)}</p>
   ${s.heroes.length ? `<p class="muted"><strong>Герої:</strong> ${s.heroes.map((h) => esc(h.id + (h.version ? ` «${h.version}»` : ''))).join(', ')}</p>` : ''}
   <details><summary>Текст для генератора</summary><pre>${esc(s.prompt)}</pre></details>
+  ${s.style ? `<details><summary>Власний стиль зразка (замість стандартного)</summary><pre>${esc(s.style)}</pre></details>` : ''}
 </div>`;
     })
     .join('\n');
