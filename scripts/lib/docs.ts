@@ -1,13 +1,19 @@
 // Парсери документів творчих ролей. Формати описано у файлах .claude/agents/*.md.
 
-import { readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
 import {
   type Doc, type Field, type Line, type Section,
   blockText, extractQuestions, fail, flatText, isPlaceholder, parseInteger, parseSeconds,
   readDoc, readFieldsStrict, requireField, requireSection, sectionText, splitByHeading, trimLines,
 } from './md';
-import { paths } from './paths';
+import { getRoot, paths } from './paths';
 import { collapseWs, slugify, stripTags, bracketProblem } from './text';
+
+/** Поле з одним рядком: усе після першого переносу (абзаци під шапкою) відкидаємо. */
+export function firstLine(value: string): string {
+  return (value.split('\n')[0] ?? '').trim();
+}
 
 // ------------------------------------------------------------------ сценарій
 
@@ -31,7 +37,7 @@ export function parseScript(story: string): ScriptDoc {
   const h1 = doc.lines.find((l) => /^#\s+/.test(l.text));
   const title = h1 ? h1.text.replace(/^#\s+/, '').replace(/^Сценарій:\s*/i, '').trim() : story;
   const { fields } = readFieldsStrict(doc, preamble, { language: /^Мова озвучення$/i, volume: /^Обсяг$/i });
-  const language = requireField(doc, fields, 'language', 'Мова озвучення', 'шапка файлу').value;
+  const language = firstLine(requireField(doc, fields, 'language', 'Мова озвучення', 'шапка файлу').value);
   const frag = requireSection(doc, sections, /^Фрагменти$/i, '## Фрагменти');
   const subs = splitByHeading(frag.body, 3).sections;
   if (!subs.length) fail(doc, frag.line, 'У розділі «Фрагменти» немає жодного фрагмента (очікуються заголовки «### 1», «### 2»…).');
@@ -156,7 +162,7 @@ export function parseVoiceMd(story: string): VoiceDoc {
   const doc = readDoc(paths.storyFile(story, 'voice.md'), 'voice-director');
   const { preamble, sections } = splitByHeading(doc.lines, 2);
   const { fields } = readFieldsStrict(doc, preamble, { voice: /^Голос$/i });
-  const voiceId = requireField(doc, fields, 'voice', 'Голос', 'шапка файлу').value.replace(/[`*]/g, '').trim();
+  const voiceId = firstLine(requireField(doc, fields, 'voice', 'Голос', 'шапка файлу').value).replace(/[`*]/g, '').trim();
   const fragments: VoiceFragment[] = [];
   let prev = 0;
   for (const s of sections) {
@@ -226,15 +232,22 @@ export function parseStyle(): StyleDoc {
 }
 
 // ------------------------------------------------------------------ герої
+//
+// Формати аркушів (art-director):
+//  - один аркуш: розділ другого рівня «## Текст для генератора аркуша героя (англійською)»;
+//  - кілька версій в одному файлі: розділи «## Версія «2014»: опис», у кожному підрозділ
+//    «### Текст для генератора аркуша героя (англійською)». Назва версії — текст у лапках «…».
 
 export interface SheetSpec {
+  /** Назва версії як у документі («2014», «вагітна») або «main» для героя з одним аркушем. */
+  label: string;
+  /** Латиницею, для імен файлів. */
   slug: string;
-  title: string;
   prompt: string;
   line: number;
 }
 export interface CharacterResource {
-  slug: string;
+  label: string;
   assetId: string;
   line: number;
 }
@@ -244,11 +257,20 @@ export interface CharacterDoc {
   appears: string;
   description: string;
   sheets: SheetSpec[];
+  /** Решта розділів (версії тощо) для сторінки огляду. */
+  extraSections: Array<{ title: string; text: string }>;
   resources: CharacterResource[];
-  /** Діапазон тіла розділу «Ресурси» і заголовок (для запису id). */
   resourcesSection?: { headingLine: number; bodyFrom: number; bodyTo: number };
   acceptance: string;
   questions: string;
+}
+
+const GEN_TITLE = /^Текст для генератора аркуша/i;
+
+export function listCharacterIds(): string[] {
+  const dir = join(getRoot(), 'characters');
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir).filter((f) => f.endsWith('.md')).map((f) => f.slice(0, -3)).sort();
 }
 
 export function parseCharacter(id: string): CharacterDoc {
@@ -256,24 +278,34 @@ export function parseCharacter(id: string): CharacterDoc {
   const h1 = doc.lines.find((l) => /^#\s+/.test(l.text));
   if (!h1) fail(doc, 1, 'Немає заголовка «# <Ім’я героя>».');
   const { preamble, sections } = splitByHeading(doc.lines, 2);
-  const { fields } = readFieldsStrict(doc, preamble, { appears: /^З['’ʼ]?являється в$/i });
-  const gen = requireSection(doc, sections, /^Текст для генератора аркуша/i, '## Текст для генератора аркуша героя (англійською)');
-  const subs = splitByHeading(gen.body, 3).sections;
+  const { fields } = readFieldsStrict(doc, preamble, { appears: /^З['’ʼ]?явля(є|ю)ться в$/i });
   const sheets: SheetSpec[] = [];
-  if (subs.length) {
+  const extraSections: Array<{ title: string; text: string }> = [];
+  const versionSections = sections.filter((s) => /^Версія\s+[«"]/.test(s.title));
+  if (versionSections.length) {
     const used = new Set<string>();
-    subs.forEach((s, i) => {
-      const prompt = flatText(s.body);
-      if (!prompt) fail(doc, s.line, `Версія «${s.title}»: порожній текст для генератора.`);
-      let slug = slugify(s.title) || `v${i + 1}`;
+    versionSections.forEach((vs, i) => {
+      const m = /^Версія\s+[«"]([^»"]+)[»"]/.exec(vs.title);
+      if (!m) fail(doc, vs.line, `Назва версії має бути в лапках: «## Версія «2014»: …», а є «${vs.title}».`);
+      const label = m[1]!.trim();
+      const subs = splitByHeading(vs.body, 3).sections;
+      const gen = subs.find((x) => GEN_TITLE.test(x.title));
+      if (!gen) fail(doc, vs.line, `У версії «${label}» немає підрозділу «### Текст для генератора аркуша героя (англійською)».`);
+      const prompt = flatText(gen.body);
+      if (!prompt || isPlaceholder(prompt)) fail(doc, gen.line, `Версія «${label}»: текст для генератора порожній або лишився шаблоном.`);
+      let slug = slugify(label) || `v${i + 1}`;
       if (used.has(slug)) slug = `${slug}-${i + 1}`;
+      if (sheets.some((x) => x.label.toLowerCase() === label.toLowerCase())) fail(doc, vs.line, `Версія «${label}» описана двічі.`);
       used.add(slug);
-      sheets.push({ slug, title: s.title, prompt, line: s.line });
+      sheets.push({ label, slug, prompt, line: gen.line });
+      const textLines = vs.body.filter((l) => l.n < gen.line);
+      extraSections.push({ title: vs.title, text: blockText(textLines) });
     });
   } else {
+    const gen = requireSection(doc, sections, GEN_TITLE, '## Текст для генератора аркуша героя (англійською)');
     const prompt = flatText(gen.body);
     if (!prompt || isPlaceholder(prompt)) fail(doc, gen.line, 'Текст для генератора аркуша порожній або лишився шаблоном.');
-    sheets.push({ slug: 'main', title: 'main', prompt, line: gen.line });
+    sheets.push({ label: 'main', slug: 'main', prompt, line: gen.line });
   }
   const res = sections.find((s) => /^Ресурси$/i.test(s.title));
   const resources: CharacterResource[] = [];
@@ -282,16 +314,18 @@ export function parseCharacter(id: string): CharacterDoc {
     const body = res.body;
     resourcesSection = { headingLine: res.line, bodyFrom: body[0]?.n ?? res.line + 1, bodyTo: body[body.length - 1]?.n ?? res.line };
     for (const l of body) {
-      const m = /^\s*[-*]\s*([\w.-]+)\s*:\s*`?([A-Za-z0-9_-]{8,})`?/.exec(l.text);
-      if (m) resources.push({ slug: m[1]!, assetId: m[2]!, line: l.n });
+      const m = /^\s*[-*]\s*[«"]?([^:»"]+?)[»"]?\s*:\s*`?([A-Za-z0-9_-]{8,})`?/.exec(l.text);
+      if (m) resources.push({ label: m[1]!.trim(), assetId: m[2]!, line: l.n });
     }
   }
+  const appearsAll = fields.appears?.value ?? '';
   return {
     id,
     name: h1.text.replace(/^#\s+/, '').trim(),
-    appears: fields.appears?.value ?? '',
-    description: blockText(preamble.filter((l) => !/^#\s/.test(l.text) && !/^\s*[-*]?\s*\**З['’ʼ]?являється в/i.test(l.text))),
+    appears: firstLine(appearsAll),
+    description: blockText(preamble.filter((l) => !/^#\s/.test(l.text) && l.n !== fields.appears?.line)),
     sheets,
+    extraSections,
     resources,
     resourcesSection,
     acceptance: sectionText(doc, /^Приймання$/i),
@@ -299,19 +333,29 @@ export function parseCharacter(id: string): CharacterDoc {
   };
 }
 
-/** Додає (або замінює) рядок «- slug: asset_id …» у розділі «Ресурси» файлу героя. */
-export function writeCharacterResource(id: string, slug: string, assetId: string, note: string): void {
+export function findSheet(doc: CharacterDoc, version: string | undefined, where: string): SheetSpec {
+  if (version === undefined) {
+    if (doc.sheets.length === 1) return doc.sheets[0]!;
+    throw new Error(`${where}: у героя «${doc.id}» ${doc.sheets.length} версії (${doc.sheets.map((s) => `«${s.label}»`).join(', ')}), потрібно вказати версію: ${doc.id} (версія «…»).`);
+  }
+  const s = doc.sheets.find((x) => x.label.toLowerCase() === version.toLowerCase());
+  if (!s) throw new Error(`${where}: невідома версія «${version}» героя «${doc.id}» (є: ${doc.sheets.map((x) => `«${x.label}»`).join(', ')}).`);
+  return s;
+}
+
+/** Додає (або замінює) рядок «- <версія>: asset_id (…)» у розділі «Ресурси» файлу героя. */
+export function writeCharacterResource(id: string, label: string, assetId: string, note: string): void {
   const file = paths.characterDoc(id);
   const lines = readFileSync(file, 'utf8').split('\n');
   const doc = parseCharacter(id);
-  const entry = `- ${slug}: ${assetId} (${note})`;
-  const existing = doc.resources.find((r) => r.slug === slug);
+  const entry = `- ${label}: ${assetId} (${note})`;
+  const existing = doc.resources.find((r) => r.label.toLowerCase() === label.toLowerCase());
   if (existing) {
     lines[existing.line - 1] = entry;
   } else if (doc.resourcesSection) {
-    // Заглушку-шаблон на кшталт «<сюди технік впише…>» прибираємо, інше лишаємо.
     const { headingLine, bodyTo } = doc.resourcesSection;
-    for (let i = headingLine; i < bodyTo; i++) if (/^\s*<[^>]*>\s*$/.test(lines[i] ?? '')) lines[i] = '';
+    // Заглушки («Поки порожньо…», «<…>») прибираємо, справжні записи лишаємо.
+    for (let i = headingLine; i < bodyTo; i++) if (/^\s*(<[^>]*>|Поки порожньо.*)\s*$/.test(lines[i] ?? '')) lines[i] = '';
     let at = bodyTo;
     while (at > headingLine && !(lines[at - 1] ?? '').trim()) at--;
     lines.splice(at, 0, entry);
@@ -354,17 +398,23 @@ const FRAME_DEFS = {
   prompt: /^Для генератора/i,
 };
 
-const NO_HEROES = /^(—|–|-|немає|нема|жодного|none|no one)\.?$/i;
-
-export function parseHeroRefs(doc: Doc, value: string, line: number): HeroRef[] {
+/**
+ * Рядок «Герої:» — вільний текст. Правило: «немає…» означає без референсів; інакше беремо латинські
+ * id героїв (natalia, natalia-husband…), а для героя з версіями — «версія «…»» у дужках після id.
+ * Решту слів ігноруємо. Чи існує такий герой і така версія, перевіряється пізніше (findSheet).
+ */
+export function parseHeroRefs(doc: Doc, value: string, line: number, frameN?: number): HeroRef[] {
   const v = value.replace(/[`*]/g, '').trim();
-  if (!v || NO_HEROES.test(v)) return [];
+  const where = frameN !== undefined ? `Кадр ${frameN}, «Герої:»` : '«Герої:»';
+  if (!v) fail(doc, line, `${where}: порожньо (якщо героїв немає, напишіть «немає»).`);
+  if (/^(немає|нема|—|–|-|none)/i.test(v)) return [];
   const refs: HeroRef[] = [];
-  for (const part of v.split(/[,;]/).map((x) => x.trim()).filter(Boolean)) {
-    const m = /^([\w.-]+)(?:\s*[:/]\s*([\w.-]+))?$/.exec(part);
-    if (!m) fail(doc, line, `Герої: «${part}» не схоже на id з characters/ (очікується «natalia» або «natalia:young»).`);
-    refs.push({ id: m[1]!, version: m[2] });
+  const re = /(^|[^\w-])([a-z][a-z0-9]*(?:-[a-z0-9]+)*)(\s*\(([^)]*)\))?/g;
+  for (const m of v.matchAll(re)) {
+    const ver = m[4] ? /версі[яї]\s*[«"]([^»"]+)[»"]/i.exec(m[4]) : null;
+    refs.push({ id: m[2]!, version: ver?.[1]?.trim() });
   }
+  if (!refs.length) fail(doc, line, `${where}: не знайдено жодного id героя (очікується щось на кшталт «natalia (версія «2014»), natalia-husband» або «немає»). Рядок: «${v}».`);
   return refs;
 }
 
@@ -372,7 +422,7 @@ export function parseStoryboard(story: string): StoryboardDoc {
   const doc = readDoc(paths.storyFile(story, 'storyboard.md'), 'art-director');
   const { preamble, sections } = splitByHeading(doc.lines, 2);
   const { fields: head } = readFieldsStrict(doc, preamble, { format: /^Формат кадру$/i });
-  const format = requireField(doc, head, 'format', 'Формат кадру', 'шапка файлу').value;
+  const format = firstLine(requireField(doc, head, 'format', 'Формат кадру', 'шапка файлу').value);
   const frames: StoryboardFrame[] = [];
   let prev = 0;
   for (const s of sections) {
@@ -391,7 +441,7 @@ export function parseStoryboard(story: string): StoryboardDoc {
       n,
       fragment: parseInteger(doc, fr.value, fr.line, `${where}, Фрагмент сценарію`),
       inFrame: fields.inFrame?.value ?? '',
-      heroes: parseHeroRefs(doc, heroesField.value, heroesField.line),
+      heroes: parseHeroRefs(doc, heroesField.value, heroesField.line, n),
       camera: fields.camera?.value ?? '',
       mood: fields.mood?.value ?? '',
       prompt: collapseWs(prompt.value),
