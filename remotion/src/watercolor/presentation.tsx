@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useMemo, useRef, useState } from "react";
-import { AbsoluteFill, cancelRender, continueRender, delayRender } from "remotion";
+import { AbsoluteFill, cancelRender, continueRender, delayRender, useCurrentFrame, useVideoConfig } from "remotion";
 import type { TransitionPresentation, TransitionPresentationComponentProps } from "@remotion/transitions";
 import type { WatercolorOptions } from "../types";
 import { renderMasks, type Masks } from "./mask";
@@ -26,10 +26,14 @@ const WatercolorComponent: React.FC<TransitionPresentationComponentProps<Waterco
   passedProps,
 }) => {
   const entering = presentationDirection === "entering";
+  // Вхідний шот стартує разом із переходом, тож локальний кадр це кадр переходу.
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const timeSec = frame / fps;
   // Маска залежить тільки від progress, який Remotion рахує з номера кадру.
   const masks = useMemo(
-    () => (entering ? renderMasks(passedProps, presentationProgress) : null),
-    [entering, passedProps, presentationProgress],
+    () => (entering ? renderMasks(passedProps, presentationProgress, timeSec) : null),
+    [entering, passedProps, presentationProgress, timeSec],
   );
   const [shown, setShown] = useState<Masks | null>(null);
   const handleRef = useRef<number | null>(null);
