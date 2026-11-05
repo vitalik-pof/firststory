@@ -1,12 +1,13 @@
 // Збирання змісту сторінки огляду Етапу 1: читає документи ролей, таймінги, маніфест і файли work/.
 
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import {
   type CharacterDoc, type ScriptDoc, type SoundDoc, type StoryboardDoc, type StyleDoc, type VoiceDoc, type VoiceEntry,
   type DirectorQuestions, type RoleDecision, parseRoleDecisions, parseDirectorQuestions, parseProducerDecisions,
   checkStoryboardAgainstScript, parseCharacter, parseScript, parseSound, parseStoryboard, parseStyle, parseVoiceMd, parseVoices, storyAuthorName,
 } from './docs';
 import { frameFile, sheetFile } from './frame-refs';
+import { gatherPreviews } from './review-previews';
 import { type PhotoRefBlock, gatherPhotoRefs } from './review-refs';
 import { type Manifest, readManifest } from './manifest';
 import { type Role, extractQuestions, readDoc, splitByHeading, blockText } from './md';
@@ -134,17 +135,7 @@ export function gatherReview(story: string, nameOverride?: string): ReviewData {
     }
   }
   if (missingSheets.length) warnings.push(`Немає аркушів героїв: ${missingSheets.join(', ')} (крок 7).`);
-  const previews: ReviewData['previews'] = [];
-  const pdir = paths.workFile(story, 'voice-previews');
-  const picked = (manifest.voice?.picked_preview as number | undefined) ?? 1;
-  if (existsSync(pdir)) {
-    for (const f of readdirSync(pdir).filter((x) => /^preview-\d+\.mp3$/.test(x)).sort()) {
-      const n = Number(/\d+/.exec(f)![0]);
-      add(`preview:${n}`, 'audio', `${pdir}/${f}`, `media/voice/preview-${n}.mp3`);
-      previews.push({ n, key: `preview:${n}`, chosen: n === picked });
-    }
-  }
-  if (!previews.length) warnings.push('Немає проб голосу у work/<id>/voice-previews/ (крок 5).');
+  const previews = gatherPreviews(story, manifest, add, warnings);
   if (!add('narration', 'audio', paths.workFile(story, 'narration.mp3'), 'media/narration.mp3')) warnings.push('Немає narration.mp3 (крок 6).');
   add('music', 'audio', paths.workFile(story, 'audio', 'music.mp3'), 'media/audio/music.mp3');
   for (const s of sound?.sfx ?? []) {

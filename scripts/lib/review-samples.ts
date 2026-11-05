@@ -1,6 +1,6 @@
 // Огляд зразків (Етап 1а): зміст сторінки і збирання медіа.
 
-import { existsSync, readdirSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import {
   type CharacterDoc, type SamplesDoc, type SoundSamplesDoc, type VoiceDoc, type VoiceEntry,
   type DirectorQuestions, type RoleDecision, parseRoleDecisions, parseDirectorQuestions, parseProducerDecisions,
@@ -10,6 +10,7 @@ import { type Manifest, readManifest } from './manifest';
 import { type Role, blockText, extractQuestions, readDoc, splitByHeading } from './md';
 import { paths } from './paths';
 import { type MediaItem, type QuestionBlock } from './review-build';
+import { gatherPreviews } from './review-previews';
 import { type PhotoRefBlock, gatherPhotoRefs } from './review-refs';
 import { type ReviewTarget, decisionSections, esc, renderPhotoRefs, fmtTime, mdLite, renderAnimatic, renderCredits, renderVoiceBody, wrapPage } from './review-html';
 import { sampleFile } from './samples-paths';
@@ -91,17 +92,7 @@ export function gatherSamplesReview(story: string, nameOverride?: string): Sampl
   const missing: number[] = [];
   for (const s of samples.samples) if (!add(`sample:${s.n}`, 'image', sampleFile(story, s.n), `media/samples/sample-${pad2(s.n)}.jpg`)) missing.push(s.n);
   if (missing.length) warnings.push(`Немає файлів зразків ${missing.join(', ')} (samples.ts): на їхньому місці заглушки.`);
-  const previews: SamplesReviewData['previews'] = [];
-  const pdir = paths.workFile(story, 'voice-previews');
-  const picked = (manifest.voice?.picked_preview as number | undefined) ?? 1;
-  if (existsSync(pdir)) {
-    for (const f of readdirSync(pdir).filter((x) => /^preview-\d+\.mp3$/.test(x)).sort()) {
-      const n = Number(/\d+/.exec(f)![0]);
-      add(`preview:${n}`, 'audio', `${pdir}/${f}`, `media/voice/preview-${n}.mp3`);
-      previews.push({ n, key: `preview:${n}`, chosen: n === picked });
-    }
-  }
-  if (!previews.length) warnings.push('Немає проб голосу (voice-previews.ts).');
+  const previews = gatherPreviews(story, manifest, add, warnings);
   if (!add('narration', 'audio', paths.workFile(story, 'narration.mp3'), 'media/narration.mp3')) warnings.push('Немає narration.mp3 (narrate.ts).');
   const adir = paths.workFile(story, 'audio', 'samples');
   for (const m of sound?.music ?? []) if (!add(`smusic:${m.n}`, 'audio', `${adir}/music-${m.n}.mp3`, `media/audio/music-${m.n}.mp3`)) warnings.push(`Немає зразка музики ${m.n} (sound-samples.ts).`);
