@@ -13,8 +13,7 @@
 Character turnaround sheet of two little girls, both about 6 years old and the same height, standing side by side, shown full body on a plain warm light-grey background in front view, three-quarter view and back view; the same two girls with identical proportions, hair and clothing in every view. Both have light-brown hair. Girl on the left: two braids, a mustard-yellow cotton summer dress, white sandals. Girl on the right: a high ponytail, a mint-green cotton summer dress, white sandals. Each girl keeps her own hairstyle and dress colour in every view, including the back view: the braids always go with the mustard-yellow dress, the ponytail always with the mint-green dress. Simplified gentle children's faces painted with a few loose watercolour brush strokes, natural muted skin tones, an even skin tone on the cheeks with no pink blush: small simple eyes, a soft line for the nose, a small simple mouth; not portraits of any real children. Lively natural poses, in one view they hold hands. No background scenery, no text, no labels.
 
 ## Ресурси
-
-Поки порожньо. Технік впише id аркуша після затвердження.
+- main: zcrqSVmbaIfrqTQNcj4Q (завантажено 2026-11-05, work/characters/natalia-daughters.png)
 
 ## Приймання
 

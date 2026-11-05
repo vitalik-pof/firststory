@@ -13,8 +13,7 @@
 Character reference sheet of one newborn baby boy on a plain warm light-grey background. Three views of the same baby wrapped in a white quilted blanket envelope tied in the middle with a wide blue satin ribbon tied in a large bow, the traditional Ukrainian way of taking a baby boy home from the maternity hospital: front view, side view and view from above; only a small simplified sleeping face is visible in the folds, painted with a few soft watercolour brush strokes, not a portrait of any real child. On the right, a simple grey baby stroller with a hood, seen in side view and from behind, the same white envelope with the blue ribbon visible inside. No background scenery, no text, no labels, no brand marks.
 
 ## Ресурси
-
-Поки порожньо. Технік впише id аркуша після затвердження.
+- main: XSvwDv9dVuefEiKmfu0c (завантажено 2026-11-05, work/characters/natalia-son.png)
 
 ## Приймання
 

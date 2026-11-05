@@ -41,8 +41,9 @@ Character turnaround sheet of one heavily pregnant woman, about 31 years old, in
 Character turnaround sheet of one woman, about 42 years old, shown full body on a plain warm light-grey background, the same person with identical proportions and hair in every view. Medium build, relaxed open posture, a light warm expression. Chestnut-brown shoulder-length hair worn loose with a soft wave. Simplified gentle face painted with a few loose watercolour brush strokes, natural muted skin tones, no rosy cheeks: small simple eyes, a soft line for the nose, a soft simple smile; not a portrait of any real person. Left group, everyday work outfit, in front view, three-quarter view, side profile and back view: an oatmeal-colored knitted sweater, dark trousers, simple shoes, a terracotta-red scarf. Right group, playback theatre actress outfit, in front view and three-quarter view: a plain black long-sleeve top, black trousers and soft black shoes, with a long flowing terracotta-red piece of fabric draped over one shoulder and held in one hand. No background scenery, no text, no labels.
 
 ## Ресурси
-
-Поки порожньо. Технік впише id аркушів окремо для кожної версії: «2014», «вагітна», «тепер».
+- 2014: pdOJgsg0CdK16mF72UB9 (завантажено 2026-11-05, work/characters/natalia--2014.png)
+- вагітна: C96KDsln5nzlCZNylXxW (завантажено 2026-11-05, work/characters/natalia--vahitna.png)
+- тепер: wVFJmXuDlRXSYePj8fTm (завантажено 2026-11-05, work/characters/natalia--teper.png)
 
 ## Приймання
 

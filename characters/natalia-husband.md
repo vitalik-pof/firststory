@@ -15,8 +15,7 @@
 Character turnaround sheet of one man, about 32 years old, shown full body on a plain warm light-grey background, the same person with identical proportions, face and hair in every view. Tall, broad-shouldered, calm steady posture. Short dark-brown hair and a short neat beard. Simplified gentle face painted with a few loose watercolour brush strokes, natural muted skin tones, no rosy cheeks: small simple eyes, a soft line for the nose, a simple mouth; not a portrait of any real person. Left group, everyday outfit, in front view, three-quarter view, side profile and back view: a plain grey t-shirt, blue jeans, simple sneakers. Right group, industrial rope-access worker outfit, in front view and three-quarter view: dark navy work jacket and work trousers, a white safety helmet, a black-and-orange climbing harness with metal carabiners, work gloves, a coil of rope over one shoulder. No background scenery, no text, no labels, no logos on clothing.
 
 ## Ресурси
-
-Поки порожньо. Технік впише id аркуша після затвердження.
+- main: AI1sdoVee9iwlrRkbBhk (завантажено 2026-11-05, work/characters/natalia-husband.png)
 
 ## Приймання
 
