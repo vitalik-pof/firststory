@@ -1,4 +1,4 @@
-import { noise2D } from "@remotion/noise";
+import { mulberry32, noise2D, seedNumber } from "./noise";
 import type { WatercolorCharacter } from "../types";
 
 // Сітка маски. Пропорція 9:16; маска розтягується браузером на весь кадр, тому край виходить гладким.
@@ -14,23 +14,6 @@ export type Field = {
   // Координати пікселів в одиницях висоти кадру (щоб відстані були круглі).
   u: Float32Array;
   v: Float32Array;
-};
-
-// Дрібний детермінований ГПСЧ для розкидання плям (однаковий результат на кожному кадрі).
-const hashSeed = (s: string): number => {
-  let h = 2166136261;
-  for (let i = 0; i < s.length; i++) {
-    h ^= s.charCodeAt(i);
-    h = Math.imul(h, 16777619);
-  }
-  return h >>> 0;
-};
-const mulberry32 = (a: number) => () => {
-  a |= 0;
-  a = (a + 0x6d2b79f5) | 0;
-  let t = Math.imul(a ^ (a >>> 15), 1 | a);
-  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
 };
 
 const fbm = (seed: string, x: number, y: number, octaves: number): number => {
@@ -81,7 +64,7 @@ const makeRaw = (character: WatercolorCharacter, seed: string): RawFn => {
       };
     }
     case "blots": {
-      const rnd = mulberry32(hashSeed(seed));
+      const rnd = mulberry32(seedNumber(seed));
       const blots = Array.from({ length: 6 }, (_, k) => ({
         x: 0.05 + rnd() * (W - 0.1),
         y: 0.07 + ((k + rnd() * 0.8) / 6) * 0.86,
@@ -107,10 +90,12 @@ const makeRaw = (character: WatercolorCharacter, seed: string): RawFn => {
     }
     case "wet": {
       return (u, v) => {
+        // Переважає велика пляма, зерно лише модулює її: виходить "вбирання", а не пил.
         const low = fbm(`${seed}:a`, u * 3.2, v * 3.2, 3);
-        const fibres = fbm(`${seed}:f`, u * 70, v * 22, 2);
-        const grain = fbm(`${seed}:g`, u * 120, v * 120, 2);
-        return 0.5 * low + 0.3 * grain + 0.2 * fibres;
+        const mid = fbm(`${seed}:m`, u * 26, v * 26, 2);
+        const fine = fbm(`${seed}:g`, u * 85, v * 85, 2);
+        const fibres = fbm(`${seed}:f`, u * 60, v * 20, 2);
+        return 0.62 * low + 0.22 * mid + 0.1 * fine + 0.08 * fibres;
       };
     }
   }

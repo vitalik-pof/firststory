@@ -56,7 +56,7 @@ export const VARIANTS: Variant[] = [
     id: "wc-bloom-edge",
     title: "Акварель: розтікання з пігментним краєм",
     description: "Пляма розтікається від центру, а по її краю збирається темніша кольорова облямівка, як у висохлої акварелі.",
-    transition: wc({ character: "bloom", seed: "n2", soft: 0.07, drift: 0.05, edge: { ...PIGMENT_EDGE } }),
+    transition: wc({ character: "bloom", seed: "n2", soft: 0.07, drift: 0.05, edge: { ...PIGMENT_EDGE, tint: "#8a6650", tintStrength: 0.3 } }),
   },
   {
     id: "wc-corner",
@@ -80,7 +80,7 @@ export const VARIANTS: Variant[] = [
     id: "wc-wet",
     title: "Акварель: намокання паперу",
     description: "Кадр проступає по всьому аркушу зернистими плямками, наче папір намокає й пігмент осідає в текстурі.",
-    transition: wc({ character: "wet", seed: "n6", soft: 0.28, drift: 0.04 }),
+    transition: wc({ character: "wet", seed: "n6", soft: 0.4, drift: 0.04 }),
   },
   {
     id: "wc-wet-edge",
@@ -89,9 +89,9 @@ export const VARIANTS: Variant[] = [
     transition: wc({
       character: "wet",
       seed: "n7",
-      soft: 0.14,
+      soft: 0.22,
       drift: 0.04,
-      edge: { strength: 0.9, width: 0.09, tint: "#c89a5e", tintStrength: 0.45 },
+      edge: { strength: 0.8, width: 0.12, tint: "#c89a5e", tintStrength: 0.35 },
     }),
   },
 ];
