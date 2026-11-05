@@ -1,7 +1,7 @@
 {
   "story": "01-natalia",
   "credits": {
-    "total_spent": 67601,
+    "total_spent": 68867,
     "runs": [
       {
         "script": "voice-previews",
@@ -2355,7 +2355,7 @@
     "created_at": "2026-11-05T00:41:54.681Z",
     "design_credits_source": "docs"
   },
-  "updated_at": "2026-11-05T18:10:22.882Z",
+  "updated_at": "2026-11-05T18:57:09.556Z",
   "narration": {
     "model_id": "eleven_v4",
     "voice_id": "49POAIkFDXsxrtR84sdj",
@@ -2504,6 +2504,85 @@
       "max": 409,
       "last": 409,
       "count": 6
+    }
+  },
+  "voice_samples": {
+    "model_id": "eleven_v4",
+    "language_code": "uk",
+    "output_format": "mp3_44100_128",
+    "items": {
+      "575ad5a133": {
+        "hash": "575ad5a133",
+        "slug": "current",
+        "voice_id": "49POAIkFDXsxrtR84sdj",
+        "name": "natalia 01-natalia",
+        "raw_file": "work/01-natalia/voice-samples/raw/current.mp3",
+        "response_file": "work/01-natalia/voice-samples/raw/current.response.json",
+        "chars_sent": 436,
+        "credits": 211,
+        "credits_source": "history",
+        "generated_at": "2026-11-05T18:54:29.476Z"
+      },
+      "f3fce75ab5": {
+        "hash": "f3fce75ab5",
+        "slug": "yaryna-lisova-natural-conversation",
+        "voice_id": "JOQst3wrnXwBfeTEW2ts",
+        "name": "Yaryna Lisova - Natural Conversation",
+        "raw_file": "work/01-natalia/voice-samples/raw/yaryna-lisova-natural-conversation.mp3",
+        "response_file": "work/01-natalia/voice-samples/raw/yaryna-lisova-natural-conversation.response.json",
+        "chars_sent": 436,
+        "credits": 211,
+        "credits_source": "history",
+        "generated_at": "2026-11-05T18:54:59.032Z"
+      },
+      "ab8ac1b99b": {
+        "hash": "ab8ac1b99b",
+        "slug": "alena",
+        "voice_id": "BEprpS2vpgM32yNJpTXq",
+        "name": "Alena",
+        "raw_file": "work/01-natalia/voice-samples/raw/alena.mp3",
+        "response_file": "work/01-natalia/voice-samples/raw/alena.response.json",
+        "chars_sent": 436,
+        "credits": 211,
+        "credits_source": "history",
+        "generated_at": "2026-11-05T18:55:28.316Z"
+      },
+      "5527222fdf": {
+        "hash": "5527222fdf",
+        "slug": "oksana",
+        "voice_id": "7NEjtweQMPrrrzXYKNvs",
+        "name": "Oksana",
+        "raw_file": "work/01-natalia/voice-samples/raw/oksana.mp3",
+        "response_file": "work/01-natalia/voice-samples/raw/oksana.response.json",
+        "chars_sent": 436,
+        "credits": 211,
+        "credits_source": "history",
+        "generated_at": "2026-11-05T18:55:58.697Z"
+      },
+      "a2b82ab067": {
+        "hash": "a2b82ab067",
+        "slug": "liudmyla3",
+        "voice_id": "Y8zsXbvUuixsXJmSWH5R",
+        "name": "liudmyla3",
+        "raw_file": "work/01-natalia/voice-samples/raw/liudmyla3.mp3",
+        "response_file": "work/01-natalia/voice-samples/raw/liudmyla3.response.json",
+        "chars_sent": 436,
+        "credits": 211,
+        "credits_source": "history",
+        "generated_at": "2026-11-05T18:56:39.954Z"
+      },
+      "7478b2b7e3": {
+        "hash": "7478b2b7e3",
+        "slug": "milamo-corporate-trustworthy",
+        "voice_id": "v2JqJ3nCt7zRtJIoVHJU",
+        "name": "MilaMo - Corporate & Trustworthy",
+        "raw_file": "work/01-natalia/voice-samples/raw/milamo-corporate-trustworthy.mp3",
+        "response_file": "work/01-natalia/voice-samples/raw/milamo-corporate-trustworthy.response.json",
+        "chars_sent": 436,
+        "credits": 211,
+        "credits_source": "history",
+        "generated_at": "2026-11-05T18:57:09.554Z"
+      }
     }
   }
 }
