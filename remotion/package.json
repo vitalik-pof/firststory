@@ -1,0 +1,28 @@
+{
+  "name": "firststory-remotion",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Проби переходів між кадрами (Remotion)",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "render": "tsx render.ts"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.541",
+    "@remotion/cli": "4.0.541",
+    "@remotion/noise": "4.0.541",
+    "@remotion/renderer": "4.0.541",
+    "@remotion/transitions": "4.0.541",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "remotion": "4.0.541"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "@types/react": "^19.3.0",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}
