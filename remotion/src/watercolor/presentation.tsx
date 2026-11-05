@@ -19,22 +19,18 @@ const maskStyle = (url: string): React.CSSProperties => ({
   maskRepeat: "no-repeat",
 });
 
-const WatercolorComponent: React.FC<TransitionPresentationComponentProps<WatercolorOptions>> = ({
-  children,
-  presentationDirection,
-  presentationProgress,
-  passedProps,
-}) => {
-  const entering = presentationDirection === "entering";
-  // Вхідний шот стартує разом із переходом, тож локальний кадр це кадр переходу.
-  const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-  const timeSec = frame / fps;
-  // Маска залежить тільки від progress, який Remotion рахує з номера кадру.
-  const masks = useMemo(
-    () => (entering ? renderMasks(passedProps, presentationProgress, timeSec) : null),
-    [entering, passedProps, presentationProgress, timeSec],
-  );
+// Маскований показ шару: новий кадр проступає за progress (0..1) через маску з шуму.
+// Використовують і презентація TransitionSeries (проби), і шарова композиція фільму.
+export const MaskedReveal: React.FC<{
+  options: WatercolorOptions;
+  progress: number;
+  timeSec: number;
+  children: React.ReactNode;
+}> = ({ options, progress, timeSec, children }) => {
+  // Поза проміжком (0, 1) маска не потрібна: нічого не видно або видно все без маски. Це економить рендер.
+  const active = progress > 0 && progress < 1;
+  // Маска залежить тільки від progress і часу, які рахуються з номера кадру.
+  const masks = useMemo(() => (active ? renderMasks(options, progress, timeSec) : null), [active, options, progress, timeSec]);
   const [shown, setShown] = useState<Masks | null>(null);
   const handleRef = useRef<number | null>(null);
 
@@ -61,13 +57,9 @@ const WatercolorComponent: React.FC<TransitionPresentationComponentProps<Waterco
     }
   }, [shown, masks]);
 
-  if (!entering) {
-    return <AbsoluteFill>{children}</AbsoluteFill>;
-  }
-  if (!shown) {
-    return <AbsoluteFill style={{ opacity: 0 }}>{children}</AbsoluteFill>;
-  }
-  const edge = passedProps.edge;
+  if (progress >= 1) return <AbsoluteFill>{children}</AbsoluteFill>;
+  if (progress <= 0 || !shown) return <AbsoluteFill style={{ opacity: 0 }}>{children}</AbsoluteFill>;
+  const edge = options.edge;
   return (
     <AbsoluteFill style={maskStyle(shown.alpha)}>
       <AbsoluteFill>{children}</AbsoluteFill>
@@ -88,6 +80,23 @@ const WatercolorComponent: React.FC<TransitionPresentationComponentProps<Waterco
         </>
       ) : null}
     </AbsoluteFill>
+  );
+};
+
+const WatercolorComponent: React.FC<TransitionPresentationComponentProps<WatercolorOptions>> = ({
+  children,
+  presentationDirection,
+  presentationProgress,
+  passedProps,
+}) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  if (presentationDirection !== "entering") return <AbsoluteFill>{children}</AbsoluteFill>;
+  // Вхідний шот стартує разом із переходом, тож локальний кадр це кадр переходу.
+  return (
+    <MaskedReveal options={passedProps} progress={presentationProgress} timeSec={frame / fps}>
+      {children}
+    </MaskedReveal>
   );
 };
 
