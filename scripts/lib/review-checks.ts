@@ -18,7 +18,8 @@ export function checkCommon(html: string): string[] {
   const css = /<style>([\s\S]*?)<\/style>/.exec(html)?.[1] ?? '';
   const withoutTokens = css.replace(/:root\s*\{[^}]*\}/g, '').replace(/:root\[data-theme="dark"\]\s*\{[^}]*\}/g, '').replace(/:root:not\(\[data-theme="light"\]\)\s*\{[^}]*\}/g, '');
   if (/#[0-9a-fA-F]{3,8}\b|rgba?\(|hsla?\(/.test(withoutTokens)) problems.push('у CSS є кольори поза токенами :root');
-  if (/\s(?:src|href)="(?:https?:)?\/\//.test(html) || /\s(?:src|href)="\//.test(html)) problems.push('є абсолютні або зовнішні посилання, дозволені лише відносні');
+  // Медіа й стилі лише відносні; зовнішні гіперпосилання <a href="https://…"> дозволені (атрибуція фото).
+  if (/\ssrc="(?:https?:)?\/\//.test(html) || /\ssrc="\//.test(html) || /<link[^>]*\shref="(?:https?:|\/)/.test(html) || /<a\s[^>]*href="(?:\/\/|\/)/.test(html)) problems.push('є абсолютні або зовнішні посилання на медіа чи стилі, дозволені лише відносні');
   return problems;
 }
 

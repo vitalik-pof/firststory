@@ -8,7 +8,18 @@ import {
   readDoc, readFieldsStrict, requireField, requireSection, sectionText, splitByHeading, trimLines,
 } from './md';
 import { getRoot, paths } from './paths';
+import { OBJECT_ID_RE } from './references';
 import { collapseWs, slugify, stripTags, bracketProblem } from './text';
+
+/** «Фото-референси: id, id» → список id. «немає» і порожнє дають []. */
+export function parsePhotoRefIds(doc: Doc, value: string, line: number, where: string): string[] {
+  const v = firstLine(value).replace(/`/g, '');
+  if (!v || /^(немає|нема|—|–|-|none)/i.test(v)) return [];
+  const ids = v.split(/[,;]/).map((x) => x.trim()).filter(Boolean);
+  for (const id of ids) if (!OBJECT_ID_RE.test(id)) fail(doc, line, `${where}: «Фото-референси:» очікує id об'єктів латиницею через кому (наприклад «bohdan-bus, tram»), а є «${id}».`);
+  if (new Set(ids).size !== ids.length) fail(doc, line, `${where}: «Фото-референси:» повторює id.`);
+  return ids;
+}
 
 /** Поле з одним рядком: усе після першого переносу (абзаци під шапкою) відкидаємо. */
 export function firstLine(value: string): string {
@@ -380,6 +391,8 @@ export interface StoryboardFrame {
   camera: string;
   mood: string;
   prompt: string;
+  /** Необов'язкове поле «Фото-референси:» (id з art/references.md). */
+  photoRefs: string[];
   line: number;
 }
 export interface StoryboardDoc {
@@ -396,6 +409,7 @@ const FRAME_DEFS = {
   camera: /^Камера$/i,
   mood: /^Світло і настрій$/i,
   prompt: /^Для генератора/i,
+  photo: /^Фото[-‑ ]референси$/i,
 };
 
 /**
@@ -445,6 +459,7 @@ export function parseStoryboard(story: string): StoryboardDoc {
       camera: fields.camera?.value ?? '',
       mood: fields.mood?.value ?? '',
       prompt: collapseWs(prompt.value),
+      photoRefs: fields.photo ? parsePhotoRefIds(doc, fields.photo.value, fields.photo.line, where) : [],
       line: s.line,
     });
   }
@@ -587,6 +602,8 @@ export interface StyleSample {
   prompt: string;
   /** Власна роздільність зразка (512, 1K, 2K, 4K) або undefined: тоді діє --resolution (1K). */
   resolution?: string;
+  /** Необов'язкове поле «Фото-референси:» (id з art/references.md). */
+  photoRefs: string[];
   /** Власний абзац стилю замість стандартного з art/style.md. */
   style?: string;
   line: number;
@@ -603,6 +620,7 @@ const SAMPLE_DEFS = {
   fragment: /^Для фрагмента$/i,
   heroes: /^Герої$/i,
   prompt: /^Для генератора/i,
+  photo: /^Фото[-‑ ]референси$/i,
   resolution: /^Роздільність$/i,
   style: /^Стиль для генератора/i,
 };
@@ -646,7 +664,7 @@ export function parseSamples(): SamplesDoc {
       if (!style || isPlaceholder(style)) fail(doc, fields.style.line, `${where}: «Стиль для генератора (англійською):» порожній або лишився шаблоном (приберіть поле, щоб діяв стандартний стиль).`);
     }
     samples.push({
-      resolution, style,
+      resolution, style, photoRefs: fields.photo ? parsePhotoRefIds(doc, fields.photo.value, fields.photo.line, where) : [],
       n,
       shows: requireField(doc, fields, 'shows', 'Що показує', where, s.line).value,
       format: fmt,

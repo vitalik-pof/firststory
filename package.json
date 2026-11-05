@@ -17,6 +17,7 @@
     "frames": "tsx scripts/frames.ts",
     "sound": "tsx scripts/sound.ts",
     "review": "tsx scripts/review.ts",
+    "upload-references": "tsx scripts/upload-references.ts",
     "samples": "tsx scripts/samples.ts",
     "sound-samples": "tsx scripts/sound-samples.ts",
     "mix-sample": "tsx scripts/mix-sample.ts"

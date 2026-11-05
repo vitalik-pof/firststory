@@ -202,3 +202,8 @@ export function sectionText(doc: Doc, re: RegExp): string {
   const s = sections.find((x) => re.test(x.title));
   return s ? blockText(s.body) : '';
 }
+
+/** Перший рядок значення поля (усе після першого переносу відкидається). */
+export function firstLineOf(value: string): string {
+  return (value.split('\n')[0] ?? '').trim();
+}

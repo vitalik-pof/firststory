@@ -10,7 +10,8 @@ import { type Manifest, readManifest } from './manifest';
 import { type Role, blockText, extractQuestions, readDoc, splitByHeading } from './md';
 import { paths } from './paths';
 import { type MediaItem, type QuestionBlock } from './review-build';
-import { type ReviewTarget, decisionSections, esc, fmtTime, mdLite, renderAnimatic, renderCredits, renderVoiceBody, wrapPage } from './review-html';
+import { type PhotoRefBlock, gatherPhotoRefs } from './review-refs';
+import { type ReviewTarget, decisionSections, esc, renderPhotoRefs, fmtTime, mdLite, renderAnimatic, renderCredits, renderVoiceBody, wrapPage } from './review-html';
 import { sampleFile } from './samples-paths';
 import type { TimingsFile } from './timings';
 import { pad2 } from './text';
@@ -30,6 +31,7 @@ export interface SamplesReviewData {
   manifest: Manifest;
   roleDecisions: RoleDecision[];
   directorQuestions: DirectorQuestions;
+  photoRefs: PhotoRefBlock[];
   producerDecisions: string[];
   questions: QuestionBlock[];
   warnings: string[];
@@ -106,9 +108,13 @@ export function gatherSamplesReview(story: string, nameOverride?: string): Sampl
   for (const x of sound?.sfx ?? []) if (!add(`ssfx:${x.n}`, 'audio', `${adir}/sfx-${pad2(x.n)}.mp3`, `media/audio/sfx-${pad2(x.n)}.mp3`)) warnings.push(`Немає зразка шуму ${x.n} (sound-samples.ts).`);
   if (!add('mix', 'audio', paths.workFile(story, 'audio', 'mix-sample.mp3'), 'media/audio/mix-sample.mp3')) warnings.push('Немає зразка зведення (mix-sample.ts).');
 
+  const usedBy = new Map<string, string[]>();
+  for (const smp of samples.samples) for (const id of smp.photoRefs) usedBy.set(id, [...(usedBy.get(id) ?? []), `зразок ${smp.n}`]);
+  const photoRefs = gatherPhotoRefs(usedBy, media, warnings);
+
   return {
     story, name: nameOverride ?? storyAuthorName(story) ?? story, scriptTitle: script.title, samples, sound, voice, voiceMd, style, characters: [],
-    timings, manifest, roleDecisions, directorQuestions, producerDecisions, questions, warnings, media, previews,
+    timings, manifest, roleDecisions, directorQuestions, photoRefs, producerDecisions, questions, warnings, media, previews,
   };
 }
 
@@ -147,13 +153,17 @@ export function renderSamplesReview(d: SamplesReviewData, target: ReviewTarget, 
   <p><span class="badge">Зразок ${s.n}</span><span class="badge">${esc(s.format)}</span><span class="badge">запитано ${esc(res)}${cur?.width ? `, вийшло ${cur.width}×${cur.height} px` : ''}</span><span class="badge">${s.fragment !== undefined ? `фрагмент ${s.fragment}${t ? `, ${fmtTime(t.start)}` : ''}` : 'без фрагмента'}</span></p>
   ${src ? `<img src="${esc(src)}" alt="Зразок ${s.n}" loading="lazy" style="max-width:min(100%, ${ar.startsWith('9') ? '360px' : '640px'})">` : `<div class="ph" style="aspect-ratio:${ar}">Зразок ${s.n} ще не згенеровано</div>`}
   <p style="margin-top:10px"><strong>Що показує:</strong> ${esc(s.shows)}</p>
+  ${s.photoRefs.length ? `<p class="muted"><strong>Фото-референси:</strong> ${s.photoRefs.map((x) => esc(x)).join(', ')}</p>` : ''}
   ${s.heroes.length ? `<p class="muted"><strong>Герої:</strong> ${s.heroes.map((h) => esc(h.id + (h.version ? ` «${h.version}»` : ''))).join(', ')}</p>` : ''}
   <details><summary>Текст для генератора</summary><pre>${esc(s.prompt)}</pre></details>
   ${s.style ? `<details><summary>Власний стиль зразка (замість стандартного)</summary><pre>${esc(s.style)}</pre></details>` : ''}
 </div>`;
     })
     .join('\n');
+  const photoHtml = renderPhotoRefs(d.photoRefs, rel);
   section('samples', 'Зразки стилю', `${d.samples.idea ? `<p class="lead">${esc(d.samples.idea)}</p>` : ''}${cards}`);
+
+  if (photoHtml) section('photo-refs', 'Фото-референси', photoHtml);
 
   section('voice', 'Голос і озвучення', renderVoiceBody({ voice: d.voice, previews: d.previews, rel, timings: d.timings, voiceMd: d.voiceMd }));
 

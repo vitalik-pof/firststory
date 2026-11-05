@@ -11,7 +11,7 @@ import { readFileSync } from 'node:fs';
 import { commonFlags, parseCli, runMain } from './lib/cli';
 import { RESOLUTIONS, aspectFromFormat, checkSamplesAgainstScript, parseSamples, parseScript, parseStyle } from './lib/docs';
 import { ElevenLabsClient } from './lib/elevenlabs';
-import { CharacterCache, composePrompt, resolveHeroList } from './lib/frame-refs';
+import { CharacterCache, addPhotoRefs, composePrompt, resolveHeroList } from './lib/frame-refs';
 import { MAX_REFS, expectedImageCredits, getRecord, planJob, runImageJob, type ImageJob } from './lib/image-job';
 import { log } from './lib/log';
 import { assertStoryExists } from './lib/paths';
@@ -66,6 +66,7 @@ async function main(): Promise<void> {
   for (const s of sd.samples) {
     if (regenN !== undefined ? s.n !== regenN : only && !only.has(s.n)) continue;
     const r = resolveHeroList(s.heroes, `Зразок ${s.n}, «Герої:»`, cache);
+    addPhotoRefs(story, s.photoRefs, `Зразок ${s.n}`, r);
     if (r.refs.length + r.missing.length > MAX_REFS) throw new Error(`Зразок ${s.n}: референсів більше ${MAX_REFS}.`);
     const scene = regenN === s.n && newPrompt ? newPrompt : s.prompt;
     const resolution = s.resolution ?? defaultResolution;
@@ -90,6 +91,7 @@ async function main(): Promise<void> {
     for (const { n, job } of jobs) {
       const s = sd.samples.find((x) => x.n === n)!;
       const r = resolveHeroList(s.heroes, `Зразок ${n}, «Герої:»`, cache);
+      addPhotoRefs(story, s.photoRefs, `Зразок ${n}`, r);
       if (planJob(story, job).action !== 'skip' && r.missing.length) throw new Error(`Зразок ${n}: не можна генерувати, бракує референсів: ${r.missing.join('; ')}.`);
       job.refs = r.refs;
       job.expectedCredits = expectedImageCredits(story, imageFlag, job.resolution);

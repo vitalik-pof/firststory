@@ -7,6 +7,7 @@ import type { DirectorQuestions, RoleDecision } from './docs';
 import type { Manifest } from './manifest';
 import type { VoiceDoc, VoiceEntry } from './docs';
 import type { QuestionBlock, ReviewData } from './review-build';
+import type { PhotoRefBlock } from './review-refs';
 import type { TimingsFile } from './timings';
 import { CLIENT_JS, CSS } from './review-assets';
 import type { Role } from './md';
@@ -141,6 +142,27 @@ export function renderRoleDecisions(list: RoleDecision[]): string {
     .join('\n');
 }
 
+/** Фото-референси з атрибуцією: мініатюра, автор, ліцензія з посиланням, джерело з посиланням. */
+export function renderPhotoRefs(blocks: PhotoRefBlock[], rel: (key: string) => string | undefined): string {
+  if (!blocks.length) return '';
+  const link = (url: string, text: string): string => `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(text)}</a>`;
+  return (
+    '<p class="lead">Фото реальних українських об\'єктів, які використано як референси для генератора. Автори й ліцензії вказані згідно з умовами ліцензій.</p>' +
+    blocks
+      .map(
+        (b) => `<div class="card"><h3 style="margin-top:0">${esc(b.object.name)} <span class="muted">(${esc(b.object.id)})</span></h3><p class="muted">Використано: ${esc(b.usedIn.join(', '))}</p><div class="sheets">${
+          b.photos
+            .map((p) => {
+              const src = rel(p.key);
+              return `<figure class="sheet" style="margin:0">${src ? `<img src="${esc(src)}" alt="${esc(b.object.name)}" loading="lazy">` : '<div class="ph" style="aspect-ratio:4/3">Файлу немає</div>'}<figcaption class="muted">Автор: ${esc(p.source.author)}<br>Ліцензія: ${link(p.source.licenseUrl, p.source.license)}<br>Джерело: ${link(p.source.source, 'сторінка фото')}</figcaption></figure>`;
+            })
+            .join('')
+        }</div></div>`,
+      )
+      .join('\n')
+  );
+}
+
 export function fmtTime(sec: number): string {
   const m = Math.floor(sec / 60);
   const s = Math.floor(sec % 60);
@@ -224,6 +246,9 @@ ${d.script.changes ? `<h3>Що змінено порівняно з оригін
       .join('\n');
     section('storyboard', 'Розкадровка', `<p class="lead">Формат кадру: ${esc(d.storyboard.format)}</p>${cards}${d.storyboard.acceptance ? `<h3>Приймання кадрів</h3>${mdLite(d.storyboard.acceptance)}` : ''}`);
   } else section('storyboard', 'Розкадровка', '<div class="note">storyboard.md ще немає.</div>');
+
+  const photoHtml = renderPhotoRefs(d.photoRefs, rel);
+  if (photoHtml) section('photo-refs', 'Фото-референси', photoHtml);
 
   // ---------------- голос
   section('voice', 'Голос і озвучення', renderVoiceBody({ voice: d.voice, previews: d.previews, rel, timings: d.timings, voiceMd: d.voiceMd }));

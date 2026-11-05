@@ -153,7 +153,7 @@ describe('суворість: документ не за форматом дає
   });
   it('невпізнаний герой чи версія в розкадровці — помилка з номером кадру (на етапі референсів)', async () => {
     const { CharacterCache, resolveFrameRefs } = await import('../lib/frame-refs');
-    const fr = { n: 5, fragment: 1, inFrame: '', heroes: [{ id: 'ghost' }], camera: '', mood: '', prompt: 'x', line: 1 };
+    const fr = { n: 5, fragment: 1, inFrame: '', heroes: [{ id: 'ghost' }], camera: '', mood: '', prompt: 'x', photoRefs: [], line: 1 };
     assert.throws(() => resolveFrameRefs(STORY, fr, {}, new CharacterCache()), /Кадр 5.*невпізнаний герой «ghost»/);
     const fr2 = { ...fr, heroes: [{ id: 'natalia', version: '1999' }] };
     assert.throws(() => resolveFrameRefs(STORY, fr2, {}, new CharacterCache()), /Кадр 5.*невідома версія «1999»/);

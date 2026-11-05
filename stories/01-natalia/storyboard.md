@@ -6,9 +6,9 @@
 
 28 кадрів на 18 фрагментів. Без людей 11 кадрів (1, 4, 5, 6, 7, 9, 10, 17, 19, 21, 26). Ще в чотирьох люди є, але облич не видно: у кадрі 2 тільки рука, у кадрі 3 тільки силуети в машині, у кадрі 22 тільки руки, у кадрі 27 вид зі спини. Стиль, палітра, правила для України і для війни описані в `art/style.md`, і технік додає абзац стилю до кожного кадру.
 
-Історичні деталі звірено з довідкою радника (`art/history.md`, 5 листопада 2026 року). За нею змінено кадри 3, 4 і 26. Описи кадрів 1, 3, 26 і 27 звірено з правилами сервісу (`art/image-rules.md`): у кадрах 1 і 3 людей зі зброєю більше немає, кадри 26 і 27 лишились як були. Рішення й причини — у `stories/01-natalia/decisions/art-director.md`.
+Описи кадрів 1, 3, 26 і 27 звірено з правилами сервісу (`art/image-rules.md`): у кадрах 1 і 3 людей зі зброєю немає. Війна у фоні є в кожній частині фільму, тихо: у Павлограді й Тернівці це прапори України на балконах і на панелі автобуса, скринька збору допомоги в аптеці, вантажівка з військовим тентом на трасі (кадри 11–15). Рішення й причини — у `stories/01-natalia/decisions/art-director.md`.
 
-Техніка — олівець і штриховка поверх акварелі (третя версія `art/style.md`). Тексти кадрів для генератора описують зміст, а техніку додає абзац стилю, тому окремо їх під нову техніку не переписано.
+Техніка — акварель із розмитістю спогаду (четверта версія `art/style.md`). Тексти кадрів для генератора описують зміст, а техніку додає абзац стилю. Де предмет чи місце мають бути справді українськими, у кадрі стоїть поле «Фото-референси» з id з `art/references.md`.
 
 Як іде війна через фільм. Фрагменти 1–2 показують її відкрито: у дворі рідного дому стоїть чужа бойова машина, і двір порожній; далі двері, які замикають, перекреслена назва міста і блокпост на виїзді. Фрагменти 3–4: дитяча кімната, до якої не повернулися, за вікном дим над териконами. Далі війна живе в тому, що родина не вдома, і в ключах від донецької квартири на тому самому кільці, що й новий павлоградський ключ (кадри 2 і 10). Фрагмент 17, «у темні часи для всіх нас»: Дніпро без світла, і одне вікно, де люди працюють разом. Подій із життя родини, яких немає в розповіді, я не малюю (див. `art/style.md`, «Межа, яку я тримаю»).
 
@@ -17,6 +17,7 @@
 У кадрі: погляд із вікна донецької квартири вниз, у двір. На передньому плані край білої віконної рами, тюль і герань на підвіконні: ми вдома. Унизу, між дев'ятиповерхівками, двір із трояндами, лавкою, жовтою газовою трубою і порожньою металевою гойдалкою. Посеред двору, між трояндами й гойдалкою, стоїть старий зелений БТР із зачиненими люками, запилена броня. У дворі нікого: ні мешканців, ні дітей, ні солдатів. Угорі кадру над будинком навпроти — спокійне вибілене небо, там є місце для титру.
 Людей зі зброєю в кадрі немає: це зміна по суті після того, як сервіс заблокував зразок 2 з ними (рішення в `stories/01-natalia/decisions/art-director.md`). Голос називає людей зі зброєю, а кадр показує, що вони зробили з двором.
 Герої: немає
+Фото-референси: panel-blocks
 Камера: статика, ледь помітний наїзд від тюлю вниз, на двір і на машину.
 Світло і настрій: спекотний липневий полудень, вохра і вигорілий рожевий троянд, а посеред цього холодна хакі і сталь. Тиша, у якій щось не так: порожня гойдалка і чужа броня.
 Для генератора (англійською): View from inside a Soviet-era apartment on the fourth floor in Donetsk, looking down through an open window on a hot July midday. In the foreground, the edge of a white-painted wooden window frame, a light patterned tulle curtain and a potted red geranium on the windowsill. Below, an inner courtyard between nine-storey Soviet-era panel apartment blocks: blooming rose bushes, a wooden bench, a yellow gas pipe running along a wall, an old metal children's swing standing empty. In the middle of the courtyard, parked on the asphalt between the roses and the swing, stands an old green Soviet-design eight-wheeled armoured personnel carrier, its hatches closed, its armour dusty. There is nobody in the courtyard: no residents, no children, no soldiers. The upper part of the vertical frame is the calm bleached sky above the opposite building, empty. Hot still air and silence: an ordinary home courtyard occupied by a foreign military vehicle.
@@ -25,6 +26,7 @@
 Фрагмент сценарію: 2
 У кадрі: сходова клітка донецького під'їзду. Рука Наталі в теракотовому рукаві повертає ключ у дверях, оббитих коричневим дерматином. На кільці з ключами маленька теракотова китичка. Біля дверей на бетонному майданчику дві спаковані дорожні сумки, з однієї визирає вухо дитячого плюшевого зайця. Видно тільки руку. Двері рідного дому зачиняються.
 Герої: natalia (версія «2014», тільки рука; ключі з китичкою — з аркуша)
+Фото-референси: padded-door
 Камера: повільний наїзд на ключ у замку.
 Світло і настрій: приглушене світло з вікна сходової клітки, пил у повітрі, поспіх і тиша.
 Для генератора (англійською): Close view in a dim Soviet-era apartment stairwell with painted walls. A woman's hand in a short terracotta-red cotton sleeve turns a key in the lock of a brown padded leatherette apartment door with rows of decorative upholstery nails and a round peephole. The keys hang on a steel ring with a small terracotta-red tassel keychain. On the concrete landing next to the door stand two packed travel bags; the ear of a child's plush bunny sticks out of one of them. Only the hand and the sleeve are visible, no face. Muted light from the stairwell window, dust in the air. Hurry and silence, a home being locked.
@@ -33,13 +35,14 @@
 Фрагмент сценарію: 2
 У кадрі: дорога з Донецька, вид ззаду і трохи згори. На узбіччі на передньому плані білий знак кінця населеного пункту: «ДОНЕЦЬК», перекреслений червоною смугою. Трохи далі блокпост звужує дорогу: бетонні блоки, мішки з піском, шини. Людей біля блокпосту не видно: присутність чужих несуть блоки й мішки. За блокпостом дорогою від нас їде маленька срібляста машина з навантаженим багажником на даху, у ній тільки крихітні силуети. Машина його вже проїхала, як саме, не показано. Обабіч степ і соняшники, збоку на обрії терикон. Над усім величезне біле небо.
 Герої: natalia (версія «2014»), natalia-husband, natalia-daughters — тільки силуети, аркуші як референси не потрібні.
+Фото-референси: settlement-signs, spoil-heap
 Камера: повільний від'їзд, машина в центрі зменшується, знак виходить із кадру.
 Світло і настрій: полуденна спека, марево, рідне місто і чужий блокпост лишаються позаду.
 Для генератора (англійською): A two-lane road leading out of a city into the steppe on a hot July midday, seen from behind and slightly above. In the foreground at the right roadside stands a white rectangular Ukrainian end-of-settlement road sign with a thin black border and the black Cyrillic name «ДОНЕЦЬК» in capital letters, exactly these letters and nothing else, crossed by one red diagonal stripe from the lower left corner to the upper right corner. A little further, a makeshift roadside checkpoint narrows the road to one lane: a few grey concrete blocks, a low wall of sandbags and a stack of old tyres; no people are visible at the checkpoint. Beyond the checkpoint, a small silver Daewoo Lanos sedan with a roof rack loaded with bags and bundles tied with rope drives away from the viewer into the open steppe; inside it only tiny dark silhouettes, no faces. Sunflower fields and dusty apricot trees on both sides, a conical coal-mine spoil heap on the side of the horizon. A huge pale summer sky fills the upper half of the vertical frame. Midday heat, haze, leaving home through a checkpoint set up by strangers.
 
 ## Кадр 4
 Фрагмент сценарію: 2
-У кадрі: тиха степова дорога серед соняшників проходить повз маленьке село. При дорозі одноповерхова біла будівля сільради з шиферним дахом, перед нею на флагштоку синьо-жовтий державний прапор України, який ледь колише вітер. Дорога порожня, абрикоса, величезне небо. Людей немає. Перший свій колір у фільмі: тут уже не окупована земля. Синьо-жовту зупинку з попередньої версії замінено: за довідкою радника масово так фарбували пізніше, у 2015–2016 роках, а прапор на сільраді — звичайна річ і в 2014-му.
+У кадрі: тиха степова дорога серед соняшників проходить повз маленьке село. При дорозі одноповерхова біла будівля сільради з шиферним дахом, перед нею на флагштоку синьо-жовтий державний прапор України, який ледь колише вітер. Дорога порожня, абрикоса, величезне небо. Людей немає. Перший свій колір у фільмі: тут уже не окупована земля.
 Герої: немає
 Камера: повільний наїзд на прапор.
 Світло і настрій: пообіднє сонце, спокій після напруги, перший видих.
@@ -57,6 +60,7 @@
 Фрагмент сценарію: 4
 У кадрі: та сама кімната і та сама композиція, що в кадрі 5, але в холодних сутінках. Ранці й банти неторкані, форми висять, на підлозі тонка смужка блідого світла. Крізь тюль у вікні далеко над темними териконами стоїть стовп сірого диму і тьмяна помаранчева заграва низько над обрієм. Людей немає. Кімната, до якої не повернулися.
 Герої: немає
+Фото-референси: spoil-heap
 Камера: статика, ледь помітний від'їзд. Кадр має постояти в тиші після «Але не судилося».
 Світло і настрій: колір злитий у сіро-блакитний, пил у повітрі, тиха втрата; єдина тепла пляма — далека заграва, і вона не тепла, а тривожна.
 Для генератора (англійською): The same small Soviet-era children's room with the same composition as the reference image, now empty and still in cold blue-grey dusk. The two school backpacks with white hair bows still stand untouched on the bed, the two small school dresses still hang on the wardrobe door, only a thin line of pale light falls across the parquet floor. Through the tulle curtain of the window, far away over dark conical spoil heaps on the horizon, a slow column of grey smoke rises and a faint dull orange glow lies low in the sky. Dust in the air. No people. Colors drained to grey-blue, quiet loss.
@@ -81,6 +85,7 @@
 Фрагмент сценарію: 6
 У кадрі: ніч переходить у світанок на порожній степовій трасі. Дві третини кадру — величезне зоряне небо, над обрієм перша золота смуга. Унизу пряма дорога, далеко маленька машина з увімкненими фарами. На узбіччі білий знак в'їзду «ПАВЛОГРАД». Людей не видно. «Довірившись Всесвіту».
 Герої: немає
+Фото-референси: settlement-signs
 Камера: повільна вертикальна панорама згори вниз, від зірок до знака.
 Світло і настрій: глибокий індиго і перше золото світанку, маленька машина у великому світі, довіра й тиха надія.
 Для генератора (англійською): Night turning into dawn over an empty steppe highway. The upper two thirds of the vertical frame is an enormous deep indigo sky full of stars, with the first pale gold of dawn along the flat horizon. At the bottom a straight road with a small car far away, its headlights on. At the roadside stands a white rectangular Ukrainian settlement entry sign with a thin black border and black Cyrillic letters reading exactly «ПАВЛОГРАД». A tiny car in a vast landscape, trust and quiet hope. No visible people.
@@ -89,49 +94,54 @@
 Фрагмент сценарію: 6
 У кадрі: вхідні двері квартири в Павлограді, оббиті вже не коричневим, а темно-бордовим дерматином, кругле вічко. У замку новий ключ, і на тому самому кільці з теракотовою китичкою висять старі ключі від донецької квартири. Під дверима килимок. Людей немає. Нове житло знайшлося швидко, а старий ключ ніхто не зняв.
 Герої: немає (ключі — з кадру 2)
+Фото-референси: padded-door
 Камера: повільний наїзд на ключі.
 Світло і настрій: тепле вечірнє світло з вікна під'їзду, полегшення з гірким присмаком.
 Для генератора (англійською): Close view of the front door of a Soviet-era apartment in a stairwell in another city: a dark burgundy padded leatherette door with rows of decorative upholstery nails and a round peephole. A key is turned in the lock, and on the same steel ring with the small terracotta-red tassel keychain from the reference image hang the other, older keys. A small worn rug at the threshold, painted stairwell wall. Soft warm evening light from the stairwell window. No people. A new home, and the old keys still kept.
 
 ## Кадр 11
 Фрагмент сценарію: 7
-У кадрі: осінній ранок у павлоградській квартирі. Наталя стоїть біля вікна в профіль, проти світла, одна рука ледь торкається ще плаского живота, друга тримає тюль. За вікном п'ятиповерхівки і жовті дерева. Обличчя в м'якій тіні.
+У кадрі: осінній ранок у павлоградській квартирі. Наталя стоїть біля вікна в профіль, проти світла, одна рука ледь торкається ще плаского живота, друга тримає тюль. За вікном п'ятиповерхівки і жовті дерева, на балконі навпроти маленький прапор України. Обличчя в м'якій тіні.
 Герої: natalia (версія «2014», у кардигані)
+Фото-референси: panel-blocks
 Камера: дуже повільний наїзд.
 Світло і настрій: холодне бліде ранкове світло з теплим краєм на силуеті, тихе усвідомлення.
-Для генератора (англійською): Autumn morning in a modest apartment in Pavlohrad. A woman with a chestnut low ponytail in a long oatmeal knitted cardigan over a terracotta blouse stands by the window in side profile against the light; one hand rests lightly on her still flat belly, the other holds the tulle curtain. Outside the window, Soviet-era five-storey apartment blocks and yellow autumn trees. Her face is in soft shadow with simple features. Cool pale morning light with a warm edge on her silhouette. A quiet, intimate realization.
+Для генератора (англійською): Autumn morning in a modest apartment in Pavlohrad. A woman with a chestnut low ponytail in a long oatmeal knitted cardigan over a terracotta blouse stands by the window in side profile against the light; one hand rests lightly on her still flat belly, the other holds the tulle curtain. Outside the window, Soviet-era five-storey apartment blocks and yellow autumn trees; on one balcony across the street hangs a small national flag of Ukraine, blue over yellow. Her face is in soft shadow with simple features. Cool pale morning light with a warm edge on her silhouette. A quiet, intimate realization.
 
 ## Кадр 12
 Фрагмент сценарію: 8
-У кадрі: темний зимовий ранок, зупинка в Павлограді. Під'їжджає білий міжміський автобус «Богдан» із освітленими жовтими вікнами, за лобовим склом табличка маршруту «ПАВЛОГРАД — ТЕРНІВКА». На зупинці стоїть Наталя на останніх місяцях вагітності, у пальті, що вже не застібається, теракотовий шарф і шапка, сумка в руці. Ми бачимо її зі спини й трохи збоку.
+У кадрі: темний зимовий ранок, зупинка в Павлограді. Під'їжджає білий міжміський автобус «Богдан» із освітленими жовтими вікнами, за лобовим склом табличка маршруту «ПАВЛОГРАД — ТЕРНІВКА» і маленький прапор України на панелі. На зупинці стоїть Наталя на останніх місяцях вагітності, у пальті, що вже не застібається, теракотовий шарф і шапка, сумка в руці. Ми бачимо її зі спини й трохи збоку.
 Герої: natalia (версія «вагітна», зимове вбрання)
+Фото-референси: bogdan-a092, panel-blocks
 Камера: повільна панорама від автобуса до Наталі.
 Світло і настрій: холодна синя темрява, ліхтар, іній, теплий жовтий автобус. Щоранку одне й те саме, і вона щоранку тут.
-Для генератора (англійською): A dark frosty winter early morning at a bus stop in Pavlohrad. A boxy white Ukrainian intercity midi-bus with a rounded roof and lit yellow windows is pulling up; behind its windshield a route board reads exactly «ПАВЛОГРАД — ТЕРНІВКА» in Ukrainian Cyrillic. A heavily pregnant woman in a dark navy winter coat worn open over her round belly, a terracotta knitted scarf and matching hat, holding a handbag, stands at the bus stop, seen from behind and slightly to the side. A single streetlamp, frosty breath in the air, a thin layer of snow, Soviet-era panel buildings with a few lit windows in the background. Cold blue darkness with warm amber light from the bus.
+Для генератора (англійською): A dark frosty winter early morning at a bus stop in Pavlohrad. A white Ukrainian Bogdan A092 intercity midi-bus on an Isuzu chassis, with a flat upright front, a large one-piece windshield, a single front door, a rounded roof and lit yellow windows, is pulling up; behind its windshield a route board reads exactly «ПАВЛОГРАД — ТЕРНІВКА» in Ukrainian Cyrillic, and a small national flag of Ukraine stands on the dashboard beside it. A heavily pregnant woman in a dark navy winter coat worn open over her round belly, a terracotta knitted scarf and matching hat, holding a handbag, stands at the bus stop, seen from behind and slightly to the side. A single streetlamp, frosty breath in the air, a thin layer of snow, Soviet-era panel buildings with a few lit windows in the background. Cold blue darkness with warm amber light from the bus.
 
 ## Кадр 13
 Фрагмент сценарію: 8
-У кадрі: невелика аптека в Тернівці, день. За скляним прилавком вагітна Наталя в білому халаті тягнеться до полиці з коробками ліків, ми бачимо її збоку. Каса, калькулятор. За вітриною зелений світловий хрест аптеки і морозна вулиця з копром шахти вдалині.
+У кадрі: невелика аптека в Тернівці, день. За скляним прилавком вагітна Наталя в білому халаті тягнеться до полиці з коробками ліків, ми бачимо її збоку. Каса, калькулятор, на прилавку прозора скринька збору допомоги для армії з синьо-жовтою стрічкою, без читабельних написів. За вітриною зелений світловий хрест аптеки і морозна вулиця з копром шахти вдалині.
 Герої: natalia (версія «вагітна», робоче вбрання)
 Камера: повільний рух уздовж прилавка.
 Світло і настрій: тепле чисте світло всередині, холодна синява за склом, спокійна сумлінна робота.
-Для генератора (англійською): Interior of a small Ukrainian pharmacy in the mining town of Ternivka, daytime. Behind a glass counter, a heavily pregnant woman with a chestnut low bun, in a white pharmacist's coat, reaches up for a medicine box on the shelf, seen from the side. Shelves full of colorful medicine boxes with no readable labels, an old cash register, a small calculator on the counter. Through the shop window, a glowing green pharmacy cross sign and a frosty street with a mine headframe in the distance. Warm clean light inside, cold blue outside. Calm diligence.
+Для генератора (англійською): Interior of a small Ukrainian pharmacy in the mining town of Ternivka, daytime. Behind a glass counter, a heavily pregnant woman with a chestnut low bun, in a white pharmacist's coat, reaches up for a medicine box on the shelf, seen from the side. Shelves full of colorful medicine boxes with no readable labels, an old cash register, a small calculator on the counter, and next to it a small clear donation box tied with a blue-and-yellow ribbon, with no readable text. Through the shop window, a glowing green pharmacy cross sign and a frosty street with a mine headframe in the distance. Warm clean light inside, cold blue outside. Calm diligence.
 
 ## Кадр 14
 Фрагмент сценарію: 9
-У кадрі: автобус у ранковій темряві, запітніле вікно зблизька. У склі ледь видно відображення силуету вагітної жінки з рукою на животі, обличчя відвернуте. За склом пролітають темні зимові поля, вдалині освітлений копер і терикон. Краплі конденсату на склі.
+У кадрі: автобус у ранковій темряві, запітніле вікно зблизька. У склі ледь видно відображення силуету вагітної жінки з рукою на животі, обличчя відвернуте. За склом пролітають темні зимові поля, вдалині освітлений копер і терикон, а далеко на трасі фари вантажівки з військовим тентом. Краплі конденсату на склі.
 Герої: natalia (версія «вагітна», зимове вбрання)
+Фото-референси: spoil-heap
 Камера: статика, лише легкий наїзд на відображення.
 Світло і настрій: холодна синява, одне тепле відображення світла салону. Напруга, втома і вперта сила.
-Для генератора (англійською): Inside a dim bus in the early morning darkness. A close view of a frosty, misted bus window: in the glass, the faint reflection of a pregnant woman's silhouette in a terracotta knitted hat, her hand on her round belly, her face turned away. Outside, dark winter fields rush past, with a distant lit coal-mine headframe and a dark spoil heap. Condensation drops on the glass. Cold blue tones with a single warm reflection of the bus interior light. Tense, tired, determined.
+Для генератора (англійською): Inside a dim bus in the early morning darkness. A close view of a frosty, misted bus window: in the glass, the faint reflection of a pregnant woman's silhouette in a terracotta knitted hat, her hand on her round belly, her face turned away. Outside, dark winter fields rush past, with a distant lit coal-mine headframe and a dark spoil heap; far away on the road glow the headlights of a military truck with a canvas cover. Condensation drops on the glass. Cold blue tones with a single warm reflection of the bus interior light. Tense, tired, determined.
 
 ## Кадр 15
 Фрагмент сценарію: 10
-У кадрі: погляд знизу вгору вздовж стіни дев'ятиповерхівки в Павлограді. Високо на стіні на мотузках працює чоловік: біла каска, обв'язка, темно-синя куртка, він утеплює фасад. Мотузки тягнуться до краю даху вгорі кадру. Нижче балкони з білизною й квітами. Маленька людина на величезній стіні.
+У кадрі: погляд знизу вгору вздовж стіни дев'ятиповерхівки в Павлограді. Високо на стіні на мотузках працює чоловік: біла каска, обв'язка, темно-синя куртка, він утеплює фасад. Мотузки тягнуться до краю даху вгорі кадру. Нижче балкони з білизною й квітами, на одному маленький прапор України. Маленька людина на величезній стіні.
 Герої: natalia-husband (робоче вбрання)
+Фото-референси: panel-blocks
 Камера: повільна вертикальна панорама знизу вгору, від балконів до чоловіка.
 Світло і настрій: ясне холодне блакитне небо, яскраве сонце, спокійна впевненість.
-Для генератора (англійською): Looking up along the tall facade of a nine-storey Soviet-era panel apartment building in Pavlohrad. High on the wall, a broad-shouldered man in industrial rope-access gear hangs on ropes: a white safety helmet, a black-and-orange harness, a dark navy work jacket; he is insulating the facade, pressing a pale ochre panel with a trowel. Two ropes run up to the roof edge at the top of the vertical frame. Below him, glazed balconies with laundry and potted plants. A clear cold blue sky and bright sun. Seen from below: a small figure on a huge wall, steady and confident.
+Для генератора (англійською): Looking up along the tall facade of a nine-storey Soviet-era panel apartment building in Pavlohrad. High on the wall, a broad-shouldered man in industrial rope-access gear hangs on ropes: a white safety helmet, a black-and-orange harness, a dark navy work jacket; he is insulating the facade, pressing a pale ochre panel with a trowel. Two ropes run up to the roof edge at the top of the vertical frame. Below him, glazed balconies with laundry and potted plants; a small national flag of Ukraine hangs from one of them. A clear cold blue sky and bright sun. Seen from below: a small figure on a huge wall, steady and confident.
 
 ## Кадр 16
 Фрагмент сценарію: 11
@@ -145,6 +155,7 @@
 Фрагмент сценарію: 12
 У кадрі: ранок у Дніпрі, вид згори. Дуже широка ріка, через неї довгий міст, по ньому їде маленька машина до міста на високому зеленому правому березі. Угорі велике весняне небо. Людей не видно. Новий початок.
 Герої: немає
+Фото-референси: dnipro-riverfront
 Камера: повільна панорама вздовж мосту до берега.
 Світло і настрій: свіже світло, блиск води, весняна зелень, простір.
 Для генератора (англійською): Morning in Dnipro seen from high above. The very wide Dnipro river with sunlit water, a long road bridge crossing it toward the city on the high green right bank with Soviet-era apartment blocks and trees. A small car crosses the bridge. A big spring sky with soft clouds fills the upper part of the vertical frame. No visible people. Fresh, open, a new beginning.
@@ -153,6 +164,7 @@
 Фрагмент сценарію: 12
 У кадрі: довга набережна Дніпра, ясний весняний день, квітнуть каштани. Родина віддаляється від нас: Наталя котить візочок, поруч чоловік, доньки трохи попереду біжать. Ми бачимо їх зі спини. Вдалині гуляють інші люди.
 Герої: natalia (версія «2014»), natalia-husband, natalia-daughters, natalia-son (у візочку)
+Фото-референси: dnipro-riverfront
 Камера: повільний рух слідом за родиною.
 Світло і настрій: тепле денне сонце, м'які тіні, спокій і відчуття правильного рішення.
 Для генератора (англійською): A bright spring afternoon on the long riverside embankment in Dnipro: a wide promenade with old lamp posts, benches and blooming chestnut trees along the very wide river. A family walks away from the viewer: a woman with a chestnut low ponytail in an oatmeal cardigan pushes a grey baby stroller, a tall broad-shouldered man in a grey t-shirt walks beside her, and two light-brown-haired girls of about eight, one with two braids and one with a high ponytail, run a little ahead. All seen from behind, no faces. A few other people stroll in the distance. Warm sunlight, soft shadows. Calm, settled, the right decision.
@@ -215,8 +227,9 @@
 
 ## Кадр 26
 Фрагмент сценарію: 17
-У кадрі: зимова ніч у Дніпрі під час відключення світла, зима 2022–2023 років: за довідкою радника саме тоді відключення й укріплення на вулицях найімовірніше збігалися. Темний квартал дев'ятиповерхівок під глибоким індиговим зоряним небом, тонкий сніг на землі й дахах, вуличні ліхтарі не горять, усі вікна темні. На розі порожньої вулиці в місячному світлі два сталеві протитанкові їжаки і низька стінка з мішків із піском, присипані снігом. Посередині кадру одне вікно світиться маленькою акумуляторною лампою, у ньому ледь видно силуети кількох людей за столом. Людей не видно, лише силуети у вікні. «У темні часи для всіх нас».
+У кадрі: зимова ніч у Дніпрі під час відключення світла, повномасштабна війна. Темний квартал дев'ятиповерхівок під глибоким індиговим зоряним небом, тонкий сніг на землі й дахах, вуличні ліхтарі не горять, усі вікна темні. На розі порожньої вулиці в місячному світлі два сталеві протитанкові їжаки і низька стінка з мішків із піском, присипані снігом. Посередині кадру одне вікно світиться маленькою акумуляторною лампою, у ньому ледь видно силуети кількох людей за столом. Людей не видно, лише силуети у вікні. «У темні часи для всіх нас».
 Герої: немає
+Фото-референси: panel-blocks, anti-tank-hedgehogs
 Камера: повільний наїзд на освітлене вікно.
 Світло і настрій: густа синя темрява, як на початку фільму, і одне тепле вікно, яке тримає.
 Для генератора (англійською): A winter night in Dnipro during a wartime power blackout: a dark district of Soviet-era nine-storey apartment blocks under a deep indigo sky full of stars, a thin layer of snow on the ground and on the roofs, the street lamps off, every window dark. On the corner of the empty street in the middle-lower part of the frame, two steel anti-tank hedgehogs and a low wall of sandbags dusted with snow, faintly visible in the moonlight. In the middle of the vertical frame, a single window glows with the soft light of a small battery-powered lamp; inside it, faint small silhouettes of a few people sitting together around a table, no faces or details. Dark times, and a warm light that holds.
@@ -233,6 +246,7 @@
 Фрагмент сценарію: 18
 У кадрі: золотий вечір на набережній Дніпра. Наталя в светрі кольору вівсянки стоїть біля парапету, вітер тріпоче теракотовий шарф, вона дивиться на широку блискучу ріку. Ми бачимо її у три чверті зі спини. Угорі величезне тепле небо, вдалині довгий міст. Наприкінці кадр відповідає першому: тоді ми дивилися з вікна на чужу броню в рідному дворі, тепер вона стоїть на відкритому місці, і перед нею простір.
 Герої: natalia (версія «тепер», робоче вбрання)
+Фото-референси: dnipro-riverfront
 Камера: повільний від'їзд, у кадрі стає дедалі більше неба. Фінал.
 Світло і настрій: низьке золоте сонце, тепло, спокій, вдячність. Життя змінилося на краще.
 Для генератора (англійською): A golden evening on the Dnipro riverside embankment. A woman about 42 with chestnut shoulder-length wavy hair, wearing an oatmeal knitted sweater and a terracotta-red scarf fluttering in the wind, stands at the stone railing and looks out over the very wide shining river, seen in three-quarter view from behind. A huge warm sky fills the upper part of the vertical frame, the long bridge in the distance, low golden sun on the water. Peaceful, grateful, a life changed for the better.
@@ -241,12 +255,9 @@
 
 Художні рішення розкадровки записано в `stories/01-natalia/decisions/art-director.md`, спільні для проєкту — у `stories/_project/decisions/art-director.md`.
 
-1. Режисерові, про факт. Скільки доньок у Наталі? У тексті «дочки» без числа, я малюю двох. Якщо можна уточнити в неї, від цього залежать кадри 3, 5, 6, 16 і 18.
-2. Режисерові, про факт. Коли Наталя була вагітна і їздила до Тернівки, і коли родина переїхала до Дніпра? Пір року в тексті немає: я показав вагітність узимку (кадри 12–14), а Дніпро навесні. Якщо Наталя пам'ятає інакше, кадри легко переписати.
-3. Сценаристові. Кадр 1 працює і під голосом, і під титром: угорі вибілене небо, де є місце для титру. Якщо фрагменти 1 і 2 поміняються місцями, скажіть, і я поставлю кадр 1 після кадрів 2–4.
-4. Технікові. Референси кадрів змінилися, і `frame-refs.json` за старою нумерацією вже не підходить. Що потрібно за новою: кадр 6 генерувати з готовим кадром 5 як референсом (у тексті «as the reference image»); кадр 10 — з готовим кадром 2 як референсом, щоб ключі з китичкою були ті самі (у тексті «from the reference image»); кадри 3 і 22 — без референсів героїв, там тільки силуети і руки; кадр 2 — з аркушем Наталі «2014», на ньому є ключі; кадри 1, 4, 7, 9, 17, 19, 21, 26 — без героїв. Решта — за рядком «Герої».
-5. Технікові. Написи й прапори: кадр 3 («ДОНЕЦЬК» великими літерами без латиниці, перекреслений червоною смугою знизу зліва вгору направо), 4 (прапор України: синя смуга над жовтою; на будівлі сільради жодних написів), 7 («СЕРПЕНЬ», «28»), 9 («ПАВЛОГРАД»), 12 («ПАВЛОГРАД — ТЕРНІВКА»). Решта кадрів без читабельного тексту. На прийманні я перевіряю кожну літеру й кожну смугу.
-6. Технікові. Порада на випадок відмови генератора (замінити слова про зброю чи прибрати озброєних людей) знята 5 листопада 2026 року: сервіс заблокував зразок 2 з тим самим текстом, що тоді мав кадр 1, а підміна слів, щоб обійти фільтр, — неправильний шлях. Кадри 1 і 3 переписано по суті за правилами сервісу (`art/image-rules.md`), кадри 26–27 звірено. Якщо сервіс заблокує будь-який кадр, не перефразовуйте і не повторюйте спробу, а поверніть мені й режисерові.
-7. Монтажерові. Кадр 6 («Але не судилося») має постояти в тиші довше, ніж триває фраза. Кадр 20, «букет», задуманий нерухомим, без руху камери і без титрів, а голос під ним звучить, як і під іншими кадрами. Кадр 1 у варіанті з титром — титр у верхній третині, на небі. Нижня п'ята частина всіх кадрів спокійна, там можна ставити субтитри.
-8. Композиторові. Кадри 26 і 27 — Дніпро під час відключення світла. Якщо вам потрібна опора для шумів: це тиша міста без електрики, далекий гул генератора, а не сирени й вибухи. Кадр 1 — тихий спекотний двір, де не чути дітей.
-9. Режисерові, про факти. Що Наталя мала на увазі під «темними часами» (кадри 26–27) і коли родина переїхала до Дніпра — див. питання 1 і 2 в `art/style.md`.
+1. Сценаристові. Кадр 1 працює і під голосом, і під титром: угорі вибілене небо, де є місце для титру. Якщо фрагменти 1 і 2 поміняються місцями, скажіть, і я поставлю кадр 1 після кадрів 2–4.
+2. Технікові. Референси кадрів змінилися, і `frame-refs.json` за старою нумерацією вже не підходить. Що потрібно за новою: кадр 6 генерувати з готовим кадром 5 як референсом (у тексті «as the reference image»); кадр 10 — з готовим кадром 2 як референсом, щоб ключі з китичкою були ті самі (у тексті «from the reference image»); кадри 3 і 22 — без референсів героїв, там тільки силуети і руки; кадр 2 — з аркушем Наталі «2014», на ньому є ключі; кадри 1, 4, 7, 9, 17, 19, 21, 26 — без героїв. Решта — за рядком «Герої». Фото-референси з `art/references.md` додаються за полем «Фото-референси» кадру.
+3. Технікові. Написи й прапори: кадр 3 («ДОНЕЦЬК» великими літерами без латиниці, перекреслений червоною смугою знизу зліва вгору направо), 4 (прапор України: синя смуга над жовтою; на будівлі сільради жодних написів), 7 («СЕРПЕНЬ», «28»), 9 («ПАВЛОГРАД»), 12 («ПАВЛОГРАД — ТЕРНІВКА»). Решта кадрів без читабельного тексту. На прийманні я перевіряю кожну літеру й кожну смугу.
+4. Технікові. Порада на випадок відмови генератора (замінити слова про зброю чи прибрати озброєних людей) знята 5 листопада 2026 року: сервіс заблокував зразок 2 з тим самим текстом, що тоді мав кадр 1, а підміна слів, щоб обійти фільтр, — неправильний шлях. Кадри 1 і 3 переписано по суті за правилами сервісу (`art/image-rules.md`), кадри 26–27 звірено. Якщо сервіс заблокує будь-який кадр, не перефразовуйте і не повторюйте спробу, а поверніть мені й режисерові.
+5. Монтажерові. Кадр 6 («Але не судилося») має постояти в тиші довше, ніж триває фраза. Кадр 20, «букет», задуманий нерухомим, без руху камери і без титрів, а голос під ним звучить, як і під іншими кадрами. Кадр 1 у варіанті з титром — титр у верхній третині, на небі. Нижня п'ята частина всіх кадрів спокійна, там можна ставити субтитри.
+6. Композиторові. Кадри 26 і 27 — Дніпро під час відключення світла. Якщо вам потрібна опора для шумів: це тиша міста без електрики, далекий гул генератора, а не сирени й вибухи. Кадр 1 — тихий спекотний двір, де не чути дітей.

@@ -7,6 +7,7 @@ import {
   checkStoryboardAgainstScript, parseCharacter, parseScript, parseSound, parseStoryboard, parseStyle, parseVoiceMd, parseVoices, storyAuthorName,
 } from './docs';
 import { frameFile, sheetFile } from './frame-refs';
+import { type PhotoRefBlock, gatherPhotoRefs } from './review-refs';
 import { type Manifest, readManifest } from './manifest';
 import { type Role, extractQuestions, readDoc, splitByHeading, blockText } from './md';
 import { paths } from './paths';
@@ -19,6 +20,8 @@ export interface MediaItem {
   src: string;
   /** Відносний шлях усередині теки сторінки, наприклад media/frames/frame-03.jpg. */
   rel: string;
+  /** Додаткове обмеження ширини для цього файлу (мініатюри). */
+  maxWidth?: number;
 }
 
 export interface QuestionBlock {
@@ -41,6 +44,7 @@ export interface ReviewData {
   manifest: Manifest;
   roleDecisions: RoleDecision[];
   directorQuestions: DirectorQuestions;
+  photoRefs: PhotoRefBlock[];
   producerDecisions: string[];
   questions: QuestionBlock[];
   warnings: string[];
@@ -149,6 +153,9 @@ export function gatherReview(story: string, nameOverride?: string): ReviewData {
   }
   if (sound && !media.some((m) => m.key === 'music')) warnings.push('Немає музики (крок 10).');
 
+  const usedBy = new Map<string, string[]>();
+  for (const f of storyboard?.frames ?? []) for (const id of f.photoRefs) usedBy.set(id, [...(usedBy.get(id) ?? []), `кадр ${f.n}`]);
+  const photoRefs = gatherPhotoRefs(usedBy, media, warnings);
   const name = nameOverride ?? storyAuthorName(story) ?? story;
-  return { story, name, script, style, characters, storyboard, voice, voiceMd, sound, timings, manifest, roleDecisions, directorQuestions, producerDecisions, questions, warnings, media, previews };
+  return { story, name, script, style, characters, storyboard, voice, voiceMd, sound, timings, manifest, roleDecisions, directorQuestions, photoRefs, producerDecisions, questions, warnings, media, previews };
 }

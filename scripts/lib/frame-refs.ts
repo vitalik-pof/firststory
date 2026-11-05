@@ -8,6 +8,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { type CharacterDoc, type HeroRef, type StoryboardFrame, findSheet, listCharacterIds, parseCharacter } from './docs';
 import { readManifest } from './manifest';
 import { paths } from './paths';
+import { resolvePhotoRefs } from './references';
 import { slugify } from './text';
 
 export type FrameRefsFile = Record<string, string[]>;
@@ -87,6 +88,14 @@ export function resolveHeroList(heroes: HeroRef[], where: string, cache: Charact
   return out;
 }
 
+/** Фото-референси з поля «Фото-референси:» додаються до референсів героїв. */
+export function addPhotoRefs(story: string, ids: string[], where: string, out: ResolvedRefs): void {
+  if (!ids.length) return;
+  const p = resolvePhotoRefs(story, ids, where);
+  out.refs.push(...p.refs);
+  out.missing.push(...p.missing);
+}
+
 export function resolveFrameRefs(story: string, frame: StoryboardFrame, overrides: FrameRefsFile, cache: CharacterCache): ResolvedRefs {
   const out: ResolvedRefs = { refs: [], deps: [], missing: [] };
   const where = `Кадр ${frame.n}`;
@@ -111,6 +120,7 @@ export function resolveFrameRefs(story: string, frame: StoryboardFrame, override
   } else {
     for (const h of frame.heroes) heroRefToAsset(cache, h, `${where}, «Герої:»`, out);
   }
+  addPhotoRefs(story, frame.photoRefs, where, out);
   return out;
 }
 

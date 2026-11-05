@@ -57,7 +57,8 @@ async function produce(item: MediaItem, outDir: string, level: Level): Promise<v
   mkdirSync(dirname(dest), { recursive: true });
   if (item.kind === 'image') {
     let img = sharp(item.src).flatten({ background: '#ffffff' });
-    if (level.maxWidth) img = img.resize({ width: level.maxWidth, withoutEnlargement: true });
+    const mw = Math.min(level.maxWidth ?? Infinity, item.maxWidth ?? Infinity);
+    if (Number.isFinite(mw)) img = img.resize({ width: mw, withoutEnlargement: true });
     await img.jpeg({ quality: level.q, mozjpeg: true }).toFile(dest);
   } else if (level.kbps === null && /\.mp3$/i.test(item.src)) {
     copyFileSync(item.src, dest); // MP3 уже є: нічого з ним не робимо
