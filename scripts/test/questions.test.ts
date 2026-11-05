@@ -1,9 +1,12 @@
 import assert from 'node:assert/strict';
 import { readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { before, describe, it } from 'node:test';
-import { parseDirectorQuestions, parseProducerDecisions } from '../lib/docs';
+import { mkdirSync } from 'node:fs';
+import { parseDirectorQuestions, parseProducerDecisions, parseRoleDecisions } from '../lib/docs';
 import { paths } from '../lib/paths';
-import { decisionSections } from '../lib/review-html';
+import { decisionSections, renderRoleDecisions } from '../lib/review-html';
+import { getRoot } from '../lib/paths';
+import { join } from 'node:path';
 import { DIRECTOR_QUESTIONS_MD, STORY, mkProject } from './fixtures';
 
 before(() => void mkProject());
@@ -58,5 +61,71 @@ describe('питання режисера і рішення продюсера',
     writeFileSync(paths.storyFile(STORY, 'status.md'), '# Статус\n\n## Журнал\n');
     assert.deepEqual(parseProducerDecisions(STORY), []);
     void readFileSync;
+  });
+});
+
+const DEC_ART = `# Рішення: art-director, ${STORY}
+
+## 5 листопада 2026 року: стиль і зразки
+
+### Гуаш замість кіно
+Що вирішено: Малюємо гуашшю на кремовому папері.
+Чому: Тиха історія потребує книжкової картинки.
+Що було б інакше: Кінематографічне світло і контрасти.
+
+### Обличчя спрощені
+Що вирішено: Без портретної схожості.
+Чому: Герої реальні.
+Що було б інакше: Детальні портрети.
+`;
+const DEC_SC = `# Рішення: scenarist, _project
+
+## 4 листопада 2026 року: сценарій
+
+### Числа словами
+Що вирішено: Усі числа пишемо словами.
+Чому: Синтезатор читає текст.
+Що було б інакше: Цифри читались би по-різному.
+`;
+
+describe('рішення ролей', () => {
+  it('немає тек decisions: порожньо, блок «Рішення ролей» не показується', () => {
+    assert.deepEqual(parseRoleDecisions(STORY), []);
+    const s = decisionSections({ roleDecisions: [], director: { updated: '', items: [] }, producerDecisions: [], questions: [] });
+    assert.ok(!s.bottom.some(([id]) => id === 'role-decisions'));
+  });
+
+  it('читає stories/<id>/decisions/*.md і stories/_project/decisions/*.md, групує за ролями', () => {
+    const root = getRoot();
+    mkdirSync(join(root, 'stories', STORY, 'decisions'), { recursive: true });
+    mkdirSync(join(root, 'stories', '_project', 'decisions'), { recursive: true });
+    writeFileSync(join(root, 'stories', STORY, 'decisions', 'art-director.md'), DEC_ART);
+    writeFileSync(join(root, 'stories', '_project', 'decisions', 'scenarist.md'), DEC_SC);
+    const list = parseRoleDecisions(STORY);
+    assert.equal(list.length, 3);
+    assert.deepEqual(list.map((x) => x.name), ['Гуаш замість кіно', 'Обличчя спрощені', 'Числа словами']);
+    assert.equal(list[0]!.topic, 'стиль і зразки');
+    assert.equal(list[0]!.date, '5 листопада 2026 року');
+    assert.equal(list[2]!.scope, '_project');
+    const html = renderRoleDecisions(list);
+    assert.ok(html.indexOf('Сценарист') < html.indexOf('Художник-постановник'), 'ролі в порядку виробництва');
+    assert.equal((html.match(/class="card rdec"/g) ?? []).length, 3);
+    assert.match(html, /Малюємо гуашшю на кремовому папері/, 'що вирішено видно одразу');
+    assert.equal((html.match(/<details>/g) ?? []).length, 3, 'чому і що було б інакше розгортаються');
+    assert.doesNotMatch(html, /<details open/);
+    assert.match(html, /\(на весь проєкт\)/);
+    const s = decisionSections({ roleDecisions: list, director: { updated: '', items: [] }, producerDecisions: ['x'], questions: [] });
+    assert.deepEqual(s.bottom.map(([id]) => id), ['role-decisions', 'decided', 'role-questions']);
+  });
+
+  it('помилки формату: файл, рядок, роль', () => {
+    const f = join(getRoot(), 'stories', STORY, 'decisions', 'art-director.md');
+    writeFileSync(f, DEC_ART.replace('Чому: Герої реальні.\n', ''));
+    assert.throws(() => parseRoleDecisions(STORY), /art-director\.md[^]*роль: art-director[^]*Чому/);
+    writeFileSync(f, DEC_ART.replace('# Рішення: art-director,', '# Про рішення'));
+    assert.throws(() => parseRoleDecisions(STORY), /# Рішення: <роль>, <історія>/);
+    writeFileSync(f, DEC_ART.replace('## 5 листопада 2026 року: стиль і зразки', '## без дати'));
+    assert.throws(() => parseRoleDecisions(STORY), /## <дата>: <за що>/);
+    writeFileSync(f, DEC_ART);
   });
 });
