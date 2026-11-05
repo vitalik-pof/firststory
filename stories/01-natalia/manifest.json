@@ -1996,11 +1996,11 @@
       "uploaded_at": "2026-11-05T03:52:03.285Z"
     },
     "sheet/natalia-daughters/main": {
-      "asset_id": "zcrqSVmbaIfrqTQNcj4Q",
-      "name": "character-natalia-daughters-main-aKN7WRcd75bLfYrKWf1l",
-      "generation_id": "aKN7WRcd75bLfYrKWf1l",
+      "asset_id": "4PSC6mUBpTqffrns2ZVp",
+      "name": "character-natalia-daughters-main-KOjVScUdKHazud2KFYpe",
+      "generation_id": "KOjVScUdKHazud2KFYpe",
       "file": "work/characters/natalia-daughters.png",
-      "uploaded_at": "2026-11-05T03:52:05.624Z"
+      "uploaded_at": "2026-11-05T17:31:02.139Z"
     },
     "sheet/natalia-son/main": {
       "asset_id": "XSvwDv9dVuefEiKmfu0c",
@@ -2227,7 +2227,7 @@
     "created_at": "2026-11-05T00:41:54.681Z",
     "design_credits_source": "docs"
   },
-  "updated_at": "2026-11-05T17:30:13.463Z",
+  "updated_at": "2026-11-05T17:31:02.139Z",
   "narration": {
     "model_id": "eleven_v4",
     "voice_id": "49POAIkFDXsxrtR84sdj",
