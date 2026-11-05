@@ -1,7 +1,7 @@
 {
   "story": "01-natalia",
   "credits": {
-    "total_spent": 53900,
+    "total_spent": 56107,
     "runs": [
       {
         "script": "voice-previews",
@@ -246,6 +246,46 @@
         "credits_before": 38376,
         "credits_after": 54007,
         "spent_run": 15631
+      },
+      {
+        "script": "frames",
+        "started_at": "2026-11-05T06:58:50.143Z",
+        "finished_at": "2026-11-05T07:00:19.731Z",
+        "credits_before": 54007,
+        "credits_after": 54616,
+        "spent_run": 609
+      },
+      {
+        "script": "frames",
+        "started_at": "2026-11-05T07:00:20.454Z",
+        "finished_at": "2026-11-05T07:02:01.758Z",
+        "credits_before": 54616,
+        "credits_after": 55314,
+        "spent_run": 698
+      },
+      {
+        "script": "frames",
+        "started_at": "2026-11-05T07:02:02.515Z",
+        "finished_at": "2026-11-05T07:02:57.636Z",
+        "credits_before": 55314,
+        "credits_after": 56007,
+        "spent_run": 693
+      },
+      {
+        "script": "frames",
+        "started_at": "2026-11-05T07:02:58.286Z",
+        "finished_at": "2026-11-05T07:03:55.073Z",
+        "credits_before": 56007,
+        "credits_after": 56823,
+        "spent_run": 816
+      },
+      {
+        "script": "frames",
+        "started_at": "2026-11-05T07:04:10.910Z",
+        "finished_at": "2026-11-05T07:04:37.669Z",
+        "credits_before": 56823,
+        "credits_after": 56823,
+        "spent_run": 0
       }
     ]
   },
@@ -1436,33 +1476,66 @@
       }
     },
     "frame/09": {
-      "history": [],
-      "regen_count": 0,
+      "history": [
+        {
+          "generation_id": "ieFfYL8mWBlKD2a76Q6C",
+          "model_id": "gemini-3.1-flash-image",
+          "width": 768,
+          "height": 1376,
+          "prompt": "Medium shot inside a small pharmacy before opening on a dark winter morning, camera at counter height from the side, 50mm lens. A heavily pregnant woman of about 31 with chestnut-brown hair in a low bun, in a white pharmacist's coat over a pale blue blouse, sits sideways on a tall stool behind the glass counter, her large round belly in profile pressed against the counter's edge, so she holds a delivery invoice out at arm's length on the counter and ticks a line with a pen, while her other hand reaches into an open cardboard box of medicine packs beside it. Her face is turned down to the invoice, a few brush strokes with an even skin tone. Behind her, shelves of small boxes dissolve into soft washes. A single lamp over the counter; the shop window behind is still dark blue, with frost on the glass. She sits in the centre of the frame; the dark floor behind the counter fills the lower fifth.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles and buildings are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering, no logos, no brands, no watermark. Everyone in the picture is an ordinary civilian going about daily life, and every place in it stands whole and peaceful.",
+          "refs": [
+            "asset:C96KDsln5nzlCZNylXxW"
+          ],
+          "file": "work/01-natalia/frames/frame-09.v1.png",
+          "aspect_ratio": "9:16",
+          "resolution": "1K",
+          "credits": 609,
+          "completed_at": "2026-11-05T06:37:48.705Z"
+        }
+      ],
+      "regen_count": 1,
       "current": {
-        "generation_id": "ieFfYL8mWBlKD2a76Q6C",
+        "generation_id": "WF3139FVzyBTGV9VYmDB",
         "model_id": "gemini-3.1-flash-image",
         "width": 768,
         "height": 1376,
-        "prompt": "Medium shot inside a small pharmacy before opening on a dark winter morning, camera at counter height from the side, 50mm lens. A heavily pregnant woman of about 31 with chestnut-brown hair in a low bun, in a white pharmacist's coat over a pale blue blouse, sits sideways on a tall stool behind the glass counter, her large round belly in profile pressed against the counter's edge, so she holds a delivery invoice out at arm's length on the counter and ticks a line with a pen, while her other hand reaches into an open cardboard box of medicine packs beside it. Her face is turned down to the invoice, a few brush strokes with an even skin tone. Behind her, shelves of small boxes dissolve into soft washes. A single lamp over the counter; the shop window behind is still dark blue, with frost on the glass. She sits in the centre of the frame; the dark floor behind the counter fills the lower fifth.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles and buildings are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering, no logos, no brands, no watermark. Everyone in the picture is an ordinary civilian going about daily life, and every place in it stands whole and peaceful.",
+        "prompt": "Medium shot inside a small pharmacy before opening on a dark winter morning, camera at counter height from the side, 50mm lens. A heavily pregnant woman of about 31 with chestnut-brown hair in a low bun, in a white pharmacist's coat over a pale blue blouse, sits sideways on a tall stool behind the glass counter, her large round belly in profile pressed against the counter's edge, so a long sheet of paper lies on the counter at arm's length and she ticks one of its lines with a pen, while her other hand rests on the edge of an open cardboard box of medicine packs beside it. The sheet holds only loose grey scribbles, and the packs are plain pale boxes in soft colour washes. Her face is turned down to the sheet, a few brush strokes with an even skin tone. Behind her, shelves of small boxes dissolve into soft washes. A single lamp over the counter; the shop window behind is still dark blue, with frost on the glass. She sits in the centre of the frame; the dark floor behind the counter fills the lower fifth.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles and buildings are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering, no logos, no brands, no watermark. Everyone in the picture is an ordinary civilian going about daily life, and every place in it stands whole and peaceful.",
         "refs": [
           "asset:C96KDsln5nzlCZNylXxW"
         ],
         "file": "work/01-natalia/frames/frame-09.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
-        "credits": 609,
-        "completed_at": "2026-11-05T06:37:48.705Z"
+        "credits": 693,
+        "completed_at": "2026-11-05T07:02:45.007Z"
       }
     },
     "frame/10": {
-      "history": [],
-      "regen_count": 0,
+      "history": [
+        {
+          "generation_id": "mvpnitCDO4LU0jyXWcqP",
+          "model_id": "gemini-3.1-flash-image",
+          "width": 768,
+          "height": 1376,
+          "prompt": "Medium shot at a bus stop on a dark frosty winter morning, camera at eye height about two metres behind her, 50mm lens. A heavily pregnant woman of about 31 with chestnut-brown hair in a low bun, in a dark navy wool coat worn open over a grey knitted jumper, with a terracotta-red knitted scarf and hat, a handbag on her shoulder, is stepping up into the open front door of the bus from the reference photo: one foot already on the lit first step, one hand on the handrail by the door, her body leaning in. She is seen from behind and slightly to the side, so the round curve of her belly shows under the open coat, and she fills most of the frame's height in the centre and right. Warm amber light from the doorway falls on her shoulder, her scarf and the snow at her feet. The bus stands soft and out of focus in the mist beside her, its windshield fogged and dark. A streetlamp with a soft halo, fine falling snow, misty panel blocks far behind. Trampled snow fills the lower fifth.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles and buildings are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering, no logos, no brands, no watermark. Everyone in the picture is an ordinary civilian going about daily life, and every place in it stands whole and peaceful.",
+          "refs": [
+            "asset:C96KDsln5nzlCZNylXxW",
+            "asset:UZYawogNdmWq89sm1FL3"
+          ],
+          "file": "work/01-natalia/frames/frame-10.v1.png",
+          "aspect_ratio": "9:16",
+          "resolution": "1K",
+          "credits": 812,
+          "completed_at": "2026-11-05T06:39:03.186Z"
+        }
+      ],
+      "regen_count": 1,
       "current": {
-        "generation_id": "mvpnitCDO4LU0jyXWcqP",
+        "generation_id": "V0AACdIf4DM7ufcdUFdb",
         "model_id": "gemini-3.1-flash-image",
         "width": 768,
         "height": 1376,
-        "prompt": "Medium shot at a bus stop on a dark frosty winter morning, camera at eye height about two metres behind her, 50mm lens. A heavily pregnant woman of about 31 with chestnut-brown hair in a low bun, in a dark navy wool coat worn open over a grey knitted jumper, with a terracotta-red knitted scarf and hat, a handbag on her shoulder, is stepping up into the open front door of the bus from the reference photo: one foot already on the lit first step, one hand on the handrail by the door, her body leaning in. She is seen from behind and slightly to the side, so the round curve of her belly shows under the open coat, and she fills most of the frame's height in the centre and right. Warm amber light from the doorway falls on her shoulder, her scarf and the snow at her feet. The bus stands soft and out of focus in the mist beside her, its windshield fogged and dark. A streetlamp with a soft halo, fine falling snow, misty panel blocks far behind. Trampled snow fills the lower fifth.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles and buildings are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering, no logos, no brands, no watermark. Everyone in the picture is an ordinary civilian going about daily life, and every place in it stands whole and peaceful.",
+        "prompt": "Medium shot at a bus stop on a dark frosty winter morning, camera at eye height about two metres behind her, 50mm lens. A heavily pregnant woman of about 31 with chestnut-brown hair in a low bun, in a dark navy wool coat worn open over a grey knitted jumper, with a terracotta-red knitted scarf and hat, a handbag on her shoulder, is stepping up into the open front door of the bus from the reference photo: one foot already on the lit first step, one hand on the handrail by the door, her body leaning in. She is seen from behind and slightly to the side, so the round curve of her belly shows under the open coat, and she fills most of the frame's height in the centre and right. Warm amber light from the doorway falls on her shoulder, her scarf and the snow at her feet. The right edge of the frame cuts through the bus just past its open door, so the front of the bus with its windscreen lies outside the picture; the side of the bus behind her stands soft and out of focus in the mist. A streetlamp with a soft halo, fine falling snow, misty panel blocks far behind. Trampled snow fills the lower fifth.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles and buildings are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering, no logos, no brands, no watermark. Everyone in the picture is an ordinary civilian going about daily life, and every place in it stands whole and peaceful.",
         "refs": [
           "asset:C96KDsln5nzlCZNylXxW",
           "asset:UZYawogNdmWq89sm1FL3"
@@ -1470,8 +1543,8 @@
         "file": "work/01-natalia/frames/frame-10.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
-        "credits": 812,
-        "completed_at": "2026-11-05T06:39:03.186Z"
+        "credits": 816,
+        "completed_at": "2026-11-05T07:03:42.425Z"
       }
     },
     "frame/11": {
@@ -1721,22 +1794,38 @@
       }
     },
     "frame/23": {
-      "history": [],
-      "regen_count": 0,
+      "history": [
+        {
+          "generation_id": "bj6lQjEKPnxpEBriCbU9",
+          "model_id": "gemini-3.1-flash-image",
+          "width": 768,
+          "height": 1376,
+          "prompt": "Medium wide shot in a bright rehearsal room with the chairs pushed back to the walls, in the daytime, camera at standing eye height, 35mm lens. Six people of different ages in everyday sweaters and jeans stand in a loose circle in the middle of a warm-up, arms raised, some of them laughing. The woman nearest the door has reached out and caught the hand of a woman of about 42 with loose chestnut-brown shoulder-length wavy hair, in an oatmeal knitted sweater and a terracotta-red scarf, and is pulling her into the circle; she steps in with a laptop bag still on her shoulder, seen from the side and slightly behind. Large windows, daylight on a wooden floor. The two joined hands sit in the centre of the frame; the wooden floor fills the lower fifth.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles and buildings are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering, no logos, no brands, no watermark. Everyone in the picture is an ordinary civilian going about daily life, and every place in it stands whole and peaceful.",
+          "refs": [
+            "asset:wVFJmXuDlRXSYePj8fTm"
+          ],
+          "file": "work/01-natalia/frames/frame-23.v1.png",
+          "aspect_ratio": "9:16",
+          "resolution": "1K",
+          "credits": 609,
+          "completed_at": "2026-11-05T06:51:44.839Z"
+        }
+      ],
+      "regen_count": 1,
       "current": {
-        "generation_id": "bj6lQjEKPnxpEBriCbU9",
+        "generation_id": "zq0fzLSQ268ybRDZgwtV",
         "model_id": "gemini-3.1-flash-image",
         "width": 768,
         "height": 1376,
-        "prompt": "Medium wide shot in a bright rehearsal room with the chairs pushed back to the walls, in the daytime, camera at standing eye height, 35mm lens. Six people of different ages in everyday sweaters and jeans stand in a loose circle in the middle of a warm-up, arms raised, some of them laughing. The woman nearest the door has reached out and caught the hand of a woman of about 42 with loose chestnut-brown shoulder-length wavy hair, in an oatmeal knitted sweater and a terracotta-red scarf, and is pulling her into the circle; she steps in with a laptop bag still on her shoulder, seen from the side and slightly behind. Large windows, daylight on a wooden floor. The two joined hands sit in the centre of the frame; the wooden floor fills the lower fifth.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles and buildings are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering, no logos, no brands, no watermark. Everyone in the picture is an ordinary civilian going about daily life, and every place in it stands whole and peaceful.",
+        "prompt": "Medium wide shot in a bright rehearsal room with the chairs pushed back to the walls, in the daytime, camera at standing eye height, 35mm lens. Six people of different ages, in sweaters of grey, navy, moss green and mustard with jeans, stand in a loose circle in the middle of a warm-up, arms raised, some of them laughing. The woman nearest the door, in a navy sweater, has caught the wrist of a woman of about 42 with loose chestnut-brown shoulder-length wavy hair, in an oatmeal knitted sweater and a terracotta-red scarf, and leans back, pulling her a step into the circle; she comes in mid-step with a laptop bag still swinging on her shoulder, seen from the side and slightly behind. She is the only one in oatmeal and terracotta. Large windows, daylight on a wooden floor. The two joined hands sit in the centre of the frame; the wooden floor fills the lower fifth.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles and buildings are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering, no logos, no brands, no watermark. Everyone in the picture is an ordinary civilian going about daily life, and every place in it stands whole and peaceful.",
         "refs": [
           "asset:wVFJmXuDlRXSYePj8fTm"
         ],
         "file": "work/01-natalia/frames/frame-23.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
-        "credits": 609,
-        "completed_at": "2026-11-05T06:51:44.839Z"
+        "credits": 698,
+        "completed_at": "2026-11-05T07:01:49.089Z"
       }
     },
     "frame/24": {
@@ -2031,7 +2120,7 @@
     "created_at": "2026-11-05T00:41:54.681Z",
     "design_credits_source": "docs"
   },
-  "updated_at": "2026-11-05T07:00:07.134Z",
+  "updated_at": "2026-11-05T07:04:37.669Z",
   "narration": {
     "model_id": "eleven_v4",
     "voice_id": "49POAIkFDXsxrtR84sdj",
@@ -2146,8 +2235,8 @@
   "image_prices": {
     "gemini-3.1-flash-image@1K": {
       "max": 1218,
-      "last": 609,
-      "count": 79
+      "last": 816,
+      "count": 82
     },
     "gemini-3.1-flash-image@512": {
       "max": 409,
