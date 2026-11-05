@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { dirname } from 'node:path';
 import { before, describe, it } from 'node:test';
 import {
   parseSamples, parseSoundSamples, parseFragmentRange, checkSamplesAgainstScript,
   aspectFromFormat, checkStoryboardAgainstScript, checkVoiceAgainstScript, findSheet, parseCharacter, parseHeroRefs, parseScript, parseSound,
-  parseStoryboard, parseStyle, parseVoiceMd, parseVoices, writeCharacterResource, writeVoiceId,
+  parseRoleDecisions, parseStoryboard, parseStyle, parseVoiceMd, parseVoices, writeCharacterResource, writeVoiceId,
 } from '../lib/docs';
 import { DocFormatError, readDoc } from '../lib/md';
 import { paths } from '../lib/paths';
@@ -154,6 +155,16 @@ describe('суворість: документ не за форматом дає
     s = parseSound(STORY);
     assert.deepEqual(s.sfx, []);
     writeFileSync(f, orig);
+  });
+  it('decisions: «### Заувага: …» без полів це примітка ролі, а не рішення', () => {
+    const f = paths.storyFile(STORY, 'decisions/editor.md');
+    mkdirSync(dirname(f), { recursive: true });
+    const base = '# Рішення: editor, T1-test\n\n## 2026-11-05: титр\n\n### Шрифт\nЩо вирішено: Lora.\nЧому: вільний.\nЩо було б інакше: PT Serif.\n\n';
+    writeFileSync(f, base + '### Заувага: розділ вище замінено нижчим\n\n### Тло\nЩо вирішено: кадр 1.\nЧому: палітра.\nЩо було б інакше: кадр 4.\n');
+    assert.deepEqual(parseRoleDecisions(STORY).map((d) => d.name), ['Шрифт', 'Тло']);
+    writeFileSync(f, base + '### Тло\nЩо вирішено: кадр 1.\n');
+    assert.throws(() => parseRoleDecisions(STORY), /Чому/);
+    rmSync(f);
   });
   it('sound.md: «Загальна тривалість» лише числом', () => {
     const f = paths.storyFile(STORY, 'sound.md');

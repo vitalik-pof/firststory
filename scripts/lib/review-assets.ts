@@ -96,11 +96,16 @@ td.num, th.num { text-align: right; white-space: nowrap; }
 .stage img.on, .stage .ph.on { display: flex; }
 .stage img.on { display: block; }
 .stage .ph { color: var(--stage-text); background: var(--stage-bg); }
-.title-card { position: absolute; inset: 0; display: block; overflow: hidden; pointer-events: none; }
-.tc-paper { position: absolute; inset: 0; }
-.tc-el { position: absolute; left: 0; opacity: 0; text-align: center; margin: 0; }
-.tc-text { width: 100%; box-sizing: border-box; }
-.tc-rule { left: 50%; margin-left: 0; transform-origin: center; }
+.tc-base { position: absolute; inset: 0; }
+.stage img { transform-origin: center; }
+.title-card { position: absolute; inset: 0; display: block; overflow: hidden; pointer-events: none; visibility: hidden; }
+.title-card.ready { visibility: visible; }
+.tc-veil, .tc-paper { position: absolute; inset: 0; }
+.tc-glow { position: absolute; }
+.tc-el { position: absolute; opacity: 0; margin: 0; }
+.tc-text { box-sizing: border-box; text-align: center; white-space: nowrap; }
+.tc-line { display: block; width: max-content; margin: 0 auto; }
+.tc-rule { transform-origin: center; }
 .sub { text-align: center; min-height: 3.2em; margin: 0 auto 10px; max-width: 520px; overflow-wrap: anywhere; }
 .sub .w.now { background: var(--accent); color: var(--accent-text); border-radius: 4px; padding: 0 2px; }
 .sub-meta { text-align: center; color: var(--muted); font-size: 0.88rem; margin-bottom: 8px; }
@@ -144,26 +149,66 @@ export const CLIENT_JS = `
   var curSlot = -1, curFrag = -1, curWord = -1, raf = 0, curShown = null;
   var T = D.title || null;
   var titleEl = document.getElementById('anim-title');
+  var baseEl = document.getElementById('anim-tcbase');
+  var veilEl = document.getElementById('anim-tcveil');
+  var glowEl = document.getElementById('anim-tcglow');
+  var stageEl = root.querySelector('.stage');
   var titleEls = {};
   if (titleEl) Array.prototype.forEach.call(titleEl.querySelectorAll('[data-tc]'), function (n) { titleEls[n.getAttribute('data-tc')] = n; });
   function clamp01(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
-  // Початковий титр: поява елементів за секундами з edit.md, наплив у кадр 1 (титр 100% -> 0%, кадр 0% -> 100%).
-  // Повертає частку напливу 0..1 (0 до його початку).
-  function renderTitle(t) {
-    if (!T || !titleEl) return 1;
-    var cf = T.crossfade, p = clamp01((t - cf.from) / Math.max(0.001, cf.to - cf.from));
-    titleEl.style.display = (p >= 1 && t >= cf.to) ? 'none' : 'block';
-    titleEl.style.opacity = String(1 - p);
+  function smooth(x) { x = clamp01(x); return x * x * (3 - 2 * x); }
+  // Шрифт титра: посилання Google Fonts підключається тут, титр показується лише після document.fonts.load
+  // (або через 5 с, якщо шрифт не вдалося завантажити: тоді системна антиква).
+  var fontsDone = !T || !T.fontUrl;
+  function fitTitle() {
+    if (!T || !stageEl || !stageEl.clientWidth) return;
+    T.elements.forEach(function (e, i) {
+      if (e.kind !== 'title') return;
+      var n = titleEls[String(i)]; if (!n) return;
+      var limit = T.blockWidth / T.frameWidth * stageEl.clientWidth, size = e.size;
+      for (var guard = 0; guard < 60 && size > 20; guard++) {
+        n.style.fontSize = (size / T.frameWidth * 100) + 'cqw';
+        var w = 0;
+        Array.prototype.forEach.call(n.querySelectorAll('.tc-line'), function (l) { w = Math.max(w, l.getBoundingClientRect().width); });
+        if (w <= limit + 0.5) break;
+        size -= T.fitStep;
+      }
+      e.fitSize = size;
+    });
+  }
+  function startFonts() {
+    if (!T || !T.fontUrl) { fontsDone = true; if (titleEl) titleEl.classList.add('ready'); return Promise.resolve(); }
+    var link = document.createElement('link'); link.rel = 'stylesheet'; link.href = T.fontUrl;
+    document.head.appendChild(link);
+    var loads = (T.fontChecks || []).map(function (c) { return document.fonts.load(c.spec, c.text); });
+    var timeout = new Promise(function (res) { setTimeout(res, 5000); });
+    var p = (document.fonts && document.fonts.load) ? Promise.race([Promise.all(loads), timeout]) : Promise.resolve();
+    return p.then(function () { return document.fonts && document.fonts.ready ? document.fonts.ready : null; }).catch(function () {}).then(function () {
+      fontsDone = true; fitTitle();
+      if (titleEl) titleEl.classList.add('ready');
+      render(audio.currentTime);
+    });
+  }
+  // Початковий титр: поява елементів і зникнення тексту за секундами з edit.md; вуаль, пляма, розмиття, насиченість
+  // і масштаб кадру 1 знімаються разом за однією плавною кривою (release). Повертає частку зняття 0..1.
+  function renderTitle(t, firstEnd) {
+    if (!T) return 1;
+    var r = T.release, p = smooth((t - r.from) / Math.max(0.001, r.to - r.from));
+    var show = t + EPS < firstEnd;
+    if (titleEl) titleEl.style.display = show ? 'block' : 'none';
+    if (baseEl) baseEl.style.display = show ? 'block' : 'none';
+    if (veilEl) veilEl.style.opacity = String(T.veil * (1 - p));
+    if (glowEl) glowEl.style.opacity = String(1 - p);
+    var h = 1 - clamp01((t - T.hide.from) / Math.max(0.001, T.hide.to - T.hide.from));
     T.elements.forEach(function (e, i) {
       var n = titleEls[String(i)]; if (!n) return;
       var k = clamp01((t - e.from) / Math.max(0.001, e.to - e.from));
-      n.style.opacity = String(k);
-      if (e.kind === 'rule') n.style.transform = 'translateX(-50%) scaleX(' + k + ')';
+      n.style.opacity = String(k * h);
+      if (e.kind === 'rule') n.style.transform = 'scaleX(' + k + ')';
       else if (e.rise) n.style.transform = 'translateY(' + ((1 - k) * e.riseCq) + 'cqw)';
     });
     return p;
   }
-
   function fmt(t) { t = Math.max(0, t); var m = Math.floor(t / 60), s = Math.floor(t % 60); return m + ':' + (s < 10 ? '0' : '') + s; }
   function dur() { return (audio && isFinite(audio.duration) && audio.duration > 0) ? audio.duration : duration; }
   function slotIndex(t) {
@@ -189,16 +234,24 @@ export const CLIENT_JS = `
     Array.prototype.forEach.call(ts, function (b, k) { b.className = k === i ? 'cur' : ''; });
   }
   function render(t) {
-    var p = renderTitle(t);
+    var firstEnd = D.slots.length ? D.slots[0].end : (T ? T.duration : 0);
+    var p = renderTitle(t, firstEnd);
     var si = slotIndex(t);
-    // До першого слота (під титром) кадр 1 проявляється разом із напливом.
-    var fr = si >= 0 ? String(D.slots[si].frame) : (T && p > 0 && D.slots.length ? String(D.slots[0].frame) : null);
-    var op = si >= 0 ? 1 : p;
+    // Під титром (до першого слота) і на першому слоті стоїть кадр 1: на ньому розмиття, вуаль знімаються за кривою p.
+    var firstFrame = D.slots.length ? String(D.slots[0].frame) : null;
+    var fr = si >= 0 ? String(D.slots[si].frame) : (T ? firstFrame : null);
     if (fr !== curShown) {
       curShown = fr;
-      Object.keys(stageImgs).forEach(function (k) { stageImgs[k].classList.toggle('on', k === fr); });
+      Object.keys(stageImgs).forEach(function (k) { stageImgs[k].style.filter = ''; stageImgs[k].style.transform = ''; stageImgs[k].classList.toggle('on', k === fr); });
     }
-    if (fr && stageImgs[fr]) stageImgs[fr].style.opacity = op < 1 ? String(op) : '';
+    if (fr && stageImgs[fr]) {
+      var im = stageImgs[fr];
+      if (T && fr === firstFrame && p < 1 && stageEl) {
+        var bl = T.blur * (1 - p) * stageEl.clientWidth / T.frameWidth;
+        im.style.filter = 'blur(' + bl + 'px) saturate(' + (T.saturation + (1 - T.saturation) * p) + ')';
+        im.style.transform = 'scale(' + (1 + T.scale * (1 - p)) + ')';
+      } else { im.style.filter = ''; im.style.transform = ''; }
+    }
     curSlot = si;
     var fi = fragIndex(t);
     var beforeVoice = T && D.fragments.length && t + EPS < D.fragments[0].start;
@@ -263,6 +316,6 @@ export const CLIENT_JS = `
   });
   setPlayLabel();
   render(0);
-  window.__animatic = { seek: seek, render: render };
+  window.__animatic = { seek: seek, render: render, fonts: startFonts() };
 })();
 `;

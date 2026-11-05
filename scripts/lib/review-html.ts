@@ -306,27 +306,45 @@ function rgba(hex: string, alpha: number): string {
 }
 
 /**
- * Початковий титр на сцені аніматика: тло, текст, риска. Усе (кольори, розміри, положення) з edit.md
- * через TitleCard; розміри в cqw від ширини сцени (кадр 1080 px завширшки), тому масштаб збігається
- * з кадром. Поява й наплив у кадр 1 рахує код сторінки за data.title (див. review-assets).
+ * Початковий титр на сцені аніматика. Тло: основа кольору паперу (під кадром), кадр 1 (його розмиває,
+ * знебарвлює й збільшує код сторінки за часом), паперова вуаль, пляма світла, зернистість і потемніння;
+ * поверх них текст і риска. Усе (кольори, розміри, положення) з edit.md через TitleCard; розміри в cqw
+ * від ширини сцени (кадр 1080 px завширшки), тому масштаб збігається з кадром. Блок тексту завширшки
+ * blockWidth стоїть по центру кадру (left = (кадр − блок) / 2), рядки центруються всередині. Поява,
+ * зникнення тексту й зняття вуалі рахує код сторінки (review-assets) за data.title.
  */
+export function renderTitleBase(c: TitleCard): string {
+  return `<div class="tc-base" id="anim-tcbase" style="background:${esc(c.background.paper)}"></div>`;
+}
+
 export function renderTitleCard(c: TitleCard): string {
   const cq = (px: number): string => `${r3((px / c.frameWidth) * 100)}cqw`;
-  const grain = c.background.grain;
-  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='${grain}'/></svg>`;
+  const pct = (px: number): string => `${r3((px / c.frameHeight) * 100)}%`;
+  const bg = c.background;
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='${bg.grain}'/></svg>`;
   const grainUrl = `url("data:image/svg+xml,${svg.replace(/</g, '%3C').replace(/>/g, '%3E')}")`;
-  const vignette = `radial-gradient(ellipse at center, rgba(60, 40, 20, 0) 55%, rgba(60, 40, 20, ${c.background.vignette}) 100%)`;
-  const paper = `background-color:${c.background.color};background-image:${vignette},${grainUrl}`;
+  const vignette = `radial-gradient(ellipse at center, rgba(60, 40, 20, 0) 55%, rgba(60, 40, 20, ${bg.vignette}) 100%)`;
+  const groupTop = Math.min(...c.elements.map((e) => e.topPx));
+  const groupBottom = Math.max(...c.elements.map((e) => (e.kind === 'rule' ? e.topPx + e.size : e.topPx + e.lines.length * e.size * e.lineHeight)));
+  const cy = (groupTop + groupBottom) / 2;
+  const g = bg.glow;
+  const solid = r3(Math.max(0, 1 - g.feather / (Math.min(g.width, g.height) / 2)) * 100);
+  const glow = g.width > 0
+    ? `<div class="tc-glow" id="anim-tcglow" style="left:${cq((c.frameWidth - g.width) / 2)};top:${pct(cy - g.height / 2)};width:${cq(g.width)};height:${cq(g.height)};background:radial-gradient(closest-side, ${rgba(bg.paper, g.alpha)} ${solid}%, ${rgba(bg.paper, 0)} 100%)"></div>`
+    : '';
+  const shadow = c.textShadow ? `text-shadow:0 0 ${cq(c.textShadow.blur)} ${rgba(c.textShadow.color, c.textShadow.alpha)};` : '';
   const els = c.elements
     .map((e, i) => {
       if (e.kind === 'rule') {
-        return `<div class="tc-el tc-rule" data-tc="${i}" style="top:${e.topPct}%;width:${cq(e.width)};height:${cq(e.size)};background:${esc(e.color)}"></div>`;
+        return `<div class="tc-el tc-rule" data-tc="${i}" style="top:${pct(e.topPx)};left:${cq((c.frameWidth - e.width) / 2)};width:${cq(e.width)};height:${cq(e.size)};background:${esc(e.color)}"></div>`;
       }
-      const st = `top:${e.topPct}%;padding:0 ${cq(c.sidePx)};font-size:${cq(e.size)};font-weight:${e.weight};line-height:${e.lineHeight};color:${rgba(e.color, e.alpha)};letter-spacing:${e.letterSpacing}em`;
-      return `<div class="tc-el tc-text" data-tc="${i}" style="${esc(st)}">${e.lines.map(esc).join('<br>')}</div>`;
+      // letter-spacing додає проміжок і після останньої літери: padding-left на ту саму величину вирівнює рядок по центру.
+      const pad = e.letterSpacing > 0 ? `padding-left:${e.letterSpacing}em;` : '';
+      const st = `top:${pct(e.topPx)};left:${cq((c.frameWidth - c.blockWidth) / 2)};width:${cq(c.blockWidth)};font-size:${cq(e.size)};font-weight:${e.weight};line-height:${e.lineHeight};color:${rgba(e.color, e.alpha)};letter-spacing:${e.letterSpacing}em;${shadow}`;
+      return `<div class="tc-el tc-text" data-tc="${i}" style="${esc(st)}">${e.lines.map((l) => `<span class="tc-line" style="${esc(pad)}">${esc(l)}</span>`).join('')}</div>`;
     })
     .join('');
-  return `<div class="title-card" id="anim-title" style="font-family:${esc(c.fontStack)}"><div class="tc-paper" style="${esc(paper)}"></div>${els}</div>`;
+  return `<div class="title-card" id="anim-title" style="font-family:${esc(c.fontStack)}"><div class="tc-veil" id="anim-tcveil" style="background:${esc(bg.paper)}"></div>${glow}<div class="tc-paper" style="${esc(`background-image:${vignette},${grainUrl}`)}"></div>${els}</div>`;
 }
 
 export function renderAnimatic(o: { timings?: TimingsFile; audioSrc?: string; items: AnimaticItem[]; word: string; intro: string; title?: TitleCard; offset?: number }): string {
@@ -343,7 +361,26 @@ export function renderAnimatic(o: { timings?: TimingsFile; audioSrc?: string; it
   const data = {
     duration,
     delay: off,
-    title: o.title ? { duration: o.title.duration, crossfade: o.title.crossfade, elements: o.title.elements.map((e) => ({ kind: e.kind, from: e.from, to: e.to, rise: e.rise, riseCq: r3((e.rise / o.title!.frameWidth) * 100) })) } : null,
+    title: o.title
+      ? {
+          duration: o.title.duration,
+          release: o.title.release,
+          hide: o.title.hide,
+          frameWidth: o.title.frameWidth,
+          blockWidth: o.title.blockWidth,
+          fitStep: o.title.fitStep,
+          blur: o.title.background.blur,
+          veil: o.title.background.veil,
+          glow: o.title.background.glow.alpha,
+          saturation: o.title.background.saturation,
+          scale: o.title.background.scale,
+          fontUrl: o.title.font.url,
+          fontChecks: o.title.font.weights.length
+            ? o.title.elements.filter((e) => e.kind !== 'rule').map((e) => ({ spec: `${e.weight} ${e.size}px "${o.title!.font.family}"`, text: e.lines.join(' ') }))
+            : [],
+          elements: o.title.elements.map((e) => ({ kind: e.kind, from: e.from, to: e.to, rise: e.rise, riseCq: r3((e.rise / o.title!.frameWidth) * 100), size: e.size })),
+        }
+      : null,
     slots,
     fragments: t.fragments.map((f) => ({ n: f.n, start: r3(f.start + off), end: r3(f.end + off), words: f.words.map((w) => [w.text, r3(w.start + off), r3(w.end + off)]) })),
   };
@@ -356,6 +393,7 @@ export function renderAnimatic(o: { timings?: TimingsFile; audioSrc?: string; it
 <p class="lead">${esc(o.intro)}</p>
 <div class="animatic" id="animatic" tabindex="0">
   <div class="stage">
+${o.title ? renderTitleBase(o.title) : ''}
 ${stageImgs}
 ${o.title ? renderTitleCard(o.title) : ''}
   </div>
