@@ -3,7 +3,10 @@
 //  - pages: повний самостійний документ для GitHub Pages (підкаталог, лише відносні посилання).
 
 import { buildSchedule } from './animatic';
+import type { Manifest } from './manifest';
+import type { VoiceDoc, VoiceEntry } from './docs';
 import type { ReviewData } from './review-build';
+import type { TimingsFile } from './timings';
 import { CLIENT_JS, CSS } from './review-assets';
 import type { Role } from './md';
 
@@ -92,50 +95,13 @@ export function renderReview(d: ReviewData, target: ReviewTarget, title: string,
 
   // ---------------- аніматик
   const frames = d.storyboard?.frames ?? [];
-  let animBody: string;
-  if (d.timings && rel('narration')) {
-    const sched = buildSchedule(d.timings.fragments, frames.map((f) => ({ n: f.n, fragment: f.fragment })), d.timings.duration, d.timings.silent_fragments ?? []);
-    const stageImgs = frames
-      .map((f) => {
-        const src = rel(`frame:${f.n}`);
-        return src
-          ? `<img data-frame="${f.n}" src="${esc(src)}" alt="Кадр ${f.n}">`
-          : `<div class="ph" data-frame="${f.n}">Кадр ${f.n} ще не згенеровано</div>`;
-      })
-      .join('\n');
-    const data = {
-      duration: d.timings.duration,
-      slots: sched.slots,
-      fragments: d.timings.fragments.map((f) => ({ n: f.n, start: f.start, end: f.end, words: f.words.map((w) => [w.text, w.start, w.end]) })),
-    };
-    const notes: string[] = [];
-    const silent = d.timings.silent_fragments ?? [];
-    if (silent.length) notes.push(`Фрагмент ${silent.join(', ')} без голосу (титр): його кадрів в аніматику немає, тривалість титру визначить монтажер.`);
-    if (sched.fragmentsWithoutFrames.length) notes.push(`Фрагменти без кадру: ${sched.fragmentsWithoutFrames.join(', ')}. На них лишається попередній кадр.`);
-    animBody = `
-<p class="lead">Чорновий перегляд: кадри розкадровки змінюються під озвучення. Кадр з'являється, коли голос доходить до початку його фрагмента; якщо на фрагмент кілька кадрів, його час ділиться між ними порівну. Звук стартує після натискання «Грати».</p>
-<div class="animatic" id="animatic" tabindex="0">
-  <div class="stage">
-${stageImgs}
-  </div>
-  <div class="sub-meta" id="anim-meta"></div>
-  <div class="sub" id="anim-sub"></div>
-  <div class="controls">
-    <button type="button" id="anim-prev" title="Попередній фрагмент">⏮ Фрагмент</button>
-    <button type="button" id="anim-back" title="Назад на 5 секунд">−5 с</button>
-    <button type="button" class="primary" id="anim-play">▶ Грати</button>
-    <button type="button" id="anim-fwd" title="Вперед на 5 секунд">+5 с</button>
-    <button type="button" id="anim-next" title="Наступний фрагмент">Фрагмент ⏭</button>
-  </div>
-  <div class="seek"><input type="range" id="anim-range" min="0" max="${d.timings.duration}" step="0.01" value="0" aria-label="Перемотування"><span class="time" id="anim-time">0:00</span></div>
-  <div class="ticks" id="anim-ticks" aria-label="Фрагменти"></div>
-  <audio id="anim-audio" preload="auto" src="${esc(rel('narration')!)}"></audio>
-  ${notes.map((n) => `<div class="note">${esc(n)}</div>`).join('')}
-</div>
-<script type="application/json" id="review-data">${jsonForScript(data)}</script>`;
-  } else {
-    animBody = `<div class="note">Аніматик недоступний: ${d.timings ? 'немає narration.mp3' : 'немає timings.json'} (крок 6).</div>`;
-  }
+  const animBody = renderAnimatic({
+    timings: d.timings,
+    narrationSrc: rel('narration'),
+    items: frames.map((f) => ({ n: f.n, fragment: f.fragment, src: rel(`frame:${f.n}`) })),
+    word: 'кадр',
+    intro: "Чорновий перегляд: кадри розкадровки змінюються під озвучення. Кадр з'являється, коли голос доходить до початку його фрагмента; якщо на фрагмент кілька кадрів, його час ділиться між ними порівну. Звук стартує після натискання «Грати».",
+  });
   section('animatic-section', 'Аніматик', animBody);
 
   // ---------------- сценарій
@@ -189,21 +155,7 @@ ${d.script.changes ? `<h3>Що змінено порівняно з оригін
   } else section('storyboard', 'Розкадровка', '<div class="note">storyboard.md ще немає.</div>');
 
   // ---------------- голос
-  let voiceBody = '';
-  if (d.voice) {
-    voiceBody += `<h3 style="margin-top:0">Голос «${esc(d.voice.id)}»</h3>${d.voice.image ? mdLite(d.voice.image) : ''}<details><summary>Опис для Voice Design</summary><pre>${esc(d.voice.designPrompt)}</pre></details><p class="muted">Текст проби: ${esc(d.voice.probeText)}</p>${d.voice.voiceId ? `<p class="muted">voice_id: <code>${esc(d.voice.voiceId)}</code></p>` : ''}`;
-  }
-  voiceBody += '<h3>Три проби голосу</h3>';
-  voiceBody += d.previews.length
-    ? d.previews.map((p) => `<div class="card"><span class="badge">Проба ${p.n}${p.chosen ? ', обрана для озвучення' : ''}</span>${rel(p.key) ? `<audio controls preload="none" src="${esc(rel(p.key)!)}"></audio>` : ''}</div>`).join('\n')
-    : '<div class="note">Проб ще немає (крок 5).</div>';
-  voiceBody += '<h3>Повне озвучення</h3>';
-  voiceBody += rel('narration') ? `<audio controls preload="none" src="${esc(rel('narration')!)}"></audio>${d.timings ? `<p class="muted">Тривалість ${fmtTime(d.timings.duration)} (${d.timings.duration} с), голос ${esc(d.timings.voice_id)}, модель ${esc(d.timings.model_id)}.</p>` : ''}` : '<div class="note">Озвучення ще немає (крок 6).</div>';
-  if (d.voiceMd) {
-    voiceBody += `<details><summary>Розмітка озвучення з тегами</summary>${d.voiceMd.fragments.map((f) => `<p><span class="badge">Фрагмент ${f.n}</span> ${esc(f.tagged)}</p>`).join('')}</details>`;
-    if (d.voiceMd.pronunciation) voiceBody += `<details><summary>Вимова</summary>${mdLite(d.voiceMd.pronunciation)}</details>`;
-  }
-  section('voice', 'Голос і озвучення', voiceBody);
+  section('voice', 'Голос і озвучення', renderVoiceBody({ voice: d.voice, previews: d.previews, rel, timings: d.timings, voiceMd: d.voiceMd }));
 
   // ---------------- звук
   let soundBody = '';
@@ -227,20 +179,90 @@ ${d.script.changes ? `<h3>Що змінено порівняно з оригін
   );
 
   // ---------------- кредити
-  section('credits', 'Витрачені кредити', renderCredits(d));
+  section('credits', 'Витрачені кредити', renderCredits(d.manifest));
 
-  const warn = d.warnings.length ? `<div class="note"><strong>Чого бракує на цій збірці:</strong><ul>${d.warnings.map((w) => `<li>${esc(w)}</li>`).join('')}</ul></div>` : '';
-  const head = `<h1>${esc(title)}</h1>\n<p class="lead">${esc(d.script.title)}. Сирий матеріал першого прогону: без зведення звуку, монтажу, руху камери й субтитрів.</p>\n<nav class="toc">${nav.map(([id, h]) => `<a href="#${id}">${esc(h)}</a>`).join('')}</nav>\n${warn}`;
+  const lead = `${d.script.title}. Сирий матеріал першого прогону: без зведення звуку, монтажу, руху камери й субтитрів.`;
+  return wrapPage(target, title, lead, nav, sections, d.warnings);
+}
+
+export function wrapPage(target: ReviewTarget, title: string, lead: string, nav: Array<[string, string]>, sections: string[], warnings: string[]): string {
+  const warn = warnings.length ? `<div class="note"><strong>Чого бракує на цій збірці:</strong><ul>${warnings.map((w) => `<li>${esc(w)}</li>`).join('')}</ul></div>` : '';
+  const head = `<h1>${esc(title)}</h1>\n<p class="lead">${esc(lead)}</p>\n<nav class="toc">${nav.map(([id, h]) => `<a href="#${id}">${esc(h)}</a>`).join('')}</nav>\n${warn}`;
   const content = `<div class="page">\n${head}\n${sections.join('\n')}\n</div>\n<script>${CLIENT_JS}</script>`;
-
   if (target === 'artifact') {
     return `<meta name="claude:viewport-fit-sides" content="cover">\n<title>${esc(title)}</title>\n<style>${CSS}</style>\n${content}\n`;
   }
   return `<!doctype html>\n<html lang="uk">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n<link rel="icon" href="data:,">\n<title>${esc(title)}</title>\n<style>${CSS}</style>\n</head>\n<body>\n${content}\n</body>\n</html>\n`;
 }
 
-function renderCredits(d: ReviewData): string {
-  const m = d.manifest;
+export interface AnimaticItem {
+  n: number;
+  fragment: number;
+  src?: string;
+}
+
+export function renderAnimatic(o: { timings?: TimingsFile; narrationSrc?: string; items: AnimaticItem[]; word: string; intro: string }): string {
+  if (!o.timings || !o.narrationSrc) return `<div class="note">Аніматик недоступний: ${o.timings ? 'немає narration.mp3' : 'немає timings.json'} (крок 6).</div>`;
+  const t = o.timings;
+  const sched = buildSchedule(t.fragments, o.items.map((f) => ({ n: f.n, fragment: f.fragment })), t.duration, t.silent_fragments ?? []);
+  const stageImgs = o.items
+    .map((f) => (f.src ? `<img data-frame="${f.n}" src="${esc(f.src)}" alt="${esc(o.word)} ${f.n}">` : `<div class="ph" data-frame="${f.n}">${esc(o.word)} ${f.n} ще не згенеровано</div>`))
+    .join('\n');
+  const data = {
+    duration: t.duration,
+    slots: sched.slots,
+    fragments: t.fragments.map((f) => ({ n: f.n, start: f.start, end: f.end, words: f.words.map((w) => [w.text, w.start, w.end]) })),
+  };
+  const notes: string[] = [];
+  const silent = t.silent_fragments ?? [];
+  if (silent.length) notes.push(`Фрагмент ${silent.join(', ')} без голосу (титр): його ${o.word}ів в аніматику немає, тривалість титру визначить монтажер.`);
+  if (sched.fragmentsWithoutFrames.length) notes.push(`Фрагменти без ${o.word}а: ${sched.fragmentsWithoutFrames.join(', ')}. На них лишається попередній.`);
+  if (!sched.slots.length) notes.push(`Жоден ${o.word} не прив'язано до фрагмента.`);
+  return `
+<p class="lead">${esc(o.intro)}</p>
+<div class="animatic" id="animatic" tabindex="0">
+  <div class="stage">
+${stageImgs}
+  </div>
+  <div class="sub-meta" id="anim-meta"></div>
+  <div class="sub" id="anim-sub"></div>
+  <div class="controls">
+    <button type="button" id="anim-prev" title="Попередній фрагмент">⏮ Фрагмент</button>
+    <button type="button" id="anim-back" title="Назад на 5 секунд">−5 с</button>
+    <button type="button" class="primary" id="anim-play">▶ Грати</button>
+    <button type="button" id="anim-fwd" title="Вперед на 5 секунд">+5 с</button>
+    <button type="button" id="anim-next" title="Наступний фрагмент">Фрагмент ⏭</button>
+  </div>
+  <div class="seek"><input type="range" id="anim-range" min="0" max="${t.duration}" step="0.01" value="0" aria-label="Перемотування"><span class="time" id="anim-time">0:00</span></div>
+  <div class="ticks" id="anim-ticks" aria-label="Фрагменти"></div>
+  <audio id="anim-audio" preload="auto" src="${esc(o.narrationSrc)}"></audio>
+  ${notes.map((n) => `<div class="note">${esc(n)}</div>`).join('')}
+</div>
+<script type="application/json" id="review-data">${jsonForScript(data)}</script>`;
+}
+
+
+export function renderVoiceBody(d: { voice?: VoiceEntry; previews: Array<{ n: number; key: string; chosen: boolean }>; rel: (key: string) => string | undefined; timings?: TimingsFile; voiceMd?: VoiceDoc }): string {
+  const rel = d.rel;
+  let voiceBody = '';
+  if (d.voice) {
+    voiceBody += `<h3 style="margin-top:0">Голос «${esc(d.voice.id)}»</h3>${d.voice.image ? mdLite(d.voice.image) : ''}<details><summary>Опис для Voice Design</summary><pre>${esc(d.voice.designPrompt)}</pre></details><p class="muted">Текст проби: ${esc(d.voice.probeText)}</p>${d.voice.voiceId ? `<p class="muted">voice_id: <code>${esc(d.voice.voiceId)}</code></p>` : ''}`;
+  }
+  voiceBody += '<h3>Три проби голосу</h3>';
+  voiceBody += d.previews.length
+    ? d.previews.map((p) => `<div class="card"><span class="badge">Проба ${p.n}${p.chosen ? ', обрана для озвучення' : ''}</span>${rel(p.key) ? `<audio controls preload="none" src="${esc(rel(p.key)!)}"></audio>` : ''}</div>`).join('\n')
+    : '<div class="note">Проб ще немає (крок 5).</div>';
+  voiceBody += '<h3>Повне озвучення</h3>';
+  voiceBody += rel('narration') ? `<audio controls preload="none" src="${esc(rel('narration')!)}"></audio>${d.timings ? `<p class="muted">Тривалість ${fmtTime(d.timings.duration)} (${d.timings.duration} с), голос ${esc(d.timings.voice_id)}, модель ${esc(d.timings.model_id)}.</p>` : ''}` : '<div class="note">Озвучення ще немає (крок 6).</div>';
+  if (d.voiceMd) {
+    voiceBody += `<details><summary>Розмітка озвучення з тегами</summary>${d.voiceMd.fragments.map((f) => `<p><span class="badge">Фрагмент ${f.n}</span> ${esc(f.tagged)}</p>`).join('')}</details>`;
+    if (d.voiceMd.pronunciation) voiceBody += `<details><summary>Вимова</summary>${mdLite(d.voiceMd.pronunciation)}</details>`;
+  }
+  return voiceBody;
+
+}
+
+export function renderCredits(m: Manifest): string {
   const rows: Array<[string, string, string]> = [];
   const v = m.voice as { design_credits?: number } | undefined;
   if (v?.design_credits !== undefined) rows.push(['Проби голосу', '3 проби', String(v.design_credits)]);
@@ -248,9 +270,11 @@ function renderCredits(d: ReviewData): string {
   if (n) rows.push(['Озвучення', `${n.chars_sent ?? '?'} знаків`, String(n.credits ?? '?')]);
   for (const [key, rec] of Object.entries(m.images)) {
     const spent = [rec.current, ...rec.history].reduce((a, x) => a + (x?.credits ?? 0), 0);
-    rows.push([key.startsWith('sheet/') ? `Аркуш ${key.slice(6)}` : `Кадр ${Number(key.slice(6))}`, `перегенерацій: ${rec.regen_count}`, String(spent)]);
+    const label = key.startsWith('sheet/') ? `Аркуш ${key.slice(6)}` : key.startsWith('sample/') ? `Зразок ${Number(key.slice(7))}` : `Кадр ${Number(key.slice(6))}`;
+    const cur = rec.current;
+    rows.push([label, `перегенерацій: ${rec.regen_count}${cur?.width ? `, ${cur.width}×${cur.height} px (запитано ${cur.resolution})` : ''}`, String(spent)]);
   }
-  for (const [key, a] of Object.entries(m.audio)) rows.push([key === 'music' ? 'Музика' : `Шум ${key.replace('sfx-', '')}`, `${a.seconds_requested ?? '?'} с`, String((a.credits as number | undefined) ?? '?')]);
+  for (const [key, a] of Object.entries(m.audio)) rows.push([key === 'music' ? 'Музика' : key.startsWith('sample-music-') ? `Зразок музики ${key.slice(13)}` : key.startsWith('sample-sfx-') ? `Зразок шуму ${key.slice(11)}` : `Шум ${key.replace('sfx-', '')}`, `${a.seconds_requested ?? '?'} с`, String((a.credits as number | undefined) ?? '?')]);
   const table = rows.length
     ? `<table><thead><tr><th>Що</th><th>Примітка</th><th class="num">Кредити</th></tr></thead><tbody>${rows.map((r) => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td class="num">${esc(r[2])}</td></tr>`).join('')}</tbody></table>`
     : '<p class="muted">Платних викликів ще не було.</p>';

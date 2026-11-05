@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { before, describe, it } from 'node:test';
 import {
+  parseSamples, parseSoundSamples, parseFragmentRange, checkSamplesAgainstScript,
   aspectFromFormat, checkStoryboardAgainstScript, checkVoiceAgainstScript, findSheet, parseCharacter, parseHeroRefs, parseScript, parseSound,
   parseStoryboard, parseStyle, parseVoiceMd, parseVoices, writeCharacterResource, writeVoiceId,
 } from '../lib/docs';
@@ -156,5 +157,60 @@ describe('суворість: документ не за форматом дає
     assert.throws(() => resolveFrameRefs(STORY, fr, {}, new CharacterCache()), /Кадр 5.*невпізнаний герой «ghost»/);
     const fr2 = { ...fr, heroes: [{ id: 'natalia', version: '1999' }] };
     assert.throws(() => resolveFrameRefs(STORY, fr2, {}, new CharacterCache()), /Кадр 5.*невідома версія «1999»/);
+  });
+});
+
+describe('зразки Етапу 1б', () => {
+  it('art/samples.md', () => {
+    const sd = parseSamples();
+    assert.equal(sd.samples.length, 3);
+    assert.deepEqual(sd.samples.map((s) => s.fragment), [undefined, 1, 3]);
+    assert.deepEqual(sd.samples[2]!.heroes, [{ id: 'natalia', version: '2014' }]);
+    assert.equal(sd.samples[0]!.format, '1:1');
+    assert.match(sd.questions, /палітра/);
+    checkSamplesAgainstScript(sd, parseScript(STORY));
+  });
+  it('зразок на неіснуючий фрагмент і поганий формат — помилки з роллю', () => {
+    const f = paths.samplesDoc();
+    const orig = readFileSync(f, 'utf8');
+    writeFileSync(f, orig.replace('Для фрагмента: 3', 'Для фрагмента: 9'));
+    assert.throws(() => checkSamplesAgainstScript(parseSamples(), parseScript(STORY)), /фрагмента 9 немає[^]*|art-director/);
+    writeFileSync(f, orig.replace('Формат: 1:1', 'Формат: квадратний'));
+    assert.throws(() => parseSamples(), /Не вдалося визначити співвідношення/);
+    writeFileSync(f, orig.replace('Герої: немає\nДля генератора (англійською): A hot', 'Для генератора (англійською): A hot'));
+    assert.throws(() => parseSamples(), /немає поля «Герої:»/);
+    writeFileSync(f, orig);
+  });
+  it('sound-samples.md: музика, шум, параметри зведення (мінус-знаки, кома)', () => {
+    const s = parseSoundSamples(STORY);
+    assert.deepEqual(s.music.map((m) => m.seconds), [12, 8]);
+    assert.equal(s.sfx[0]!.seconds, 4);
+    assert.deepEqual(s.mix.fragments, [1, 2]);
+    assert.equal(s.mix.underDb, -18);
+    assert.equal(s.mix.pauseDb, -8);
+    assert.equal(s.mix.fadeSeconds, 0.6);
+    assert.equal(s.mix.musicSample, 1);
+  });
+  it('sound-samples.md: помилки', () => {
+    const f = paths.soundSamplesDoc(STORY);
+    const orig = readFileSync(f, 'utf8');
+    writeFileSync(f, orig.replace('Тривалість: 12', 'Тривалість: 2'));
+    assert.throws(() => parseSoundSamples(STORY), /поза межами API/);
+    writeFileSync(f, orig.replace('Зразок музики: 1', 'Зразок музики: 7'));
+    assert.throws(() => parseSoundSamples(STORY), /Зразка музики 7 немає/);
+    writeFileSync(f, orig.replace('−18', '-3').replace('-8', '-12'));
+    assert.throws(() => parseSoundSamples(STORY), /тихіша, ніж під голосом/);
+    writeFileSync(f, orig.replace('1–2', 'усі'));
+    assert.throws(() => parseSoundSamples(STORY), /Фрагменти для зразка/);
+    writeFileSync(f, orig.replace('Час зміни гучності, с: 0,6', 'Час зміни гучності, с: швидко'));
+    assert.throws(() => parseSoundSamples(STORY), /очікувалось число/);
+    writeFileSync(f, orig);
+  });
+  it('діапазони фрагментів', () => {
+    const doc = readDoc(paths.soundSamplesDoc(STORY), 'composer');
+    assert.deepEqual(parseFragmentRange(doc, '1–4', 1), [1, 2, 3, 4]);
+    assert.deepEqual(parseFragmentRange(doc, '1-3, 5', 1), [1, 2, 3, 5]);
+    assert.deepEqual(parseFragmentRange(doc, '7', 1), [7]);
+    assert.throws(() => parseFragmentRange(doc, '4-2', 1), /зворотний/);
   });
 });

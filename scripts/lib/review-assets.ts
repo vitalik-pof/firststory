@@ -135,7 +135,7 @@ export const CLIENT_JS = `
   function fmt(t) { t = Math.max(0, t); var m = Math.floor(t / 60), s = Math.floor(t % 60); return m + ':' + (s < 10 ? '0' : '') + s; }
   function dur() { return (audio && isFinite(audio.duration) && audio.duration > 0) ? audio.duration : duration; }
   function slotIndex(t) {
-    var S = D.slots; if (!S.length) return -1;
+    var S = D.slots; if (!S.length || t + EPS < S[0].start) return -1;
     var lo = 0, hi = S.length - 1, ans = 0;
     while (lo <= hi) { var mid = (lo + hi) >> 1; if (S[mid].start <= t + EPS) { ans = mid; lo = mid + 1; } else hi = mid - 1; }
     return ans;

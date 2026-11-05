@@ -14,7 +14,7 @@
 
 import type { ElevenLabsClient } from './elevenlabs';
 
-export type PriceSource = 'з API' | 'з документації ElevenLabs' | 'оцінка' | 'не знайдено';
+export type PriceSource = 'з API' | 'з документації ElevenLabs' | 'оцінка' | 'не знайдено' | 'виміряно в маніфесті';
 
 export interface Priced {
   credits: number | null;

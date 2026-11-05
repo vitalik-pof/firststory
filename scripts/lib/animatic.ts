@@ -57,7 +57,7 @@ export function buildSchedule(fragments: FragmentWindowInput[], frames: FrameInp
 
 /** Слот, активний у момент t: останній, що почався (бінарний пошук). Те саме робить код сторінки. */
 export function slotAt(slots: Slot[], t: number): Slot | undefined {
-  if (!slots.length) return undefined;
+  if (!slots.length || t + 0.03 < slots[0]!.start) return undefined;
   let lo = 0;
   let hi = slots.length - 1;
   let ans = 0;

@@ -3,7 +3,9 @@
   "private": true,
   "type": "module",
   "description": "Скрипти генерації і збирання фільмів за історіями Контакт2U",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "typecheck": "tsc --noEmit -p scripts",
     "test": "node --import tsx --test --test-reporter=spec \"scripts/test/*.test.ts\"",
@@ -14,7 +16,10 @@
     "upload-character-sheet": "tsx scripts/upload-character-sheet.ts",
     "frames": "tsx scripts/frames.ts",
     "sound": "tsx scripts/sound.ts",
-    "review": "tsx scripts/review.ts"
+    "review": "tsx scripts/review.ts",
+    "samples": "tsx scripts/samples.ts",
+    "sound-samples": "tsx scripts/sound-samples.ts",
+    "mix-sample": "tsx scripts/mix-sample.ts"
   },
   "dependencies": {
     "sharp": "^0.34.0",
