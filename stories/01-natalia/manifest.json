@@ -1,7 +1,7 @@
 {
   "story": "01-natalia",
   "credits": {
-    "total_spent": 60756,
+    "total_spent": 61162,
     "runs": [
       {
         "script": "voice-previews",
@@ -318,6 +318,14 @@
         "credits_before": 61316,
         "credits_after": 63485,
         "spent_run": 2169
+      },
+      {
+        "script": "character-sheets",
+        "started_at": "2026-11-05T17:29:06.864Z",
+        "finished_at": "2026-11-05T17:30:13.463Z",
+        "credits_before": 74027,
+        "credits_after": 74433,
+        "spent_run": 406
       }
     ]
   },
@@ -602,21 +610,34 @@
           "resolution": "1K",
           "credits": 406,
           "completed_at": "2026-11-05T03:43:48.318Z"
+        },
+        {
+          "generation_id": "aKN7WRcd75bLfYrKWf1l",
+          "model_id": "gemini-3.1-flash-image",
+          "width": 1376,
+          "height": 768,
+          "prompt": "Character turnaround sheet of two little girls, both about 6 years old and the same height, standing side by side, shown full body on a plain warm light-grey background in front view, three-quarter view and back view; the same two girls with identical proportions, hair and clothing in every view. Both have light-brown hair. Girl on the left: two braids, a mustard-yellow cotton summer dress, white sandals. Girl on the right: a high ponytail, a mint-green cotton summer dress, white sandals. Each girl keeps her own hairstyle and dress colour in every view, including the back view: the braids always go with the mustard-yellow dress, the ponytail always with the mint-green dress. Simplified gentle children's faces painted with a few loose watercolour brush strokes, natural muted skin tones, an even skin tone on the cheeks with no pink blush: small simple eyes, a soft line for the nose, a small simple mouth; not portraits of any real children. Lively natural poses, in one view they hold hands. No background scenery, no text, no labels.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles, buildings, signs and lettering are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details; lettering may be soft and only half legible. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles, signs and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering except the Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. Signs of war appear only where and as the description places them, as the main subject or in the background, with no people holding weapons, no blood, no wounded, no explosions or fireballs. No letter Z.",
+          "refs": [],
+          "file": "work/characters/natalia-daughters.v2.png",
+          "aspect_ratio": "16:9",
+          "resolution": "1K",
+          "credits": 406,
+          "completed_at": "2026-11-05T03:50:57.603Z"
         }
       ],
-      "regen_count": 1,
+      "regen_count": 2,
       "current": {
-        "generation_id": "aKN7WRcd75bLfYrKWf1l",
+        "generation_id": "KOjVScUdKHazud2KFYpe",
         "model_id": "gemini-3.1-flash-image",
         "width": 1376,
         "height": 768,
-        "prompt": "Character turnaround sheet of two little girls, both about 6 years old and the same height, standing side by side, shown full body on a plain warm light-grey background in front view, three-quarter view and back view; the same two girls with identical proportions, hair and clothing in every view. Both have light-brown hair. Girl on the left: two braids, a mustard-yellow cotton summer dress, white sandals. Girl on the right: a high ponytail, a mint-green cotton summer dress, white sandals. Each girl keeps her own hairstyle and dress colour in every view, including the back view: the braids always go with the mustard-yellow dress, the ponytail always with the mint-green dress. Simplified gentle children's faces painted with a few loose watercolour brush strokes, natural muted skin tones, an even skin tone on the cheeks with no pink blush: small simple eyes, a soft line for the nose, a small simple mouth; not portraits of any real children. Lively natural poses, in one view they hold hands. No background scenery, no text, no labels.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles, buildings, signs and lettering are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details; lettering may be soft and only half legible. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles, signs and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering except the Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. Signs of war appear only where and as the description places them, as the main subject or in the background, with no people holding weapons, no blood, no wounded, no explosions or fireballs. No letter Z.",
+        "prompt": "Character turnaround sheet of two sisters three years apart in age, standing side by side, shown full body on a plain warm light-grey background in front view, three-quarter view and back view; the same two girls with identical proportions, hair and clothing in every view. The difference in their age and height reads at first glance: the younger girl's head reaches only to her older sister's shoulder. Both have light-brown hair. Girl on the left, the younger, about 6 years old and about 115 cm tall: small-child proportions with a large head for her body, round cheeks and chin, short arms and legs, a soft rounded tummy under the dress; two short braids, a mustard-yellow cotton summer dress above the knee, white sandals. Girl on the right, the older, about 9 years old and about 135 cm tall: slim and long-legged, a longer neck, a narrower face, long thin arms; a high ponytail, a mint-green cotton summer dress to the knee, white sandals. Each girl keeps her own hairstyle, dress colour and height in every view, including the back view: the braids always go with the mustard-yellow dress and the shorter girl, the ponytail always with the mint-green dress and the taller girl. Simplified gentle children's faces painted with a few loose watercolour brush strokes, natural muted skin tones, an even skin tone on the cheeks with no pink blush: small simple eyes, a soft line for the nose, a small simple mouth; not portraits of any real children. Lively natural poses; in one view the older girl holds her younger sister's hand, her arm reaching down to it. The sheet holds only the two girls on the plain background.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles and buildings are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering, no logos, no brands, no watermark. Everyone in the picture is an ordinary civilian going about daily life, and every place in it stands whole and peaceful.",
         "refs": [],
         "file": "work/characters/natalia-daughters.png",
         "aspect_ratio": "16:9",
         "resolution": "1K",
         "credits": 406,
-        "completed_at": "2026-11-05T03:50:57.603Z"
+        "completed_at": "2026-11-05T17:30:00.892Z"
       }
     },
     "sheet/natalia-son/main": {
@@ -1975,11 +1996,11 @@
       "uploaded_at": "2026-11-05T03:52:03.285Z"
     },
     "sheet/natalia-daughters/main": {
-      "asset_id": "zcrqSVmbaIfrqTQNcj4Q",
-      "name": "character-natalia-daughters-main-aKN7WRcd75bLfYrKWf1l",
-      "generation_id": "aKN7WRcd75bLfYrKWf1l",
+      "asset_id": "4PSC6mUBpTqffrns2ZVp",
+      "name": "character-natalia-daughters-main-KOjVScUdKHazud2KFYpe",
+      "generation_id": "KOjVScUdKHazud2KFYpe",
       "file": "work/characters/natalia-daughters.png",
-      "uploaded_at": "2026-11-05T03:52:05.624Z"
+      "uploaded_at": "2026-11-05T17:31:02.139Z"
     },
     "sheet/natalia-son/main": {
       "asset_id": "XSvwDv9dVuefEiKmfu0c",
@@ -2206,7 +2227,7 @@
     "created_at": "2026-11-05T00:41:54.681Z",
     "design_credits_source": "docs"
   },
-  "updated_at": "2026-11-05T07:50:12.427Z",
+  "updated_at": "2026-11-05T17:31:02.139Z",
   "narration": {
     "model_id": "eleven_v4",
     "voice_id": "49POAIkFDXsxrtR84sdj",
@@ -2349,7 +2370,7 @@
     "gemini-3.1-flash-image@1K": {
       "max": 1218,
       "last": 406,
-      "count": 84
+      "count": 85
     },
     "gemini-3.1-flash-image@512": {
       "max": 409,

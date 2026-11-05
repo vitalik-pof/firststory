@@ -17,12 +17,20 @@
 Character turnaround sheet of two sisters three years apart in age, standing side by side, shown full body on a plain warm light-grey background in front view, three-quarter view and back view; the same two girls with identical proportions, hair and clothing in every view. The difference in their age and height reads at first glance: the younger girl's head reaches only to her older sister's shoulder. Both have light-brown hair. Girl on the left, the younger, about 6 years old and about 115 cm tall: small-child proportions with a large head for her body, round cheeks and chin, short arms and legs, a soft rounded tummy under the dress; two short braids, a mustard-yellow cotton summer dress above the knee, white sandals. Girl on the right, the older, about 9 years old and about 135 cm tall: slim and long-legged, a longer neck, a narrower face, long thin arms; a high ponytail, a mint-green cotton summer dress to the knee, white sandals. Each girl keeps her own hairstyle, dress colour and height in every view, including the back view: the braids always go with the mustard-yellow dress and the shorter girl, the ponytail always with the mint-green dress and the taller girl. Simplified gentle children's faces painted with a few loose watercolour brush strokes, natural muted skin tones, an even skin tone on the cheeks with no pink blush: small simple eyes, a soft line for the nose, a small simple mouth; not portraits of any real children. Lively natural poses; in one view the older girl holds her younger sister's hand, her arm reaching down to it. The sheet holds only the two girls on the plain background.
 
 ## Ресурси
-- main: (технік впише id нового аркуша після його приймання)
 - попередній, не використовувати: zcrqSVmbaIfrqTQNcj4Q (завантажено 2026-11-05, `work/characters/natalia-daughters.png`; сестри-однолітки однакового зросту, до правки 5 листопада 2026 року)
+- main: 4PSC6mUBpTqffrns2ZVp (завантажено 2026-11-05, work/characters/natalia-daughters.png)
 
 ## Приймання
 
-Обидва записи нижче стосуються попереднього аркуша, де сестри однолітки. Новий аркуш з різницею у віці три роки ще не генерувався.
+### 2026-11-05: новий аркуш, сестри з різницею у віці три роки, перша генерація
+
+`work/characters/natalia-daughters.png`. Прийнято із застереженням, перегенерація не потрібна. Головне вийшло. Різниця у віці читається з першого погляду в усіх трьох видах: молодша на голову нижча, її маківка сягає старшій до плеча. У молодшої дитячі пропорції: велика голова, круглі щоки, короткі руки й ноги. Старша тонка й довгонога, з довшою шиєю і вужчим обличчям. Ознаки не переплутано ніде, зокрема на виді ззаду: дві коси йдуть із гірчичною сукнею й нижчою дівчинкою, високий хвіст — із м'ятною сукнею й вищою. В обох білі сандалі. У середньому виді старша тримає молодшу за руку, опустивши свою руку до неї.
+
+Застереження. Обличчя анфас прописані детальніше за стиль: очі з виразними зіницями, на щоках рожевий рум'янець, особливо в молодшої. Тло не зовсім рівне сіре: за кожною парою стоїть вохристо-синя акварельна пляма. Третьої спроби на це не витрачаю, бо в кадрах 3 і 14 обох дівчат видно зі спини або обличчям у кардиган чи до скла, і в текстах цих кадрів обличчя вже описано «a few brush strokes with an even skin tone». На прийманні кадрів 3 і 14 перевірю, чи не потрапили в них рум'янець і плями з тла.
+
+### Записи про попередній аркуш
+
+Обидва записи нижче стосуються попереднього аркуша, де сестри однолітки.
 
 ### 2026-11-05: аркуш 1K, 16:9, перша генерація
 
