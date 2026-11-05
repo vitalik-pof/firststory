@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { buildSchedule, slotAt } from '../lib/animatic';
+import { renderAnimatic } from '../lib/review-html';
+import type { TimingsFile } from '../lib/timings';
 
 describe('розклад аніматика', () => {
   const frags = [{ n: 1, start: 0.4 }, { n: 2, start: 10 }, { n: 3, start: 14 }, { n: 4, start: 20 }];
@@ -24,5 +26,19 @@ describe('розклад аніматика', () => {
   });
   it('кадр на неіснуючий фрагмент — помилка', () => {
     assert.throws(() => buildSchedule(frags, [{ n: 1, fragment: 9 }], 30), /фрагмент 9/);
+  });
+});
+
+describe('плеєр аніматика', () => {
+  const timings = { duration: 10, silent_fragments: [], fragments: [{ n: 1, start: 0, end: 9, text: 'а', words: [{ text: 'а', start: 0, end: 1 }] }] } as unknown as TimingsFile;
+  const items = [{ n: 1, fragment: 1, src: 'media/frames/frame-01.jpg' }];
+  it('грає звук, який йому дали (зведення), а кадри йдуть за таймінгами голосу', () => {
+    const html = renderAnimatic({ timings, audioSrc: 'media/mix.mp3', items, word: 'кадр', intro: 'x' });
+    assert.match(html, /<audio id="anim-audio"[^>]*src="media\/mix\.mp3"/);
+    assert.doesNotMatch(html, /narration\.mp3/);
+    assert.match(html, /"slots":\[\{"start":0,"end":10,"frame":1/);
+  });
+  it('без звуку аніматик недоступний', () => {
+    assert.match(renderAnimatic({ timings, items, word: 'кадр', intro: 'x' }), /недоступний/);
   });
 });

@@ -125,7 +125,7 @@ export function renderSamplesReview(d: SamplesReviewData, target: ReviewTarget, 
     'Аніматик на зразках',
     renderAnimatic({
       timings: d.timings,
-      narrationSrc: rel('narration'),
+      audioSrc: rel('narration'),
       items: d.samples.samples.filter((s) => s.fragment !== undefined).map((s) => ({ n: s.n, fragment: s.fragment!, src: rel(`sample:${s.n}`) })),
       word: 'зразок',
       intro: "Озвучення грає, а зразки стилю змінюються від початку свого фрагмента (поле «Для фрагмента»). Де зразка для фрагмента немає, лишається попередній. Зразки без фрагмента в аніматику не входять. Звук стартує після натискання «Грати».",
