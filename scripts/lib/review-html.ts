@@ -6,9 +6,11 @@ import { buildSchedule } from './animatic';
 import type { DirectorQuestions, RoleDecision } from './docs';
 import type { Manifest } from './manifest';
 import type { VoiceDoc, VoiceEntry } from './docs';
+import { parseVoiceDelay } from './mix-spec';
 import type { QuestionBlock, ReviewData } from './review-build';
 import type { PhotoRefBlock } from './review-refs';
 import type { TimingsFile } from './timings';
+import type { TitleCard } from './title-card';
 import { CLIENT_JS, CSS } from './review-assets';
 import type { Role } from './md';
 
@@ -189,12 +191,17 @@ export function renderReview(d: ReviewData, target: ReviewTarget, title: string,
 
   // ---------------- аніматик
   const frames = d.storyboard?.frames ?? [];
+  // Титр показуємо лише коли плеєр грає зведення (воно вже має 3 с музики перед голосом) і затримка озвучення відома з sound.md.
+  const delay = (d.sound ? parseVoiceDelay(d.sound.mix) : undefined) ?? 0;
+  const titleOn = !!d.titleCard && !!rel('film-mix') && delay > 0;
   const animBody = renderAnimatic({
     timings: d.timings,
     audioSrc: rel('film-mix') ?? rel('narration'),
     items: frames.map((f) => ({ n: f.n, fragment: f.fragment, src: rel(`frame:${f.n}`) })),
     word: 'кадр',
-    intro: `Чорновий перегляд: кадри розкадровки змінюються під ${rel('film-mix') ? 'повне зведення фільму (озвучення з музикою й шумами за звуковим брифом)' : 'озвучення'}. Кадр з'являється, коли голос доходить до початку його фрагмента; якщо на фрагмент кілька кадрів, його час ділиться між ними порівну. Звук стартує після натискання «Грати».`,
+    title: titleOn ? d.titleCard : undefined,
+    offset: titleOn ? delay : 0,
+    intro: `Чорновий перегляд: ${titleOn ? 'спершу початковий титр (малює код за edit.md), далі ' : ''}кадри розкадровки змінюються під ${rel('film-mix') ? `повне зведення фільму (озвучення${d.sound?.sfx.length ? ' з музикою й шумами' : ' з музикою'} за звуковим брифом)` : 'озвучення'}. Кадр з'являється, коли голос доходить до початку його фрагмента${titleOn ? ` (час озвучення зсунуто на ${delay} с титру)` : ''}; якщо на фрагмент кілька кадрів, його час ділиться між ними порівну. Звук стартує після натискання «Грати».`,
   });
   section('animatic-section', 'Аніматик', animBody);
 
@@ -291,17 +298,54 @@ export interface AnimaticItem {
   src?: string;
 }
 
-export function renderAnimatic(o: { timings?: TimingsFile; audioSrc?: string; items: AnimaticItem[]; word: string; intro: string }): string {
+const r3 = (x: number): number => Math.round(x * 1000) / 1000;
+
+function rgba(hex: string, alpha: number): string {
+  const n = Number.parseInt(hex.slice(1), 16);
+  return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${alpha})`;
+}
+
+/**
+ * Початковий титр на сцені аніматика: тло, текст, риска. Усе (кольори, розміри, положення) з edit.md
+ * через TitleCard; розміри в cqw від ширини сцени (кадр 1080 px завширшки), тому масштаб збігається
+ * з кадром. Поява й наплив у кадр 1 рахує код сторінки за data.title (див. review-assets).
+ */
+export function renderTitleCard(c: TitleCard): string {
+  const cq = (px: number): string => `${r3((px / c.frameWidth) * 100)}cqw`;
+  const grain = c.background.grain;
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='${grain}'/></svg>`;
+  const grainUrl = `url("data:image/svg+xml,${svg.replace(/</g, '%3C').replace(/>/g, '%3E')}")`;
+  const vignette = `radial-gradient(ellipse at center, rgba(60, 40, 20, 0) 55%, rgba(60, 40, 20, ${c.background.vignette}) 100%)`;
+  const paper = `background-color:${c.background.color};background-image:${vignette},${grainUrl}`;
+  const els = c.elements
+    .map((e, i) => {
+      if (e.kind === 'rule') {
+        return `<div class="tc-el tc-rule" data-tc="${i}" style="top:${e.topPct}%;width:${cq(e.width)};height:${cq(e.size)};background:${esc(e.color)}"></div>`;
+      }
+      const st = `top:${e.topPct}%;padding:0 ${cq(c.sidePx)};font-size:${cq(e.size)};font-weight:${e.weight};line-height:${e.lineHeight};color:${rgba(e.color, e.alpha)};letter-spacing:${e.letterSpacing}em`;
+      return `<div class="tc-el tc-text" data-tc="${i}" style="${esc(st)}">${e.lines.map(esc).join('<br>')}</div>`;
+    })
+    .join('');
+  return `<div class="title-card" id="anim-title" style="font-family:${esc(c.fontStack)}"><div class="tc-paper" style="${esc(paper)}"></div>${els}</div>`;
+}
+
+export function renderAnimatic(o: { timings?: TimingsFile; audioSrc?: string; items: AnimaticItem[]; word: string; intro: string; title?: TitleCard; offset?: number }): string {
   if (!o.timings || !o.audioSrc) return `<div class="note">Аніматик недоступний: ${o.timings ? 'немає narration.mp3' : 'немає timings.json'} (крок 6).</div>`;
   const t = o.timings;
+  // Озвучення стоїть у фільмі із затримкою offset (початковий титр): кадри й слова зсуваються на неї, звук плеєра це зведення.
+  const off = o.offset ?? 0;
   const sched = buildSchedule(t.fragments, o.items.map((f) => ({ n: f.n, fragment: f.fragment })), t.duration, t.silent_fragments ?? []);
+  const slots = sched.slots.map((s) => ({ ...s, start: r3(s.start + off), end: r3(s.end + off) }));
+  const duration = r3(t.duration + off);
   const stageImgs = o.items
     .map((f) => (f.src ? `<img data-frame="${f.n}" src="${esc(f.src)}" alt="${esc(o.word)} ${f.n}">` : `<div class="ph" data-frame="${f.n}">${esc(o.word)} ${f.n} ще не згенеровано</div>`))
     .join('\n');
   const data = {
-    duration: t.duration,
-    slots: sched.slots,
-    fragments: t.fragments.map((f) => ({ n: f.n, start: f.start, end: f.end, words: f.words.map((w) => [w.text, w.start, w.end]) })),
+    duration,
+    delay: off,
+    title: o.title ? { duration: o.title.duration, crossfade: o.title.crossfade, elements: o.title.elements.map((e) => ({ kind: e.kind, from: e.from, to: e.to, rise: e.rise, riseCq: r3((e.rise / o.title!.frameWidth) * 100) })) } : null,
+    slots,
+    fragments: t.fragments.map((f) => ({ n: f.n, start: r3(f.start + off), end: r3(f.end + off), words: f.words.map((w) => [w.text, r3(w.start + off), r3(w.end + off)]) })),
   };
   const notes: string[] = [];
   const silent = t.silent_fragments ?? [];
@@ -313,6 +357,7 @@ export function renderAnimatic(o: { timings?: TimingsFile; audioSrc?: string; it
 <div class="animatic" id="animatic" tabindex="0">
   <div class="stage">
 ${stageImgs}
+${o.title ? renderTitleCard(o.title) : ''}
   </div>
   <div class="sub-meta" id="anim-meta"></div>
   <div class="sub" id="anim-sub"></div>
@@ -323,7 +368,7 @@ ${stageImgs}
     <button type="button" id="anim-fwd" title="Вперед на 5 секунд">+5 с</button>
     <button type="button" id="anim-next" title="Наступний фрагмент">Фрагмент ⏭</button>
   </div>
-  <div class="seek"><input type="range" id="anim-range" min="0" max="${t.duration}" step="0.01" value="0" aria-label="Перемотування"><span class="time" id="anim-time">0:00</span></div>
+  <div class="seek"><input type="range" id="anim-range" min="0" max="${duration}" step="0.01" value="0" aria-label="Перемотування"><span class="time" id="anim-time">0:00</span></div>
   <div class="ticks" id="anim-ticks" aria-label="Фрагменти"></div>
   <audio id="anim-audio" preload="auto" src="${esc(o.audioSrc)}"></audio>
   ${notes.map((n) => `<div class="note">${esc(n)}</div>`).join('')}
