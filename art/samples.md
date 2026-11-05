@@ -24,7 +24,7 @@
 Формат: 1:1
 Для фрагмента: немає
 Герої: немає
-Для генератора (англійською): A study sheet of five head-and-shoulders portraits of the members of one Ukrainian family, drawn on plain warm toned paper with no background scenery, arranged loosely in two rows with space between them: three portraits in the top row, two in the bottom row. Each figure is turned in a gentle three-quarter view, shoulders visible. Top left: a woman about 30 years old, chestnut-brown shoulder-length hair tied in a low ponytail with a few loose strands, a short-sleeved terracotta-red cotton blouse, a calm, collected, slightly tired expression. Top centre: the same woman about 42 years old, chestnut-brown shoulder-length hair worn loose with a soft wave, an oatmeal-colored knitted sweater and a terracotta-red scarf, an open, warm, light smile. Top right: a man about 32 years old, tall and broad-shouldered, short dark-brown hair and a short neat beard, a plain grey t-shirt, a calm steady expression. Bottom left: a little girl about 6 years old with light-brown hair in two braids, a mustard-yellow summer dress. Bottom right: a little girl about 6 years old with light-brown hair in a high ponytail, a mint-green summer dress. The two girls look about the same age, lively and curious. All faces are simplified and drawn with a few pencil strokes: small simple eyes, a single line for the nose, a soft simple mouth, natural muted skin tones without rosy cheeks, no detailed features; these are not portraits of any real people. No text, no labels, no names.
+Для генератора (англійською): A study sheet of five head-and-shoulders portraits of the members of one Ukrainian family, painted on plain watercolour paper with no background scenery, arranged loosely in two rows with space between them: three portraits in the top row, two in the bottom row. Each figure is turned in a gentle three-quarter view, shoulders visible. Top left: a woman about 30 years old, chestnut-brown shoulder-length hair tied in a low ponytail with a few loose strands, a short-sleeved terracotta-red cotton blouse, a calm, collected, slightly tired expression. Top centre: the same woman about 42 years old, chestnut-brown shoulder-length hair worn loose with a soft wave, an oatmeal-colored knitted sweater and a terracotta-red scarf, an open, warm, light smile. Top right: a man about 32 years old, tall and broad-shouldered, short dark-brown hair and a short neat beard, a plain grey t-shirt, a calm steady expression. Bottom left: a little girl about 6 years old with light-brown hair in two braids, a mustard-yellow summer dress. Bottom right: a little girl about 6 years old with light-brown hair in a high ponytail, a mint-green summer dress. The two girls look about the same age, lively and curious. All faces are simplified and painted with a few loose watercolour brush strokes: small simple eyes, a single line for the nose, a soft simple mouth, natural muted skin tones without rosy cheeks, no detailed features; these are not portraits of any real people. No text, no labels, no names.
 
 ## Зразок 2
 Що показує: війна липня 2014 року і як її видно. Український двір згори і чужий колір у теплому світі. За кадром 1 розкадровки.
@@ -33,6 +33,7 @@
 Формат: 9:16
 Для фрагмента: 1
 Герої: немає
+Фото-референси: panel-blocks
 Для генератора (англійською): View from inside a Soviet-era apartment on the fourth floor in Donetsk, looking down through an open window on a hot July midday. In the foreground, the edge of a white-painted wooden window frame, a light patterned tulle curtain and a potted red geranium on the windowsill. Below, an inner courtyard between nine-storey Soviet-era panel apartment blocks: blooming rose bushes, a wooden bench, a yellow gas pipe running along a wall, an old metal children's swing standing empty. In the middle of the courtyard, parked on the asphalt between the roses and the swing, stands an old green Soviet-design eight-wheeled armoured personnel carrier, its hatches closed, its armour dusty. There is nobody in the courtyard: no residents, no children, no soldiers. The upper part of the vertical frame is the calm bleached sky above the opposite building, empty. Hot still air and silence: an ordinary home courtyard occupied by a foreign military vehicle.
 
 ## Зразок 3
@@ -40,6 +41,7 @@
 Формат: 9:16
 Для фрагмента: 2
 Герої: немає
+Фото-референси: settlement-signs, spoil-heap
 Для генератора (англійською): A two-lane road leading out of a city into the steppe on a hot July midday, seen from behind and slightly above. In the foreground at the right roadside stands a white rectangular Ukrainian end-of-settlement road sign with a thin black border and the black Cyrillic name «ДОНЕЦЬК» in capital letters, exactly these letters and nothing else, crossed by one red diagonal stripe from the lower left corner to the upper right corner. A little further, a makeshift roadside checkpoint narrows the road to one lane: a few grey concrete blocks, a low wall of sandbags and a stack of old tyres; no people are visible at the checkpoint. Beyond the checkpoint, a small silver Daewoo Lanos sedan with a roof rack loaded with bags and bundles tied with rope drives away from the viewer into the open steppe; inside it only tiny dark silhouettes, no faces. Sunflower fields and dusty apricot trees on both sides, a conical coal-mine spoil heap on the side of the horizon. A huge pale summer sky fills the upper half of the vertical frame. Midday heat, haze, leaving home through a checkpoint set up by strangers.
 
 ## Зразок 4
@@ -47,6 +49,7 @@
 Формат: 9:16
 Для фрагмента: 3
 Герої: немає
+Фото-референси: spoil-heap
 Для генератора (англійською): Interior of a small Soviet-era apartment children's room in Donetsk, empty and still in cold blue-grey dusk. Two new matching school backpacks for first-graders stand side by side on a neatly made bed, each with a big fluffy white nylon hair bow placed on top, as Ukrainian girls wear on the first day of school. On the wardrobe door hang two small dark-blue school pinafore dresses with white blouses on hangers. Patterned wallpaper with a child's drawing pinned to it, a worn wooden parquet floor and a woven rug; only a thin line of pale light falls across the floor. Through the light tulle curtain of the window, far away over dark conical coal-mine spoil heaps on the horizon, a slow column of grey smoke rises and a faint dull orange glow lies low in the sky. Dust in the air. No people. Colors drained to grey-blue, quiet loss, a room nobody came back to.
 
 ## Зразок 5
@@ -54,6 +57,7 @@
 Формат: 9:16
 Для фрагмента: 8
 Герої: немає
+Фото-референси: bogdan-a092, panel-blocks
 Для генератора (англійською): A dark frosty winter early morning at a bus stop in Pavlohrad. A boxy white Ukrainian intercity midi-bus with a rounded roof and lit yellow windows is pulling up; behind its windshield a route board reads exactly «ПАВЛОГРАД — ТЕРНІВКА» in Ukrainian Cyrillic. A heavily pregnant woman about 31 years old, chestnut-brown hair gathered in a low bun under a terracotta-red knitted hat, a matching terracotta-red knitted scarf, a dark navy winter coat worn open over her round belly, dark trousers and warm boots, holding a handbag, stands at the bus stop, seen from behind and slightly to the side, her face not visible. A single streetlamp, frosty breath in the air, a thin layer of snow, Soviet-era panel buildings with a few lit windows in the background. Cold blue darkness with warm amber light from the bus.
 
 ## Зразок 6
@@ -68,12 +72,14 @@
 Формат: 9:16
 Для фрагмента: 17
 Герої: немає
+Фото-референси: panel-blocks, anti-tank-hedgehogs
 Для генератора (англійською): A winter night in Dnipro during a wartime power blackout: a dark district of Soviet-era nine-storey apartment blocks under a deep indigo sky full of stars, a thin layer of snow on the ground and on the roofs, the street lamps off, every window dark. On the corner of the empty street in the middle-lower part of the frame, two steel anti-tank hedgehogs and a low wall of sandbags dusted with snow, faintly visible in the moonlight. In the middle of the vertical frame, a single window glows with the soft light of a small battery-powered lamp; inside it, faint small silhouettes of a few people sitting together around a table, no faces or details. Dark times, and a warm light that holds.
 
 ## Зразок 8
 Що показує: пейзаж Дніпра і фінальна палітра, низьке золоте світло, широка вода, велике небо. Героїня тепер на відкритому місці, і це відповідь на погляд із вікна в зразку 2. За кадром 28 розкадровки.Формат: 9:16
 Для фрагмента: 18
 Герої: немає
+Фото-референси: dnipro-riverfront
 Для генератора (англійською): A golden evening on the Dnipro riverside embankment. A woman about 42 with chestnut shoulder-length wavy hair, wearing an oatmeal knitted sweater and a terracotta-red scarf fluttering in the wind, stands at the stone railing and looks out over the very wide shining river, seen in three-quarter view from behind. A huge warm sky fills the upper part of the vertical frame, a long bridge in the distance, the high green right bank with apartment blocks and trees, low golden sun on the water. Peaceful, grateful, a life changed for the better.
 
 ## Зразки 9–12: техніка «з пам'яті»
