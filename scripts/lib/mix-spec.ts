@@ -43,7 +43,21 @@ export interface SfxPlan {
   patches: EnvPatch[];
 }
 
+/** Як читати файл музики: з якої секунди файлу, з якою швидкістю, по якій ділянці міряти RMS, яке підсилення початку. */
+export interface MusicSource {
+  /** Секунда файлу, що стоїть на секунді фільму 0 («Музика береться з N с файлу»); 0, якщо не вказано. */
+  offset: number;
+  /** Швидкість читання («Швидкість читання 0.95»): секунда фільму t це секунда файлу offset + speed·t; 1, якщо не вказано. */
+  speed: number;
+  /** Ділянка оригінального файлу (секунди файлу), по якій рахується RMS музики; без неї весь файл. */
+  rmsFrom?: number;
+  rmsTo?: number;
+  /** «Підсилення початку»: точки (секунда фільму, дБ), між ними лінійно, після останньої тримається останнє значення; порожньо: без підсилення. */
+  boost: Array<{ t: number; db: number }>;
+}
+
 export interface FilmMixSpec {
+  music: MusicSource;
   /** Секунда фільму, з якої стоїть озвучення (з документа; 0, якщо фраза відсутня). */
   voiceDelay: number;
   /** Вхід музики з нуля на початку фільму (проти клацання), секунд; 0, якщо не вказано. */
@@ -136,7 +150,41 @@ export function parseFilmMix(mixText: string, sfx: SfxSpec[], ctx: MixContext): 
   let endFrom = ctx.lastWordEnd;
   let bumpFall = fade;
   let musicFadeIn = 0;
+  const music: MusicSource = { offset: 0, speed: 1, boost: [] };
   for (const b of bullets) {
+    // Параметри читання файлу музики (див. розділ «Зведення»: «Файл музики і як його читати»).
+    const off = new RegExp(`^Музика береться з\\s+${N}\\s*с файлу`, 'i').exec(b);
+    if (off) {
+      music.offset = num(off[1]!);
+      notes.push(`Музика береться з ${music.offset} с файлу: секунда фільму 0 це секунда файлу ${music.offset}.`);
+      continue;
+    }
+    const spd = new RegExp(`^Швидкість читання\\s+${N}`, 'i').exec(b);
+    if (spd) {
+      music.speed = num(spd[1]!);
+      if (!(music.speed > 0.5 && music.speed < 2)) throw new Error(`У «Зведенні» швидкість читання музики ${music.speed} поза межами 0.5–2. Роль: composer.`);
+      notes.push(`Швидкість читання ${music.speed}: секунда фільму t це секунда файлу ${music.offset} + ${music.speed}·t (змінюється й тональність, asetrate).`);
+      continue;
+    }
+    const rmsM = new RegExp(`^Нормування:[^]*?оригінальному файлу від\\s+${N}\\s*с\\s+до\\s+${N}\\s*с`, 'i').exec(b);
+    if (rmsM) {
+      music.rmsFrom = num(rmsM[1]!);
+      music.rmsTo = num(rmsM[2]!);
+      notes.push(`RMS музики рахується по оригінальному файлу від ${music.rmsFrom} до ${music.rmsTo} с.`);
+      continue;
+    }
+    if (/^Підсилення початку/i.test(b)) {
+      const body = b.slice(b.indexOf(':') + 1).split(/далі/i)[0]!;
+      for (const m of body.matchAll(new RegExp(`${N}\\s*с\\s+([+-]?\\d+(?:[.,]\\d+)?)`, 'g'))) music.boost.push({ t: num(m[1]!), db: num(m[2]!) });
+      const tail = /далі\s+([+-]?\d+(?:[.,]\d+)?)/i.exec(b);
+      const last = music.boost[music.boost.length - 1];
+      if (tail && last && num(tail[1]!) !== last.db) music.boost.push({ t: last.t + 0.001, db: num(tail[1]!) });
+      if (music.boost.length < 2 || music.boost.some((p, i) => i > 0 && p.t < music.boost[i - 1]!.t)) {
+        warnings.push(`Підсилення початку не розібрано (потрібні точки «N с ±X», що зростають за часом): «${b.slice(0, 90)}».`);
+        music.boost = [];
+      } else notes.push(`Підсилення початку (дБ, лінійно за секундою фільму, додається до рівнів зведення): ${music.boost.map((p) => `${p.t} с ${p.db > 0 ? '+' : ''}${p.db}`).join(', ')}.`);
+      continue;
+    }
     if (/^\d/.test(b) && /^[\d.,]+\s*[–-]\s*[\d.,]+\s*с,\s*кадр\s+\d+/i.test(b)) continue; // пункти шумів за часом розбираються нижче
     // шум N: -X[, у паузі a–b с -Y][, після останнього слова[ (з T с)] -Z];
     const lv = new RegExp(`^шум\\s+(\\d+):\\s*${DB}(?:\\s*дБ)?((?:\\s*,[^;]*?\\s${DB}(?:\\s*дБ)?)*)\\s*[;.]?$`, 'i').exec(b);
@@ -319,5 +367,5 @@ export function parseFilmMix(mixText: string, sfx: SfxSpec[], ctx: MixContext): 
   if (sfx.length) notes.push(
     'Шуми: початок файлу ставиться на секунду з поля «Де»; «Вступає за T с» це тривалість наростання з цієї секунди; «гасне до T с» означає, що згасання закінчується на T с, але не пізніше за кінець самого файлу (файл шуму не подовжується), тривалість згасання 1 с, якщо не вказана; рівень шуму береться зі списку «шум N: -X» (або з речення про рівні) у «Зведенні», а не зі слова «тихо» в полі «Гучність під голосом».',
   );
-  return { voiceDelay, musicFadeIn, underDb, pauseDb, fade, pauseMin, musicPatches, endFade, sfx: plans, notes, warnings };
+  return { music, voiceDelay, musicFadeIn, underDb, pauseDb, fade, pauseMin, musicPatches, endFade, sfx: plans, notes, warnings };
 }

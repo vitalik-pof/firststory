@@ -4,7 +4,7 @@ import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import {
   type Doc, type Field, type Line, type Role, type Section,
-  blockText, extractQuestions, fail, flatText, isPlaceholder, parseInteger, parseSeconds,
+  blockText, extractQuestions, fail, firstLineOf, flatText, isPlaceholder, parseInteger, parseSeconds,
   readDoc, readFieldsStrict, requireField, requireSection, sectionText, splitByHeading, trimLines,
 } from './md';
 import { getRoot, paths } from './paths';
@@ -546,7 +546,9 @@ export function parseSound(story: string): SoundDoc {
     fail(doc, secF.line, `Тривалість музики ${seconds} с поза межами API (${MUSIC_MIN_SECONDS}–${MUSIC_MAX_SECONDS} с).`);
   }
   const instF = requireField(doc, mf, 'instrumental', 'Інструментальна', '## Музика', ms.line);
-  if (!/^(так|ні|yes|no)\.?$/i.test(instF.value.trim())) fail(doc, instF.line, `«Інструментальна:» має бути «так» або «ні», а є «${instF.value}».`);
+  // Після «Інструментальна:» композитор може дописати власні поля («Файл: …») у наступних рядках: беремо лише перший рядок.
+  const instValue = firstLineOf(instF.value);
+  if (!/^(так|ні|yes|no)\.?$/i.test(instValue)) fail(doc, instF.line, `«Інструментальна:» має бути «так» або «ні», а є «${instValue}».`);
 
   // Розділ «Шуми» необов'язковий: фільм може бути без шумів (немає розділу, або він порожній чи «немає»).
   const sfxSection = sections.find((x) => /^Шуми$/i.test(x.title));
@@ -581,7 +583,7 @@ export function parseSound(story: string): SoundDoc {
     music: {
       prompt: collapseWs(prompt.value),
       seconds,
-      instrumental: /^(так|yes)/i.test(instF.value.trim()),
+      instrumental: /^(так|yes)/i.test(instValue),
       development: mf.development?.value ?? '',
       line: ms.line,
     },
@@ -924,6 +926,8 @@ export function parseRoleDecisions(story: string): RoleDecision[] {
         const dm = /^(.+?)\s*:\s*(.+)$/.exec(s.title);
         if (!dm) fail(doc, s.line, `Заголовок розділу має бути «## <дата>: <за що>», а є «${s.title}».`);
         for (const dec of splitByHeading(s.body, 3).sections) {
+          // «### Заувага: …» без полів це примітка ролі (наприклад, що розділ вище замінено нижчим), а не рішення: пропускається.
+          if (/^Заувага(?![\p{L}])/iu.test(dec.title) && !dec.body.some((l) => /^(Що вирішено|Чому|Що було б інакше)\s*:/i.test(l.text.trim()))) continue;
           const { fields } = readFieldsStrict(doc, dec.body, { decided: /^Що вирішено$/i, why: /^Чому$/i, alt: /^Що було б інакше$/i });
           const where = `### ${dec.title}`;
           out.push({

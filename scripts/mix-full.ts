@@ -15,7 +15,7 @@ import { parseArgs } from 'node:util';
 import { parseSound } from './lib/docs';
 import { UsageError, runMain } from './lib/cli';
 import { log } from './lib/log';
-import { CH, SR, baseMusicEnvelope, decodeStereo, encodeStereoMp3, lowpass, mixFilm, padVoice, speechIntervals, withPatches, type FilmSfx } from './lib/mix';
+import { CH, SR, baseMusicEnvelope, dbAt, decodeMusic, decodeStereo, encodeStereoMp3, lowpass, mixFilm, padVoice, rmsOver, speechIntervals, withPatches, type FilmSfx } from './lib/mix';
 import { parseFilmMix, parseVoiceDelay } from './lib/mix-spec';
 import { assertStoryExists, paths } from './lib/paths';
 import type { TimingsFile } from './lib/timings';
@@ -57,6 +57,7 @@ async function main(): Promise<void> {
   if (sound.totalSeconds !== undefined && Math.abs(sound.totalSeconds - filmEnd) > 0.05) {
     log(`УВАГА: «Загальна тривалість» у sound.md ${sound.totalSeconds} с, а затримка плюс озвучення за timings.json дають ${fmt(filmEnd)} с.`);
   }
+  if (spec.music.offset > 0 || spec.music.speed !== 1 || spec.music.boost.length) log(`Читання музики: з ${fmt(spec.music.offset)} с файлу, швидкість ${spec.music.speed}, підсилення початку ${spec.music.boost.length ? spec.music.boost.map((p) => `${p.t} с ${p.db > 0 ? '+' : ''}${p.db}`).join(', ') : 'немає'}.`);
   log(`Музика: під голосом ${spec.underDb} дБ, у паузах довших за ${spec.pauseMin} с ${spec.pauseDb} дБ, зміна гучності ${spec.fade} с; ділянок-винятків ${spec.musicPatches.length}, на кінці згасання ${spec.endFade} с.`);
   for (const p of spec.musicPatches) log(`  ділянка музики: ${p.label}`);
   if (spec.sfx.length) log('Шуми (файл починається на «Де», рівень відносно голосу):');
@@ -84,10 +85,21 @@ async function main(): Promise<void> {
     grown.set(voice);
     voice = grown;
   }
-  const music = decodeStereo(musicFile);
+  // Музика: з секунди offset файлу, зі швидкістю speed; RMS по ділянці оригінального файлу (якщо вона задана), інакше по прочитаному.
+  const ms = spec.music;
+  const original = ms.rmsFrom !== undefined || ms.offset > 0 || ms.speed !== 1 ? decodeStereo(musicFile) : undefined;
+  const music = original && (ms.offset > 0 || ms.speed !== 1) ? decodeMusic(musicFile, ms.offset, ms.speed) : original ?? decodeStereo(musicFile);
+  let musicRms: number | undefined;
+  if (original && ms.rmsFrom !== undefined && ms.rmsTo !== undefined) {
+    const fileSec = original.length / CH / SR;
+    musicRms = rmsOver(original, [{ a: ms.rmsFrom, b: Math.min(ms.rmsTo, fileSec) }]);
+    log(`RMS музики по оригінальному файлу від ${fmt(ms.rmsFrom)} до ${fmt(Math.min(ms.rmsTo, fileSec))} с (файл ${fmt(fileSec)} с); музика у фільмі ${fmt(music.length / CH / SR)} с.`);
+  }
   const filmSec = voice.length / CH / SR;
   const intervals = speechIntervals(words, spec.pauseMin);
-  const musicDb = withPatches(baseMusicEnvelope(intervals, spec.underDb, spec.pauseDb, spec.fade), spec.musicPatches);
+  const levelDb = withPatches(baseMusicEnvelope(intervals, spec.underDb, spec.pauseDb, spec.fade), spec.musicPatches);
+  const boost = ms.boost;
+  const musicDb = boost.length ? (t: number): number => levelDb(t) + dbAt(boost, t) : levelDb;
   const sfx: FilmSfx[] = spec.sfx.map((s) => {
     log(`Декодую шум ${s.n}…`);
     let pcm = decodeStereo(sfxFile(s.n));
@@ -98,7 +110,7 @@ async function main(): Promise<void> {
   });
 
   log('Зводжу…');
-  const r = mixFilm(voice, music, { words, pauseMin: spec.pauseMin, musicDb, endFade: spec.endFade, musicFadeIn: spec.musicFadeIn, sfx });
+  const r = mixFilm(voice, music, { words, pauseMin: spec.pauseMin, musicDb, endFade: spec.endFade, musicFadeIn: spec.musicFadeIn, musicRms, sfx });
   mkdirSync(dirname(out), { recursive: true });
   log('Кодую MP3…');
   encodeStereoMp3(r.pcm, out, kbps);

@@ -26,6 +26,23 @@ export function encodeStereoMp3(pcm: Float32Array, out: string, kbps = 128): voi
   if (r.status !== 0) throw new Error(`ffmpeg не зміг записати ${out}: ${r.stderr?.toString()}`);
 }
 
+/**
+ * Музика для фільму: файл береться з секунди offset і читається зі швидкістю speed (секунда фільму t це
+ * секунда файлу offset + speed·t). Швидкість змінюється разом із тональністю: ffmpeg asetrate (+ aresample
+ * до 44100), без артефактів розтягування. Без offset і зі speed 1 це звичайне декодування.
+ */
+export function decodeMusic(file: string, offset: number, speed: number): Float32Array {
+  const args = ['-v', 'error'];
+  if (offset > 0) args.push('-ss', String(offset));
+  args.push('-i', file);
+  if (speed !== 1) args.push('-af', `aresample=${SR},asetrate=${Math.round(SR * speed)},aresample=${SR}`);
+  args.push('-f', 'f32le', '-ac', String(CH), '-ar', String(SR), '-');
+  const r = spawnSync('ffmpeg', args, { maxBuffer: 1 << 30 });
+  if (r.status !== 0) throw new Error(`ffmpeg не зміг прочитати музику ${file}: ${r.stderr?.toString()}`);
+  const buf = r.stdout as Buffer;
+  return new Float32Array(buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength - (buf.byteLength % 4)));
+}
+
 export interface Interval {
   a: number;
   b: number;
@@ -204,6 +221,8 @@ export interface FilmParams {
   endFade: number;
   /** Вхід музики з нуля на початку фільму (проти клацання), секунд; 0 або без поля: без входу. */
   musicFadeIn?: number;
+  /** RMS музики (лінійний), якщо його треба взяти не з наданого PCM, а, наприклад, з ділянки оригінального файлу. */
+  musicRms?: number;
   /** Шумів може не бути: порожній список. */
   sfx: FilmSfx[];
 }
@@ -261,7 +280,7 @@ export function mixFilm(voice: Float32Array, music: Float32Array, p: FilmParams)
   const voiceRms = rmsOver(voice, intervals);
   if (voiceRms <= 0) throw new Error('Не знайдено мовлення (RMS голосу = 0): перевірте озвучення й timings.json.');
   const musicFrames = music.length / CH;
-  const musicRms = rmsOver(music, [{ a: 0, b: Math.min(musicFrames / SR, filmSec) }]);
+  const musicRms = p.musicRms ?? rmsOver(music, [{ a: 0, b: Math.min(musicFrames / SR, filmSec) }]);
   if (musicRms <= 0) throw new Error('Музика беззвучна.');
   const out = new Float32Array(voice);
   const mg = gainTable(p.musicDb, filmSec, voiceRms / musicRms);
