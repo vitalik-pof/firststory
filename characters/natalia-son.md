@@ -10,7 +10,7 @@
 
 ## Текст для генератора аркуша героя (англійською)
 
-Character reference sheet of one newborn baby boy on a plain warm light-grey background. Three views of the same baby wrapped in a white quilted blanket envelope tied in the middle with a wide blue satin ribbon tied in a large bow, the traditional Ukrainian way of taking a baby boy home from the maternity hospital: front view, side view and view from above; only a small simplified sleeping face is visible in the folds, painted in the gentle picture-book manner, not a portrait of any real child. On the right, a simple grey baby stroller with a hood, seen in side view and from behind, the same white envelope with the blue ribbon visible inside. No background scenery, no text, no labels, no brand marks.
+Character reference sheet of one newborn baby boy on a plain warm light-grey background. Three views of the same baby wrapped in a white quilted blanket envelope tied in the middle with a wide blue satin ribbon tied in a large bow, the traditional Ukrainian way of taking a baby boy home from the maternity hospital: front view, side view and view from above; only a small simplified sleeping face is visible in the folds, drawn with a few soft pencil strokes, not a portrait of any real child. On the right, a simple grey baby stroller with a hood, seen in side view and from behind, the same white envelope with the blue ribbon visible inside. No background scenery, no text, no labels, no brand marks.
 
 ## Ресурси
 
