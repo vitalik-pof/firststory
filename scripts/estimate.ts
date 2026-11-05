@@ -121,7 +121,7 @@ async function main(): Promise<void> {
     });
   }
 
-  log(`Кошторис для ${story}, ${stage === 'samples' ? `Етап 1б (зразки, ${resolution})` : 'Етап 1, повний обсяг'}\n`);
+  log(`Кошторис для ${story}, ${stage === 'samples' ? `Етап 1а (зразки, ${resolution})` : 'Етап 1, повний обсяг'}\n`);
   for (const r of rows) {
     log(`${/^\d/.test(r.step) ? 'Крок ' : ''}${r.step.padEnd(2)} ${r.what}`);
     log(`         одиниць: ${r.units} [з документів]`);

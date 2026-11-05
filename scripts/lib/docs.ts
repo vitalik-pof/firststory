@@ -575,7 +575,7 @@ export function parseSound(story: string): SoundDoc {
   };
 }
 
-// ------------------------------------------------------------------ зразки стилю (Етап 1б)
+// ------------------------------------------------------------------ зразки стилю (Етап 1а)
 
 export interface StyleSample {
   n: number;
@@ -648,7 +648,7 @@ export function checkSamplesAgainstScript(sd: SamplesDoc, script: ScriptDoc): vo
   }
 }
 
-// ------------------------------------------------------------------ зразки звуку (Етап 1б)
+// ------------------------------------------------------------------ зразки звуку (Етап 1а)
 
 export interface MusicSample {
   n: number;

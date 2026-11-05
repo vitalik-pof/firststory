@@ -1,4 +1,4 @@
-// Огляд зразків (Етап 1б): зміст сторінки і збирання медіа.
+// Огляд зразків (Етап 1а): зміст сторінки і збирання медіа.
 
 import { existsSync, readdirSync } from 'node:fs';
 import {
@@ -69,11 +69,9 @@ export function gatherSamplesReview(story: string, nameOverride?: string): Sampl
   addQ('scenarist', paths.storyFile(story, 'script.md'));
   addQ('art-director', paths.styleDoc());
   addQ('art-director', paths.samplesDoc());
-  addQ('art-director', paths.storyFile(story, 'storyboard.md'));
   addQ('voice-director', paths.voicesDoc());
   addQ('voice-director', paths.storyFile(story, 'voice.md'));
   addQ('composer', paths.soundSamplesDoc(story));
-  addQ('composer', paths.storyFile(story, 'sound.md'));
 
   let roleDecisions = '';
   const statusFile = paths.storyFile(story, 'status.md');
@@ -184,5 +182,5 @@ export function renderSamplesReview(d: SamplesReviewData, target: ReviewTarget, 
   );
   section('credits', 'Витрачені кредити', renderCredits(d.manifest));
 
-  return wrapPage(target, title, `${d.scriptTitle}. Етап 1б: зразки стилю й звуку в малому обсязі, без розкадровки.`, nav, sections, d.warnings);
+  return wrapPage(target, title, `${d.scriptTitle}. Етап 1а: зразки стилю й звуку в малому обсязі, без розкадровки (розкадровка це Етап 1б).`, nav, sections, d.warnings);
 }

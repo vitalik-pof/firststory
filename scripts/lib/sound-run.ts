@@ -1,4 +1,4 @@
-// Спільне для sound.ts (кроки 10) і sound-samples.ts (Етап 1б): план і генерація музики та шумів.
+// Спільне для sound.ts (кроки 10) і sound-samples.ts (Етап 1а): план і генерація музики та шумів.
 
 import { existsSync, mkdirSync, renameSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';

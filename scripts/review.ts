@@ -21,7 +21,7 @@ import { renderReview, type ReviewTarget } from './lib/review-html';
 const HELP = `Огляд Етапу 1.
 Прапорці:
   --story <id>            історія (обов'язково)
-  --stage full|samples    full (за замовчуванням): огляд Етапу 1; samples: огляд зразків Етапу 1б
+  --stage full|samples    full (за замовчуванням): огляд Етапу 1; samples: огляд зразків Етапу 1а
   --target artifact|pages artifact (за замовчуванням): work/<id>/review/ (зразки: review-samples/), фрагмент для claude.ai;
                           pages: docs/<id>/ (зразки: docs/<id>/samples/), повний HTML для GitHub Pages
   --name "<ім'я>"         ім'я в заголовку («Наталя»); за замовчуванням з source.md («Автор: Наталя, …»)
@@ -88,7 +88,7 @@ async function main(): Promise<void> {
   if (!hasBinary('ffmpeg') && !hasBinary('ffprobe')) log('УВАГА: ffmpeg не знайдено; MP3 копіюються без перекодування, а WAV не підтримуються.');
 
   const data: { name: string; warnings: string[]; media: MediaItem[] } = stage === 'samples' ? gatherSamplesReview(story, values.name) : gatherReview(story, values.name);
-  const title = `${titleName(data.name)}, ${stage === 'samples' ? 'огляд зразків Етапу 1б' : 'огляд Етапу 1'}`;
+  const title = `${titleName(data.name)}, ${stage === 'samples' ? 'огляд зразків Етапу 1а' : 'огляд Етапу 1'}`;
   const render = (available: Set<string>): string =>
     stage === 'samples' ? renderSamplesReview(data as SamplesReviewData, target, title, available) : renderReview(data as ReviewData, target, title, available);
   log(`Огляд «${title}», режим ${target}, вивід ${paths.rel(outDir)}`);

@@ -1,4 +1,4 @@
-// Етап 1б: зразки стилю за art/samples.md → work/<id>/samples/sample-NN.png.
+// Етап 1а: зразки стилю за art/samples.md → work/<id>/samples/sample-NN.png.
 // Запит = «Для генератора» зразка + текст стилю з art/style.md; референси героїв за тими самими
 // правилами, що й у кадрів (рядок «Герої:», аркуші мають бути завантажені).
 //
@@ -19,7 +19,7 @@ import { estimateImage, fmt } from './lib/pricing';
 import { RunContext } from './lib/run-context';
 import { sampleFile, sampleKey } from './lib/samples-paths';
 
-const HELP = `Етап 1б: зразки стилю.
+const HELP = `Етап 1а: зразки стилю.
 Прапорці:
   --story <id>           історія (обов'язково)
   --run / --limit-credits N   справжній запуск і загальний ліміт кредитів (без --run сухий прогін)

@@ -1,4 +1,4 @@
-// Етап 1б: зразки музики й шумів за stories/<id>/sound-samples.md → work/<id>/audio/samples/
+// Етап 1а: зразки музики й шумів за stories/<id>/sound-samples.md → work/<id>/audio/samples/
 // (music-N.mp3, sfx-NN.mp3). Межі API перевіряються при читанні документа.
 //
 //   npx tsx scripts/sound-samples.ts --story 01-natalia                                 сухий прогін
@@ -15,7 +15,7 @@ import { RunContext } from './lib/run-context';
 import { type SoundItem, parseIdList, planSoundItems, runSoundItems } from './lib/sound-run';
 import { pad2 } from './lib/text';
 
-const HELP = `Етап 1б: зразки музики й шумів.
+const HELP = `Етап 1а: зразки музики й шумів.
 Прапорці:
   --story <id>            історія (обов'язково)
   --run / --limit-credits N   справжній запуск і загальний ліміт кредитів (без --run сухий прогін)

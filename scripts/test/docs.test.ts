@@ -160,7 +160,7 @@ describe('суворість: документ не за форматом дає
   });
 });
 
-describe('зразки Етапу 1б', () => {
+describe('зразки Етапу 1а', () => {
   it('art/samples.md', () => {
     const sd = parseSamples();
     assert.equal(sd.samples.length, 3);
