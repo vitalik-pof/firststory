@@ -1,4 +1,4 @@
-// Рендер проб переходів. Запуск: npx tsx render.ts [--only id,id] [--still N] [--range a-b] [--crf 24] [--out dir]
+// Рендер проб переходів. Запуск: npx tsx render.ts [--only id,id] [--still N] [--range a-b] [--crf 27] [--out dir] [--index-only]
 import { bundle } from "@remotion/bundler";
 import { renderMedia, renderStill, selectComposition } from "@remotion/renderer";
 import { cpSync, existsSync, mkdirSync, rmSync, statSync, writeFileSync } from "node:fs";
@@ -83,6 +83,10 @@ const durationFrames = (): number => {
 
 const main = async (): Promise<void> => {
   mkdirSync(outDir, { recursive: true });
+  if (args.includes("--index-only")) {
+    writeIndex();
+    return;
+  }
   stageFrames();
   log("збираю бандл");
   const serveUrl = await bundle({

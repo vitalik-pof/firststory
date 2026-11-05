@@ -11,5 +11,5 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "types": ["node"]
   },
-  "include": ["src", "render.ts", "remotion.config.ts"]
+  "include": ["src", "render.ts", "compress.ts", "remotion.config.ts"]
 }
