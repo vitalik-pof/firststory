@@ -1,7 +1,7 @@
 {
   "story": "01-natalia",
   "credits": {
-    "total_spent": 8537,
+    "total_spent": 10575,
     "runs": [
       {
         "script": "voice-previews",
@@ -440,6 +440,67 @@
       "generated_at": "2026-11-05T00:44:42.735Z",
       "character_cost_header": 97,
       "credits_source": "header"
+    },
+    "music": {
+      "file": "work/01-natalia/audio/music.mp3",
+      "kind": "music",
+      "seconds_requested": 113,
+      "prompt": "Instrumental ambient texture without a melody, slow and weightless, no clear tempo and no beat, no rhythm, no repeating pattern, no hook, no drums, no percussion, no vocals. Built from a low warm drone of bowed double bass, a soft analog synth pad and a few quiet bowed string layers, with distant slowly breathing tones and faint bowed glass harmonics. A single barely audible detuned piano note appears very rarely, far away, like a memory. Very low dynamics throughout: this is air under a human voice, never a tune. The colour of the music changes over time from cold to warm, and the warmth comes only from slowly blooming string chords, never from a melody. Timeline of about 113 seconds. 0:00 to 0:22: cold, wide, empty and still, like early morning frost over a field; in the first six seconds the drone is almost nothing, barely there. At about 0:12 one warm string chord slowly blooms out of the drone, stays for a few seconds and dissolves again into the quiet. At about 0:21 everything thins out to one thin low tone, almost silence, and stays that thin until 0:24. 0:24 to 0:38: a quiet, unsettled, searching night mood; the drone shifts very slowly, sparse glass harmonics; at about 0:32 a wide airy pad slowly opens like the first light before dawn, then settles back down. 0:38 to 0:51: narrow, close and restrained tension; a sustained low bowed bass note and a small cluster of close tones, very quiet, stubborn and tired, with no build. 0:51 to 0:59: steadier ground; at about 0:56 a soft warm chord appears, small and gentle, like something new being born. 0:59 to 1:06: morning light; the pad opens into a brighter, wider, fresh major colour, spacious and calm. 1:06 to 1:38: the warmest part; layered warm string chords bloom slowly one after another, each overlapping the one before, like many people breathing together, adding more and more voices; still no melody, no rhythm, still very quiet and wide. 1:38 to 1:44: the warmth withdraws; everything pulls back to one low bass tone and a single thin warm held note, like one small lamp in a dark room. 1:44 to 1:53: the final chord opens wide and slowly, the warmest and widest moment of the whole piece, with a few separate, far-away soft piano notes that do not form a motif, then a long slow fade into a thin warm tone, ending at 1:53. No heroic or epic build, no big crescendo, no climax, no cinematic trailer sound, no sentimental swell.",
+      "credits": 1712,
+      "credits_source": "counter",
+      "output_format": "mp3_44100_128",
+      "regen_count": 0,
+      "generated_at": "2026-11-05T03:45:59.760Z",
+      "song_id": "7FouNPv9rypDidPR9kxP",
+      "model_id": null
+    },
+    "sfx-1": {
+      "file": "work/01-natalia/audio/sfx-01.mp3",
+      "kind": "sfx",
+      "seconds_requested": 8,
+      "prompt": "A large old military armoured vehicle engine idling at a low steady rumble, heard from some distance across an empty summer courtyard between apartment blocks. Hot still air, distant insects chirping, a faint rhythmic squeak of a metal playground swing moving slightly in the wind. Nothing else: no voices, no gunfire, no explosions, no radio, no music. Calm, impersonal and heavy, constant level, no build-up.",
+      "credits": 97,
+      "credits_source": "header",
+      "output_format": "mp3_44100_128",
+      "regen_count": 0,
+      "generated_at": "2026-11-05T03:46:14.478Z",
+      "character_cost_header": 97
+    },
+    "sfx-2": {
+      "file": "work/01-natalia/audio/sfx-02.mp3",
+      "kind": "sfx",
+      "seconds_requested": 3,
+      "prompt": "Close sound in a quiet old apartment stairwell: a metal key turns in a lock with a dry click and the heavy door latch, then the soft thud of a padded door being pulled shut, and the dull scrape of a travel bag being lifted from a concrete floor. Slight room echo, no voices, no music, hurried and quiet.",
+      "credits": 133,
+      "credits_source": "counter",
+      "output_format": "mp3_44100_128",
+      "regen_count": 0,
+      "generated_at": "2026-11-05T03:46:40.540Z",
+      "character_cost_header": 36
+    },
+    "sfx-3": {
+      "file": "work/01-natalia/audio/sfx-03.mp3",
+      "kind": "sfx",
+      "seconds_requested": 4,
+      "prompt": "A gentle open steppe in a hot afternoon: a light warm wind moving through sunflower fields, a metal halyard ringing softly against a flagpole, the cloth of a flag stirring and flapping lightly, a lark singing far away, and very faint distant insects. Calm, spacious, the first easy breath. No voices, no engines, no music.",
+      "credits": 48,
+      "credits_source": "header",
+      "output_format": "mp3_44100_128",
+      "regen_count": 0,
+      "generated_at": "2026-11-05T03:46:54.923Z",
+      "character_cost_header": 48
+    },
+    "sfx-4": {
+      "file": "work/01-natalia/audio/sfx-04.mp3",
+      "kind": "sfx",
+      "seconds_requested": 4,
+      "prompt": "A diesel intercity midi-bus pulls up at a bus stop on a frozen winter morning in the dark: the low rumble of an old diesel engine slowing down, a long soft hiss of air brakes, then the pneumatic hiss and creak of a folding door opening. Crisp cold air, a few quiet footsteps on frozen snow. No voices, no music.",
+      "credits": 48,
+      "credits_source": "header",
+      "output_format": "mp3_44100_128",
+      "regen_count": 0,
+      "generated_at": "2026-11-05T03:47:09.271Z",
+      "character_cost_header": 48
     }
   },
   "voice": {
@@ -474,7 +535,7 @@
     "created_at": "2026-11-05T00:41:54.681Z",
     "design_credits_source": "docs"
   },
-  "updated_at": "2026-11-05T03:44:59.952Z",
+  "updated_at": "2026-11-05T03:47:09.271Z",
   "narration": {
     "model_id": "eleven_v4",
     "voice_id": "49POAIkFDXsxrtR84sdj",
