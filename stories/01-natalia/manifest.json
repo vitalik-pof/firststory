@@ -1,7 +1,7 @@
 {
   "story": "01-natalia",
   "credits": {
-    "total_spent": 58297,
+    "total_spent": 60756,
     "runs": [
       {
         "script": "voice-previews",
@@ -310,6 +310,14 @@
         "credits_before": 60910,
         "credits_after": 61316,
         "spent_run": 406
+      },
+      {
+        "script": "sound",
+        "started_at": "2026-11-05T07:46:48.437Z",
+        "finished_at": "2026-11-05T07:50:12.427Z",
+        "credits_before": 61316,
+        "credits_after": 63485,
+        "spent_run": 2169
       }
     ]
   },
@@ -2023,14 +2031,14 @@
     "music": {
       "file": "work/01-natalia/audio/music.mp3",
       "kind": "music",
-      "seconds_requested": 113,
-      "prompt": "Instrumental ambient texture without a melody, slow and weightless, no clear tempo and no beat, no rhythm, no repeating pattern, no hook, no drums, no percussion, no vocals. Built from a low warm drone of bowed double bass, a soft analog synth pad and a few quiet bowed string layers, with distant slowly breathing tones and faint bowed glass harmonics. A single barely audible detuned piano note appears very rarely, far away, like a memory. Very low dynamics throughout: this is air under a human voice, never a tune. The colour of the music changes over time from cold to warm, and the warmth comes only from slowly blooming string chords, never from a melody. Timeline of about 113 seconds. 0:00 to 0:22: cold, wide, empty and still, like early morning frost over a field; in the first six seconds the drone is almost nothing, barely there. At about 0:12 one warm string chord slowly blooms out of the drone, stays for a few seconds and dissolves again into the quiet. At about 0:21 everything thins out to one thin low tone, almost silence, and stays that thin until 0:24. 0:24 to 0:38: a quiet, unsettled, searching night mood; the drone shifts very slowly, sparse glass harmonics; at about 0:32 a wide airy pad slowly opens like the first light before dawn, then settles back down. 0:38 to 0:51: narrow, close and restrained tension; a sustained low bowed bass note and a small cluster of close tones, very quiet, stubborn and tired, with no build. 0:51 to 0:59: steadier ground; at about 0:56 a soft warm chord appears, small and gentle, like something new being born. 0:59 to 1:06: morning light; the pad opens into a brighter, wider, fresh major colour, spacious and calm. 1:06 to 1:38: the warmest part; layered warm string chords bloom slowly one after another, each overlapping the one before, like many people breathing together, adding more and more voices; still no melody, no rhythm, still very quiet and wide. 1:38 to 1:44: the warmth withdraws; everything pulls back to one low bass tone and a single thin warm held note, like one small lamp in a dark room. 1:44 to 1:53: the final chord opens wide and slowly, the warmest and widest moment of the whole piece, with a few separate, far-away soft piano notes that do not form a motif, then a long slow fade into a thin warm tone, ending at 1:53. No heroic or epic build, no big crescendo, no climax, no cinematic trailer sound, no sentimental swell.",
-      "credits": 1712,
+      "seconds_requested": 120,
+      "prompt": "Instrumental ambient texture without a melody, slow and weightless, no clear tempo and no beat, no rhythm, no repeating pattern, no hook, no drums, no percussion, no vocals. Built from a low warm drone of bowed double bass, a soft analog synth pad and a few quiet bowed string layers, with distant slowly breathing tones and faint bowed glass harmonics. A single barely audible detuned piano note appears very rarely, far away, like a memory. Very low dynamics throughout: this is air under a human voice, never a tune. The colour of the music changes over time from cold to warm, and the warmth comes only from slowly blooming string chords, never from a melody. Timeline of about 120 seconds. 0:00 to 0:13: cold, wide, empty and still, like early morning frost over a field; in the first four seconds the drone is almost nothing, barely there. At about 0:05 one warm string chord slowly blooms out of the drone, is at its fullest near 0:06, stays for a few seconds and dissolves again into the quiet by 0:10; from 0:10 to 0:13 it is cold and empty again. At about 0:13 everything thins out to one thin low tone, almost silence, and stays that thin until 0:17. 0:17 to 0:31: a quiet, unsettled, searching night mood; the drone shifts very slowly, sparse glass harmonics; at about 0:24 a wide airy pad slowly opens like the first light before dawn, then settles back down by 0:31. 0:31 to 0:49: narrow, close and restrained tension; from 0:31 the pad draws in and hushes, then a sustained low bowed bass note and a small cluster of close tones, very quiet, stubborn and tired, with no build. 0:49 to 0:54: steadier ground, the cluster loosens into an open stable fifth. At about 0:54 a soft warm chord appears, small and gentle, like something new being born, and holds until 1:01. 1:01 to 1:08: morning light; the pad opens into a brighter, wider, fresh major colour, spacious and calm. 1:08 to 1:40: the warmest part; layered warm string chords bloom slowly one after another, each overlapping the one before, like many people breathing together, adding more and more voices; still no melody, no rhythm, still very quiet and wide. 1:40 to 1:50: the warmth withdraws; everything pulls back to one low bass tone and a single thin warm held note, like one small lamp in a dark room; at about 1:47 a second thin warm tone joins it quietly, a fifth above, with no build. 1:50 to 2:00: the final chord opens wide and slowly, the warmest and widest moment of the whole piece, with a few separate, far-away soft piano notes that do not form a motif, then a long slow fade into a thin warm tone, ending at 2:00. No heroic or epic build, no big crescendo, no climax, no cinematic trailer sound, no sentimental swell.",
+      "credits": 1818,
       "credits_source": "counter",
       "output_format": "mp3_44100_128",
-      "regen_count": 0,
-      "generated_at": "2026-11-05T03:45:59.760Z",
-      "song_id": "7FouNPv9rypDidPR9kxP",
+      "regen_count": 1,
+      "generated_at": "2026-11-05T07:47:40.152Z",
+      "song_id": "45yo4BpBN5YsqIB09nIO",
       "model_id": null
     },
     "sfx-1": {
@@ -2049,37 +2057,37 @@
       "file": "work/01-natalia/audio/sfx-02.mp3",
       "kind": "sfx",
       "seconds_requested": 3,
-      "prompt": "Close sound in a quiet old apartment stairwell: a metal key turns in a lock with a dry click and the heavy door latch, then the soft thud of a padded door being pulled shut, and the dull scrape of a travel bag being lifted from a concrete floor. Slight room echo, no voices, no music, hurried and quiet.",
-      "credits": 133,
-      "credits_source": "counter",
+      "prompt": "Close sound on a quiet old apartment stairwell landing: a hand pulls hard once on the handle of a heavy padded door to check the lock, the latch rattles against the locked bolt and the door does not open; a small bunch of keys with a tassel jingles in the lock, a canvas bag strap shifts on a shoulder, a soft step on concrete. Slight stairwell echo, no voices, no music, hurried and quiet.",
+      "credits": 36,
+      "credits_source": "header",
       "output_format": "mp3_44100_128",
-      "regen_count": 0,
-      "generated_at": "2026-11-05T03:46:40.540Z",
+      "regen_count": 1,
+      "generated_at": "2026-11-05T07:47:54.567Z",
       "character_cost_header": 36
     },
     "sfx-3": {
       "file": "work/01-natalia/audio/sfx-03.mp3",
       "kind": "sfx",
-      "seconds_requested": 4,
-      "prompt": "A gentle open steppe in a hot afternoon: a light warm wind moving through sunflower fields, a metal halyard ringing softly against a flagpole, the cloth of a flag stirring and flapping lightly, a lark singing far away, and very faint distant insects. Calm, spacious, the first easy breath. No voices, no engines, no music.",
-      "credits": 48,
+      "seconds_requested": 5,
+      "prompt": "A slow queue of ordinary family cars creeping along a hot dusty country road at July midday: many engines at a low idle, tyres crunching slowly on gritty asphalt, a faint creak and rattle of bundles roped onto car roofs, a light dry wind moving through sunflower fields, grasshoppers and distant insects. Wide, dusty and heavy with waiting. No voices, no car horns, no gunfire, no music.",
+      "credits": 61,
       "credits_source": "header",
       "output_format": "mp3_44100_128",
-      "regen_count": 0,
-      "generated_at": "2026-11-05T03:46:54.923Z",
-      "character_cost_header": 48
+      "regen_count": 1,
+      "generated_at": "2026-11-05T07:48:08.899Z",
+      "character_cost_header": 61
     },
     "sfx-4": {
       "file": "work/01-natalia/audio/sfx-04.mp3",
       "kind": "sfx",
-      "seconds_requested": 4,
-      "prompt": "A diesel intercity midi-bus pulls up at a bus stop on a frozen winter morning in the dark: the low rumble of an old diesel engine slowing down, a long soft hiss of air brakes, then the pneumatic hiss and creak of a folding door opening. Crisp cold air, a few quiet footsteps on frozen snow. No voices, no music.",
-      "credits": 48,
-      "credits_source": "header",
+      "seconds_requested": 3,
+      "prompt": "A diesel intercity midi-bus standing at a stop on a frozen winter morning in the dark, its engine idling with a low rough rumble and a soft hiss of air as the folding door stands open; boots stepping up onto a metal step, crisp footsteps squeaking on trampled snow, the faint creak of a handrail taking a hand's weight. Crisp cold air, quiet. No voices, no music.",
+      "credits": 133,
+      "credits_source": "counter",
       "output_format": "mp3_44100_128",
-      "regen_count": 0,
-      "generated_at": "2026-11-05T03:47:09.271Z",
-      "character_cost_header": 48
+      "regen_count": 1,
+      "generated_at": "2026-11-05T07:48:34.379Z",
+      "character_cost_header": 36
     },
     "sfx-5": {
       "file": "work/01-natalia/audio/sfx-05.mp3",
@@ -2096,26 +2104,26 @@
     "sfx-6": {
       "file": "work/01-natalia/audio/sfx-06.mp3",
       "kind": "sfx",
-      "seconds_requested": 7,
-      "prompt": "A spring morning above a very wide river: soft wind, quiet lapping of water against a stone embankment, a few gulls calling far away, the faint steady hum of cars crossing a long bridge in the distance, then small spring birds nearby and the soft rolling of a stroller wheels on a paved path. Fresh, open and calm. No voices, no music.",
-      "credits": 242,
-      "credits_source": "counter",
+      "seconds_requested": 6,
+      "prompt": "The inside of a small car crossing a long bridge on a spring morning: a steady soft tyre hum, the slow regular double thump of the wheels over the expansion joints of the bridge deck, a light rush of wind past the closed window glass, a fast flutter of railing posts flicking past outside, a faint creak of a seat. Fresh and calm. No voices, no music.",
+      "credits": 73,
+      "credits_source": "header",
       "output_format": "mp3_44100_128",
-      "regen_count": 0,
-      "generated_at": "2026-11-05T03:47:49.981Z",
-      "character_cost_header": 85
+      "regen_count": 1,
+      "generated_at": "2026-11-05T07:48:48.986Z",
+      "character_cost_header": 73
     },
     "sfx-7": {
       "file": "work/01-natalia/audio/sfx-07.mp3",
       "kind": "sfx",
-      "seconds_requested": 5,
-      "prompt": "Warm applause from a small audience of about thirty people in a modest hall at the end of a show, starting softly, growing to a natural full applause and then settling, a couple of faint cheers far in the back. No music, no speech.",
-      "credits": 61,
+      "seconds_requested": 4,
+      "prompt": "A small dark theatre hall during a quiet moment of a live performance: a long piece of cloth pulled taut between two people, its soft low stretching rustle under tension, a floorboard creaking as two people lean back against the pull, then a hushed audience with a faint rustle of clothes and one distant quiet cough. Intimate, hushed, warm room acoustics. No applause, no speech, no music.",
+      "credits": 48,
       "credits_source": "header",
       "output_format": "mp3_44100_128",
-      "regen_count": 0,
-      "generated_at": "2026-11-05T03:48:05.323Z",
-      "character_cost_header": 61
+      "regen_count": 1,
+      "generated_at": "2026-11-05T07:49:03.530Z",
+      "character_cost_header": 48
     },
     "sfx-8": {
       "file": "work/01-natalia/audio/sfx-08.mp3",
@@ -2133,13 +2141,37 @@
       "file": "work/01-natalia/audio/sfx-09.mp3",
       "kind": "sfx",
       "seconds_requested": 8,
-      "prompt": "A calm golden evening on a riverside embankment: a soft wind, gentle water against stone, far-away gulls, a faint flutter of fabric in the breeze, a slow wide sense of open space, getting slightly more spacious toward the end. No engines, no voices, no music.",
-      "credits": 231,
+      "prompt": "A warm spring evening in a green courtyard between apartment blocks, heard from an open window four floors up: a gentle breeze moving a light curtain, swifts and sparrows in the trees, the far-away soft indistinct murmur of a few friendly voices below with one light laugh and no clear words, a distant bicycle bell, leaves rustling. Open, alive and warm, getting slightly more spacious toward the end. No engines, no music, no speech.",
+      "credits": 218,
       "credits_source": "counter",
       "output_format": "mp3_44100_128",
-      "regen_count": 0,
-      "generated_at": "2026-11-05T03:48:46.026Z",
+      "regen_count": 1,
+      "generated_at": "2026-11-05T07:49:30.033Z",
       "character_cost_header": 97
+    },
+    "sfx-10": {
+      "file": "work/01-natalia/audio/sfx-10.mp3",
+      "kind": "sfx",
+      "seconds_requested": 3,
+      "prompt": "Inside a narrow concrete stairwell of an old apartment block, two people carry a heavy old sofa up a flight and turn it at the half-landing: the wooden frame creaks under strain, upholstery scrapes along a metal railing, a sofa leg knocks once against a concrete step, slow heavy footsteps, a soft thud as a corner meets a painted wall. Hollow stairwell echo. No voices, no music.",
+      "credits": 36,
+      "credits_source": "header",
+      "output_format": "mp3_44100_128",
+      "regen_count": 0,
+      "generated_at": "2026-11-05T07:49:44.676Z",
+      "character_cost_header": 36
+    },
+    "sfx-11": {
+      "file": "work/01-natalia/audio/sfx-11.mp3",
+      "kind": "sfx",
+      "seconds_requested": 3,
+      "prompt": "A tap left running in a small tiled bathroom in the morning: a thin steady stream of water falling into a porcelain sink, a faint hollow echo off the tiles, and nothing else. No voices, no music.",
+      "credits": 36,
+      "credits_source": "header",
+      "output_format": "mp3_44100_128",
+      "regen_count": 0,
+      "generated_at": "2026-11-05T07:49:59.981Z",
+      "character_cost_header": 36
     }
   },
   "voice": {
@@ -2174,7 +2206,7 @@
     "created_at": "2026-11-05T00:41:54.681Z",
     "design_credits_source": "docs"
   },
-  "updated_at": "2026-11-05T07:44:05.160Z",
+  "updated_at": "2026-11-05T07:50:12.427Z",
   "narration": {
     "model_id": "eleven_v4",
     "voice_id": "49POAIkFDXsxrtR84sdj",
