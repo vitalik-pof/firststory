@@ -3,6 +3,7 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import {
   type CharacterDoc, type ScriptDoc, type SoundDoc, type StoryboardDoc, type StyleDoc, type VoiceDoc, type VoiceEntry,
+  type DirectorQuestions, parseDirectorQuestions, parseProducerDecisions,
   checkStoryboardAgainstScript, parseCharacter, parseScript, parseSound, parseStoryboard, parseStyle, parseVoiceMd, parseVoices, storyAuthorName,
 } from './docs';
 import { frameFile, sheetFile } from './frame-refs';
@@ -38,7 +39,8 @@ export interface ReviewData {
   sound?: SoundDoc;
   timings?: TimingsFile;
   manifest: Manifest;
-  roleDecisions: string;
+  directorQuestions: DirectorQuestions;
+  producerDecisions: string[];
   questions: QuestionBlock[];
   warnings: string[];
   media: MediaItem[];
@@ -99,14 +101,8 @@ export function gatherReview(story: string, nameOverride?: string): ReviewData {
   addQ('composer', paths.storyFile(story, 'sound.md'));
   addQ('editor', paths.storyFile(story, 'edit.md'));
 
-  // Рішення ролей замість режисера (status.md).
-  let roleDecisions = '';
-  const statusFile = paths.storyFile(story, 'status.md');
-  if (existsSync(statusFile)) {
-    const d = readDoc(statusFile, 'scenarist');
-    const sec = splitByHeading(d.lines, 2).sections.find((s) => /^Рішення ролей замість режисера/i.test(s.title));
-    roleDecisions = sec ? blockText(sec.body) : '';
-  }
+  const directorQuestions = parseDirectorQuestions(story);
+  const producerDecisions = parseProducerDecisions(story);
 
   // Медіа.
   const media: MediaItem[] = [];
@@ -152,5 +148,5 @@ export function gatherReview(story: string, nameOverride?: string): ReviewData {
   if (sound && !media.some((m) => m.key === 'music')) warnings.push('Немає музики (крок 10).');
 
   const name = nameOverride ?? storyAuthorName(story) ?? story;
-  return { story, name, script, style, characters, storyboard, voice, voiceMd, sound, timings, manifest, roleDecisions, questions, warnings, media, previews };
+  return { story, name, script, style, characters, storyboard, voice, voiceMd, sound, timings, manifest, directorQuestions, producerDecisions, questions, warnings, media, previews };
 }

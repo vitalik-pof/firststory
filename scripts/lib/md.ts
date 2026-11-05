@@ -4,7 +4,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { paths } from './paths';
 
-export type Role = 'scenarist' | 'art-director' | 'voice-director' | 'composer' | 'editor';
+export type Role = 'scenarist' | 'art-director' | 'voice-director' | 'composer' | 'editor' | 'producer';
 
 export interface Line {
   /** Номер рядка у файлі, з 1. */

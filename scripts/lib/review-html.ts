@@ -3,9 +3,10 @@
 //  - pages: повний самостійний документ для GitHub Pages (підкаталог, лише відносні посилання).
 
 import { buildSchedule } from './animatic';
+import type { DirectorQuestions } from './docs';
 import type { Manifest } from './manifest';
 import type { VoiceDoc, VoiceEntry } from './docs';
-import type { ReviewData } from './review-build';
+import type { QuestionBlock, ReviewData } from './review-build';
 import type { TimingsFile } from './timings';
 import { CLIENT_JS, CSS } from './review-assets';
 import type { Role } from './md';
@@ -13,6 +14,7 @@ import type { Role } from './md';
 export type ReviewTarget = 'artifact' | 'pages';
 
 export const ROLE_LABEL: Record<Role, string> = {
+  producer: 'Технічний продюсер',
   scenarist: 'Сценарист',
   'art-director': 'Художник-постановник',
   'voice-director': 'Режисер озвучення',
@@ -72,6 +74,44 @@ export function mdLite(text: string): string {
   return out.join('\n');
 }
 
+/**
+ * Три частини замість одного блоку питань: «Потрібне ваше рішення» (угорі), «Що вирішено без вас» і
+ * згорнута довідка «Усі питання ролей» (унизу). Повертає секції як [id, заголовок, html].
+ */
+export function decisionSections(o: { director: DirectorQuestions; producerDecisions: string[]; questions: QuestionBlock[] }): { top: Array<[string, string, string]>; bottom: Array<[string, string, string]> } {
+  const top: Array<[string, string, string]> = [];
+  const bottom: Array<[string, string, string]> = [];
+  const items = o.director.items;
+  top.push([
+    'need-decision',
+    'Потрібне ваше рішення',
+    items.length
+      ? `${o.director.updated ? `<p class="muted">Оновлено: ${esc(o.director.updated)}. Якщо не відповісте, діє значення за замовчуванням.</p>` : ''}` +
+        items
+          .map(
+            (q) => `<div class="card decision" id="decision-${q.n}"><h3>${q.n}. ${esc(q.title)}</h3>
+<p>${inline(q.question)}</p>
+<p class="rec"><strong>Рекомендація продюсера:</strong> ${inline(q.recommendation)}</p>
+<p class="def"><strong>За замовчуванням:</strong> ${inline(q.defaultValue)}</p></div>`,
+          )
+          .join('\n')
+      : '<p class="muted">Рішень від вас зараз не потрібно.</p>',
+  ]);
+  if (o.producerDecisions.length) {
+    bottom.push(['decided', 'Що вирішено без вас', `<ul>${o.producerDecisions.map((x) => `<li>${inline(x)}</li>`).join('')}</ul>`]);
+  }
+  bottom.push([
+    'role-questions',
+    'Усі питання ролей (довідка)',
+    `<details><summary>Показати питання, які ролі лишили у своїх файлах</summary><p class="muted">Це довідка. Відповідати на ці питання не потрібно: їх розбирає технічний продюсер, а вам лишаються тільки рішення зі списку «Потрібне ваше рішення».</p>${
+      o.questions.length
+        ? o.questions.map((q) => `<div class="card"><h3 style="margin-top:0">${esc(ROLE_LABEL[q.role])} <span class="muted">(${esc(q.file)})</span></h3>${mdLite(q.text)}</div>`).join('\n')
+        : '<p class="muted">Питань немає.</p>'
+    }</details>`,
+  ]);
+  return { top, bottom };
+}
+
 export function fmtTime(sec: number): string {
   const m = Math.floor(sec / 60);
   const s = Math.floor(sec % 60);
@@ -92,6 +132,8 @@ export function renderReview(d: ReviewData, target: ReviewTarget, title: string,
     nav.push([id, heading]);
     sections.push(`<section id="${id}">\n<h2>${esc(heading)}</h2>\n${body}\n</section>`);
   };
+
+  for (const [id, hd, body] of decisionSections({ director: d.directorQuestions, producerDecisions: d.producerDecisions, questions: d.questions }).top) section(id, hd, body);
 
   // ---------------- аніматик
   const frames = d.storyboard?.frames ?? [];
@@ -169,14 +211,7 @@ ${d.script.changes ? `<h3>Що змінено порівняно з оригін
   section('sound', 'Звуковий бриф, музика і шуми', soundBody);
 
   // ---------------- рішення ролей, питання
-  if (d.roleDecisions.trim()) section('decisions', 'Рішення ролей замість режисера', mdLite(d.roleDecisions));
-  section(
-    'questions',
-    'Питання ролей до режисера',
-    d.questions.length
-      ? d.questions.map((q) => `<div class="card"><h3 style="margin-top:0">${esc(ROLE_LABEL[q.role])} <span class="muted">(${esc(q.file)})</span></h3>${mdLite(q.text)}</div>`).join('\n')
-      : '<p class="muted">Питань немає.</p>',
-  );
+  for (const [id, hd, body] of decisionSections({ director: d.directorQuestions, producerDecisions: d.producerDecisions, questions: d.questions }).bottom) section(id, hd, body);
 
   // ---------------- кредити
   section('credits', 'Витрачені кредити', renderCredits(d.manifest));

@@ -68,6 +68,10 @@ details { margin: 8px 0; min-width: 0; }
 summary { cursor: pointer; color: var(--muted); }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin: 12px 0; min-width: 0; }
 .muted { color: var(--muted); }
+.decision { border-left: 4px solid var(--accent); }
+.decision h3 { margin-top: 0; }
+.decision .rec { background: var(--surface-2); border-radius: 8px; padding: 8px 12px; }
+.decision .def { color: var(--muted); }
 .note { background: var(--warn-bg); color: var(--warn-text); border-radius: 8px; padding: 8px 12px; margin: 10px 0; overflow-wrap: anywhere; }
 .badge { display: inline-block; background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; padding: 1px 10px; font-size: 0.82rem; color: var(--muted); margin-right: 6px; }
 audio { width: 100%; max-width: 100%; display: block; margin: 6px 0; }

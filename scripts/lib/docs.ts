@@ -808,6 +808,63 @@ export function parseSoundSamples(story: string): SoundSamplesDoc {
   };
 }
 
+// ------------------------------------------------------------------ питання режисера і рішення продюсера
+
+export interface DirectorQuestion {
+  n: number;
+  title: string;
+  question: string;
+  recommendation: string;
+  defaultValue: string;
+  line: number;
+}
+export interface DirectorQuestions {
+  updated: string;
+  items: DirectorQuestion[];
+}
+
+/**
+ * stories/<id>/director-questions.md (пише технічний продюсер): «# Питання до режисера: …», «Оновлено: …»,
+ * «## N. Назва» з полями «Питання:», «Рекомендація продюсера:», «За замовчуванням:».
+ * Файлу немає або він порожній: питань немає.
+ */
+export function parseDirectorQuestions(story: string): DirectorQuestions {
+  const file = paths.storyFile(story, 'director-questions.md');
+  if (!existsSync(file)) return { updated: '', items: [] };
+  const doc = readDoc(file, 'producer');
+  const { preamble, sections } = splitByHeading(doc.lines, 2);
+  const { fields: head } = readFieldsStrict(doc, preamble, { updated: /^Оновлено$/i });
+  const items: DirectorQuestion[] = [];
+  for (const s of sections) {
+    const m = /^(\d+)\.\s*(.+)$/.exec(s.title);
+    if (!m) fail(doc, s.line, `Заголовок питання має бути «## N. Коротка назва», а є «${s.title}».`);
+    const { fields } = readFieldsStrict(doc, s.body, { q: /^Питання$/i, rec: /^Рекомендація продюсера$/i, def: /^За замовчуванням$/i });
+    const where = `## ${s.title}`;
+    items.push({
+      n: Number(m[1]), title: m[2]!.trim(), line: s.line,
+      question: requireField(doc, fields, 'q', 'Питання', where, s.line).value,
+      recommendation: requireField(doc, fields, 'rec', 'Рекомендація продюсера', where, s.line).value,
+      defaultValue: requireField(doc, fields, 'def', 'За замовчуванням', where, s.line).value,
+    });
+  }
+  return { updated: head.updated ? firstLine(head.updated.value) : '', items };
+}
+
+/** status.md, розділ «## Рішення продюсера»: маркований список коротких рядків. Розділу немає: порожній список. */
+export function parseProducerDecisions(story: string): string[] {
+  const file = paths.storyFile(story, 'status.md');
+  if (!existsSync(file)) return [];
+  const doc = readDoc(file, 'producer');
+  const sec = splitByHeading(doc.lines, 2).sections.find((s) => /^Рішення продюсера/i.test(s.title));
+  if (!sec) return [];
+  const out: string[] = [];
+  for (const l of sec.body) {
+    const m = /^\s*[-*]\s+(.*\S)\s*$/.exec(l.text);
+    if (m) out.push(m[1]!); // лише маркований список; вступний абзац ігноруємо
+  }
+  return out;
+}
+
 // ------------------------------------------------------------------ допоміжне
 
 /** Автор і назва історії для заголовка огляду: «Автор: Наталя, м. Донецьк» → «Наталя». */

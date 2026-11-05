@@ -3,13 +3,14 @@
 import { existsSync, readdirSync } from 'node:fs';
 import {
   type CharacterDoc, type SamplesDoc, type SoundSamplesDoc, type VoiceDoc, type VoiceEntry,
+  type DirectorQuestions, parseDirectorQuestions, parseProducerDecisions,
   checkSamplesAgainstScript, parseSamples, parseScript, parseSoundSamples, parseStyle, parseVoiceMd, parseVoices, storyAuthorName, type StyleDoc,
 } from './docs';
 import { type Manifest, readManifest } from './manifest';
 import { type Role, blockText, extractQuestions, readDoc, splitByHeading } from './md';
 import { paths } from './paths';
 import { type MediaItem, type QuestionBlock } from './review-build';
-import { ROLE_LABEL, type ReviewTarget, esc, fmtTime, mdLite, renderAnimatic, renderCredits, renderVoiceBody, wrapPage } from './review-html';
+import { type ReviewTarget, decisionSections, esc, fmtTime, mdLite, renderAnimatic, renderCredits, renderVoiceBody, wrapPage } from './review-html';
 import { sampleFile } from './samples-paths';
 import type { TimingsFile } from './timings';
 import { pad2 } from './text';
@@ -27,7 +28,8 @@ export interface SamplesReviewData {
   characters: CharacterDoc[];
   timings?: TimingsFile;
   manifest: Manifest;
-  roleDecisions: string;
+  directorQuestions: DirectorQuestions;
+  producerDecisions: string[];
   questions: QuestionBlock[];
   warnings: string[];
   media: MediaItem[];
@@ -73,13 +75,8 @@ export function gatherSamplesReview(story: string, nameOverride?: string): Sampl
   addQ('voice-director', paths.storyFile(story, 'voice.md'));
   addQ('composer', paths.soundSamplesDoc(story));
 
-  let roleDecisions = '';
-  const statusFile = paths.storyFile(story, 'status.md');
-  if (existsSync(statusFile)) {
-    const d = readDoc(statusFile, 'scenarist');
-    const sec = splitByHeading(d.lines, 2).sections.find((s) => /^Рішення ролей замість режисера/i.test(s.title));
-    roleDecisions = sec ? blockText(sec.body) : '';
-  }
+  const directorQuestions = parseDirectorQuestions(story);
+  const producerDecisions = parseProducerDecisions(story);
 
   const media: MediaItem[] = [];
   const add = (key: string, kind: MediaItem['kind'], src: string, rel: string): boolean => {
@@ -109,7 +106,7 @@ export function gatherSamplesReview(story: string, nameOverride?: string): Sampl
 
   return {
     story, name: nameOverride ?? storyAuthorName(story) ?? story, scriptTitle: script.title, samples, sound, voice, voiceMd, style, characters: [],
-    timings, manifest, roleDecisions, questions, warnings, media, previews,
+    timings, manifest, directorQuestions, producerDecisions, questions, warnings, media, previews,
   };
 }
 
@@ -121,6 +118,8 @@ export function renderSamplesReview(d: SamplesReviewData, target: ReviewTarget, 
     nav.push([id, heading]);
     sections.push(`<section id="${id}">\n<h2>${esc(heading)}</h2>\n${body}\n</section>`);
   };
+
+  for (const [id, h, body] of decisionSections({ director: d.directorQuestions, producerDecisions: d.producerDecisions, questions: d.questions }).top) section(id, h, body);
 
   section(
     'animatic-section',
@@ -177,12 +176,7 @@ export function renderSamplesReview(d: SamplesReviewData, target: ReviewTarget, 
   } else mix = '<div class="note">Параметрів зведення немає: sound-samples.md відсутній.</div>';
   section('mix', 'Зразок зведення', mix);
 
-  if (d.roleDecisions.trim()) section('decisions', 'Рішення ролей замість режисера', mdLite(d.roleDecisions));
-  section(
-    'questions',
-    'Питання ролей до режисера',
-    d.questions.length ? d.questions.map((q) => `<div class="card"><h3 style="margin-top:0">${esc(ROLE_LABEL[q.role])} <span class="muted">(${esc(q.file)})</span></h3>${mdLite(q.text)}</div>`).join('\n') : '<p class="muted">Питань немає.</p>',
-  );
+  for (const [id, h, body] of decisionSections({ director: d.directorQuestions, producerDecisions: d.producerDecisions, questions: d.questions }).bottom) section(id, h, body);
   section('credits', 'Витрачені кредити', renderCredits(d.manifest));
 
   return wrapPage(target, title, `${d.scriptTitle}. Етап 1а: зразки стилю й звуку в малому обсязі, без розкадровки (розкадровка це Етап 1б).`, nav, sections, d.warnings);

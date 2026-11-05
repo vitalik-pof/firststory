@@ -282,6 +282,21 @@ export const SOUND_SAMPLES_MD = `# Зразки звуку: Тестова іс�
 1. Режисерові. Чи не надто тиха музика під голосом?
 `;
 
+export const DIRECTOR_QUESTIONS_MD = `# Питання до режисера: Тестова історія
+
+Оновлено: 5 листопада 2026 року
+
+## 1. Фрагмент 1 голосом чи титром
+Питання: Чи озвучувати перший фрагмент?
+Рекомендація продюсера: Озвучити голосом, тихо.
+За замовчуванням: Голосом.
+
+## 2. Скільки доньок
+Питання: Скільки доньок було у родині?
+Рекомендація продюсера: Уточнити в героїні.
+За замовчуванням: Двоє.
+`;
+
 export function mkProject(): string {
   const root = mkdtempSync(join(tmpdir(), 'firststory-test-'));
   setRoot(root);
@@ -295,7 +310,7 @@ export function mkProject(): string {
   w(`stories/${STORY}/voice.md`, VOICE_MD);
   w(`stories/${STORY}/storyboard.md`, STORYBOARD_MD);
   w(`stories/${STORY}/sound.md`, SOUND_MD);
-  w(`stories/${STORY}/status.md`, '# Статус\n\n## Рішення ролей замість режисера на Етапі 1\n\n- Озвучення з першої проби.\n\n## Журнал\n');
+  w(`stories/${STORY}/status.md`, '# Статус\n\n## Рішення продюсера\n\n- Нумерацію кадрів не змінюємо.\n- Фрагмент 1 озвучуємо окремим викликом.\n\n## Журнал\n');
   w('voices.md', VOICES_MD);
   w('art/style.md', STYLE_MD);
   w('art/samples.md', SAMPLES_MD);
