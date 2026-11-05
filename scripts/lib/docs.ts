@@ -3,7 +3,7 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import {
-  type Doc, type Field, type Line, type Section,
+  type Doc, type Field, type Line, type Role, type Section,
   blockText, extractQuestions, fail, flatText, isPlaceholder, parseInteger, parseSeconds,
   readDoc, readFieldsStrict, requireField, requireSection, sectionText, splitByHeading, trimLines,
 } from './md';
@@ -861,6 +861,61 @@ export function parseProducerDecisions(story: string): string[] {
   for (const l of sec.body) {
     const m = /^\s*[-*]\s+(.*\S)\s*$/.exec(l.text);
     if (m) out.push(m[1]!); // лише маркований список; вступний абзац ігноруємо
+  }
+  return out;
+}
+
+// ------------------------------------------------------------------ рішення ролей
+
+export interface RoleDecision {
+  /** Роль із заголовка файлу («# Рішення: <роль>, <історія>») або з імені файлу. */
+  role: string;
+  /** Історія з заголовка (може бути _project). */
+  scope: string;
+  date: string;
+  topic: string;
+  name: string;
+  decided: string;
+  why: string;
+  alternative: string;
+  file: string;
+}
+
+const ROLE_IDS: Role[] = ['scenarist', 'art-director', 'voice-director', 'composer', 'editor', 'producer'];
+
+/**
+ * Рішення ролей: stories/<id>/decisions/*.md і stories/_project/decisions/*.md.
+ * Формат: «# Рішення: <роль>, <історія>», «## <дата>: <за що>», «### <назва>» з полями
+ * «Що вирішено:», «Чому:», «Що було б інакше:» (усі три обов'язкові). Немає файлів: порожній список.
+ */
+export function parseRoleDecisions(story: string): RoleDecision[] {
+  const out: RoleDecision[] = [];
+  for (const scope of [story, '_project']) {
+    const dir = join(getRoot(), 'stories', scope, 'decisions');
+    if (!existsSync(dir)) continue;
+    for (const f of readdirSync(dir).filter((x) => x.endsWith('.md')).sort()) {
+      const base = f.slice(0, -3) as Role;
+      const doc = readDoc(join(dir, f), ROLE_IDS.includes(base) ? base : 'producer');
+      const h1 = doc.lines.find((l) => /^#\s+/.test(l.text));
+      const hm = h1 ? /^#\s+Рішення:\s*([^,]+?)\s*(?:,\s*(.+?))?\s*$/.exec(h1.text) : null;
+      if (!hm) fail(doc, h1?.n ?? 1, 'Заголовок має бути «# Рішення: <роль>, <історія>».');
+      const role = hm[1]!.trim();
+      const { sections } = splitByHeading(doc.lines, 2);
+      for (const s of sections) {
+        const dm = /^(.+?)\s*:\s*(.+)$/.exec(s.title);
+        if (!dm) fail(doc, s.line, `Заголовок розділу має бути «## <дата>: <за що>», а є «${s.title}».`);
+        for (const dec of splitByHeading(s.body, 3).sections) {
+          const { fields } = readFieldsStrict(doc, dec.body, { decided: /^Що вирішено$/i, why: /^Чому$/i, alt: /^Що було б інакше$/i });
+          const where = `### ${dec.title}`;
+          out.push({
+            role, scope: hm[2]?.trim() ?? scope, date: dm[1]!.trim(), topic: dm[2]!.trim(), name: dec.title, file: paths.rel(doc.file),
+            decided: requireField(doc, fields, 'decided', 'Що вирішено', where, dec.line).value,
+            why: requireField(doc, fields, 'why', 'Чому', where, dec.line).value,
+            alternative: requireField(doc, fields, 'alt', 'Що було б інакше', where, dec.line).value,
+          });
+        }
+      }
+    }
   }
   return out;
 }

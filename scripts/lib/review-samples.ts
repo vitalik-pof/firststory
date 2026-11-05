@@ -3,7 +3,7 @@
 import { existsSync, readdirSync } from 'node:fs';
 import {
   type CharacterDoc, type SamplesDoc, type SoundSamplesDoc, type VoiceDoc, type VoiceEntry,
-  type DirectorQuestions, parseDirectorQuestions, parseProducerDecisions,
+  type DirectorQuestions, type RoleDecision, parseRoleDecisions, parseDirectorQuestions, parseProducerDecisions,
   checkSamplesAgainstScript, parseSamples, parseScript, parseSoundSamples, parseStyle, parseVoiceMd, parseVoices, storyAuthorName, type StyleDoc,
 } from './docs';
 import { type Manifest, readManifest } from './manifest';
@@ -28,6 +28,7 @@ export interface SamplesReviewData {
   characters: CharacterDoc[];
   timings?: TimingsFile;
   manifest: Manifest;
+  roleDecisions: RoleDecision[];
   directorQuestions: DirectorQuestions;
   producerDecisions: string[];
   questions: QuestionBlock[];
@@ -75,6 +76,7 @@ export function gatherSamplesReview(story: string, nameOverride?: string): Sampl
   addQ('voice-director', paths.storyFile(story, 'voice.md'));
   addQ('composer', paths.soundSamplesDoc(story));
 
+  const roleDecisions = parseRoleDecisions(story);
   const directorQuestions = parseDirectorQuestions(story);
   const producerDecisions = parseProducerDecisions(story);
 
@@ -106,7 +108,7 @@ export function gatherSamplesReview(story: string, nameOverride?: string): Sampl
 
   return {
     story, name: nameOverride ?? storyAuthorName(story) ?? story, scriptTitle: script.title, samples, sound, voice, voiceMd, style, characters: [],
-    timings, manifest, directorQuestions, producerDecisions, questions, warnings, media, previews,
+    timings, manifest, roleDecisions, directorQuestions, producerDecisions, questions, warnings, media, previews,
   };
 }
 
@@ -119,7 +121,7 @@ export function renderSamplesReview(d: SamplesReviewData, target: ReviewTarget, 
     sections.push(`<section id="${id}">\n<h2>${esc(heading)}</h2>\n${body}\n</section>`);
   };
 
-  for (const [id, h, body] of decisionSections({ director: d.directorQuestions, producerDecisions: d.producerDecisions, questions: d.questions }).top) section(id, h, body);
+  for (const [id, h, body] of decisionSections({ roleDecisions: d.roleDecisions, director: d.directorQuestions, producerDecisions: d.producerDecisions, questions: d.questions }).top) section(id, h, body);
 
   section(
     'animatic-section',
@@ -176,7 +178,7 @@ export function renderSamplesReview(d: SamplesReviewData, target: ReviewTarget, 
   } else mix = '<div class="note">Параметрів зведення немає: sound-samples.md відсутній.</div>';
   section('mix', 'Зразок зведення', mix);
 
-  for (const [id, h, body] of decisionSections({ director: d.directorQuestions, producerDecisions: d.producerDecisions, questions: d.questions }).bottom) section(id, h, body);
+  for (const [id, h, body] of decisionSections({ roleDecisions: d.roleDecisions, director: d.directorQuestions, producerDecisions: d.producerDecisions, questions: d.questions }).bottom) section(id, h, body);
   section('credits', 'Витрачені кредити', renderCredits(d.manifest));
 
   return wrapPage(target, title, `${d.scriptTitle}. Етап 1а: зразки стилю й звуку в малому обсязі, без розкадровки (розкадровка це Етап 1б).`, nav, sections, d.warnings);

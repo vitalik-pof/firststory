@@ -3,7 +3,7 @@
 //  - pages: повний самостійний документ для GitHub Pages (підкаталог, лише відносні посилання).
 
 import { buildSchedule } from './animatic';
-import type { DirectorQuestions } from './docs';
+import type { DirectorQuestions, RoleDecision } from './docs';
 import type { Manifest } from './manifest';
 import type { VoiceDoc, VoiceEntry } from './docs';
 import type { QuestionBlock, ReviewData } from './review-build';
@@ -78,7 +78,7 @@ export function mdLite(text: string): string {
  * Три частини замість одного блоку питань: «Потрібне ваше рішення» (угорі), «Що вирішено без вас» і
  * згорнута довідка «Усі питання ролей» (унизу). Повертає секції як [id, заголовок, html].
  */
-export function decisionSections(o: { director: DirectorQuestions; producerDecisions: string[]; questions: QuestionBlock[] }): { top: Array<[string, string, string]>; bottom: Array<[string, string, string]> } {
+export function decisionSections(o: { roleDecisions?: RoleDecision[]; director: DirectorQuestions; producerDecisions: string[]; questions: QuestionBlock[] }): { top: Array<[string, string, string]>; bottom: Array<[string, string, string]> } {
   const top: Array<[string, string, string]> = [];
   const bottom: Array<[string, string, string]> = [];
   const items = o.director.items;
@@ -97,6 +97,7 @@ export function decisionSections(o: { director: DirectorQuestions; producerDecis
           .join('\n')
       : '<p class="muted">Рішень від вас зараз не потрібно.</p>',
   ]);
+  if (o.roleDecisions?.length) bottom.push(['role-decisions', 'Рішення ролей', renderRoleDecisions(o.roleDecisions)]);
   if (o.producerDecisions.length) {
     bottom.push(['decided', 'Що вирішено без вас', `<ul>${o.producerDecisions.map((x) => `<li>${inline(x)}</li>`).join('')}</ul>`]);
   }
@@ -110,6 +111,34 @@ export function decisionSections(o: { director: DirectorQuestions; producerDecis
     }</details>`,
   ]);
   return { top, bottom };
+}
+
+const ROLE_ORDER = ['scenarist', 'art-director', 'voice-director', 'composer', 'editor', 'producer'];
+
+/** Рішення ролей за ролями: що вирішено видно одразу, «чому» і «що було б інакше» розгортаються. */
+export function renderRoleDecisions(list: RoleDecision[]): string {
+  const roles = [...new Set(list.map((x) => x.role))].sort((a, b) => {
+    const ia = ROLE_ORDER.indexOf(a);
+    const ib = ROLE_ORDER.indexOf(b);
+    return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib) || a.localeCompare(b);
+  });
+  return `<p class="lead">Кожна роль записує свої рішення у файл. Тут видно, що вирішено; «Чому» і «Що було б інакше» розгортаються.</p>` + roles
+    .map((role) => {
+      const mine = list.filter((x) => x.role === role);
+      const label = (ROLE_LABEL as Record<string, string>)[role] ?? role;
+      const groups = [...new Set(mine.map((x) => `${x.date}: ${x.topic}`))];
+      return `<h3>${esc(label)}</h3>` + groups
+        .map((g) => {
+          const items = mine.filter((x) => `${x.date}: ${x.topic}` === g);
+          return `<p class="muted" style="margin-bottom:4px">${esc(g)}${items[0]!.scope === '_project' ? ' (на весь проєкт)' : ''}</p>` + items
+            .map(
+              (x) => `<div class="card rdec"><strong>${esc(x.name)}</strong><p style="margin:4px 0 0">${inline(x.decided)}</p><details><summary>Чому і що було б інакше</summary><p><strong>Чому:</strong> ${inline(x.why)}</p><p><strong>Що було б інакше:</strong> ${inline(x.alternative)}</p></details></div>`,
+            )
+            .join('\n');
+        })
+        .join('\n');
+    })
+    .join('\n');
 }
 
 export function fmtTime(sec: number): string {
@@ -133,7 +162,7 @@ export function renderReview(d: ReviewData, target: ReviewTarget, title: string,
     sections.push(`<section id="${id}">\n<h2>${esc(heading)}</h2>\n${body}\n</section>`);
   };
 
-  for (const [id, hd, body] of decisionSections({ director: d.directorQuestions, producerDecisions: d.producerDecisions, questions: d.questions }).top) section(id, hd, body);
+  for (const [id, hd, body] of decisionSections({ roleDecisions: d.roleDecisions, director: d.directorQuestions, producerDecisions: d.producerDecisions, questions: d.questions }).top) section(id, hd, body);
 
   // ---------------- аніматик
   const frames = d.storyboard?.frames ?? [];
@@ -211,7 +240,7 @@ ${d.script.changes ? `<h3>Що змінено порівняно з оригін
   section('sound', 'Звуковий бриф, музика і шуми', soundBody);
 
   // ---------------- рішення ролей, питання
-  for (const [id, hd, body] of decisionSections({ director: d.directorQuestions, producerDecisions: d.producerDecisions, questions: d.questions }).bottom) section(id, hd, body);
+  for (const [id, hd, body] of decisionSections({ roleDecisions: d.roleDecisions, director: d.directorQuestions, producerDecisions: d.producerDecisions, questions: d.questions }).bottom) section(id, hd, body);
 
   // ---------------- кредити
   section('credits', 'Витрачені кредити', renderCredits(d.manifest));

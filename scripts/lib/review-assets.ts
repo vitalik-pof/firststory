@@ -68,6 +68,8 @@ details { margin: 8px 0; min-width: 0; }
 summary { cursor: pointer; color: var(--muted); }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin: 12px 0; min-width: 0; }
 .muted { color: var(--muted); }
+.rdec { padding: 10px 12px; margin: 6px 0; }
+.rdec details { margin: 4px 0 0; }
 .decision { border-left: 4px solid var(--accent); }
 .decision h3 { margin-top: 0; }
 .decision .rec { background: var(--surface-2); border-radius: 8px; padding: 8px 12px; }
