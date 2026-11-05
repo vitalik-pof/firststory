@@ -1,7 +1,7 @@
 {
   "story": "01-natalia",
   "credits": {
-    "total_spent": 35968,
+    "total_spent": 37254,
     "runs": [
       {
         "script": "voice-previews",
@@ -205,6 +205,30 @@
         "credits_before": 34673,
         "credits_after": 35891,
         "spent_run": 1218
+      },
+      {
+        "script": "frames",
+        "started_at": "2026-11-05T04:38:02.766Z",
+        "finished_at": "2026-11-05T04:39:07.859Z",
+        "credits_before": 35891,
+        "credits_after": 36500,
+        "spent_run": 609
+      },
+      {
+        "script": "frames",
+        "started_at": "2026-11-05T04:39:08.519Z",
+        "finished_at": "2026-11-05T04:40:01.837Z",
+        "credits_before": 36500,
+        "credits_after": 37109,
+        "spent_run": 609
+      },
+      {
+        "script": "frames",
+        "started_at": "2026-11-05T04:40:02.472Z",
+        "finished_at": "2026-11-05T04:41:09.581Z",
+        "credits_before": 37109,
+        "credits_after": 37786,
+        "spent_run": 677
       }
     ]
   },
@@ -1053,14 +1077,30 @@
       }
     },
     "frame/24": {
-      "history": [],
-      "regen_count": 0,
+      "history": [
+        {
+          "generation_id": "SDfc2UTb8AaHDgOOvjOH",
+          "model_id": "gemini-3.1-flash-image",
+          "width": 768,
+          "height": 1376,
+          "prompt": "The end of a playback theatre show in a small hall. The main subject: a line of five actors of different ages, all dressed in plain black, stand on the floor-level stage holding hands and bowing together; among them, a woman with chestnut shoulder-length wavy hair has a long terracotta-red fabric over her shoulder. Behind them, colourful fabrics in terracotta, ochre and teal lie on wooden crates. In the foreground, the audience applauds, seen from behind. Warm stage light, joy and community.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles, buildings, signs and lettering are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details; lettering may be soft and only half legible. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles, signs and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering except the Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. Signs of war appear only where and as the description places them, as the main subject or in the background, with no people holding weapons, no blood, no wounded, no explosions or fireballs. No letter Z.",
+          "refs": [
+            "asset:wVFJmXuDlRXSYePj8fTm"
+          ],
+          "file": "work/01-natalia/frames/frame-24.v1.png",
+          "aspect_ratio": "9:16",
+          "resolution": "1K",
+          "credits": 609,
+          "completed_at": "2026-11-05T04:14:49.601Z"
+        }
+      ],
+      "regen_count": 1,
       "current": {
-        "generation_id": "SDfc2UTb8AaHDgOOvjOH",
+        "generation_id": "bVUEAevoBcT7eCkd0RyF",
         "model_id": "gemini-3.1-flash-image",
         "width": 768,
         "height": 1376,
-        "prompt": "The end of a playback theatre show in a small hall. The main subject: a line of five actors of different ages, all dressed in plain black, stand on the floor-level stage holding hands and bowing together; among them, a woman with chestnut shoulder-length wavy hair has a long terracotta-red fabric over her shoulder. Behind them, colourful fabrics in terracotta, ochre and teal lie on wooden crates. In the foreground, the audience applauds, seen from behind. Warm stage light, joy and community.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles, buildings, signs and lettering are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details; lettering may be soft and only half legible. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles, signs and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering except the Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. Signs of war appear only where and as the description places them, as the main subject or in the background, with no people holding weapons, no blood, no wounded, no explosions or fireballs. No letter Z.",
+        "prompt": "The end of a playback theatre show in a small hall. The main subject: a line of five actors of different ages, all dressed in plain black, stand on the floor-level stage holding hands and bowing together, heads bowed low so their faces are barely seen; among them, a woman with chestnut shoulder-length wavy hair has a long terracotta-red fabric over her shoulder. Behind them, colourful fabrics in terracotta, ochre and teal lie on wooden crates in front of a plain dark wall with no signs, banners or lettering. In the foreground, the audience applauds, seen from behind. Warm stage light, joy and community.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles, buildings, signs and lettering are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details; lettering may be soft and only half legible. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles, signs and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering except the Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. Signs of war appear only where and as the description places them, as the main subject or in the background, with no people holding weapons, no blood, no wounded, no explosions or fireballs. No letter Z.",
         "refs": [
           "asset:wVFJmXuDlRXSYePj8fTm"
         ],
@@ -1068,7 +1108,7 @@
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 609,
-        "completed_at": "2026-11-05T04:14:49.601Z"
+        "completed_at": "2026-11-05T04:39:49.254Z"
       }
     },
     "frame/25": {
@@ -1108,22 +1148,38 @@
       }
     },
     "frame/27": {
-      "history": [],
-      "regen_count": 0,
+      "history": [
+        {
+          "generation_id": "lBScXuWieNWmDrJgV5hL",
+          "model_id": "gemini-3.1-flash-image",
+          "width": 768,
+          "height": 1376,
+          "prompt": "A close view from behind in a dark room during a power outage: a colleague standing beside a seated woman rests a hand on her shoulder in support, and this hand on the shoulder is the main subject of the frame. The seated woman has chestnut shoulder-length wavy hair, an oatmeal knitted sweater and a terracotta-red scarf. Both look toward the same open laptop and papers on the table. The only light comes from a small battery-powered camping lantern on the table; a power bank with a cable is connected to the laptop, a mug of tea nearby. The rest of the room is in deep darkness. No faces visible. Support, trust, work that goes on.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles, buildings, signs and lettering are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details; lettering may be soft and only half legible. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles, signs and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering except the Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. Signs of war appear only where and as the description places them, as the main subject or in the background, with no people holding weapons, no blood, no wounded, no explosions or fireballs. No letter Z.",
+          "refs": [
+            "asset:wVFJmXuDlRXSYePj8fTm"
+          ],
+          "file": "work/01-natalia/frames/frame-27.v1.png",
+          "aspect_ratio": "9:16",
+          "resolution": "1K",
+          "credits": 609,
+          "completed_at": "2026-11-05T04:18:17.726Z"
+        }
+      ],
+      "regen_count": 1,
       "current": {
-        "generation_id": "lBScXuWieNWmDrJgV5hL",
+        "generation_id": "qKJj516j4B85M1nRoX6r",
         "model_id": "gemini-3.1-flash-image",
         "width": 768,
         "height": 1376,
-        "prompt": "A close view from behind in a dark room during a power outage: a colleague standing beside a seated woman rests a hand on her shoulder in support, and this hand on the shoulder is the main subject of the frame. The seated woman has chestnut shoulder-length wavy hair, an oatmeal knitted sweater and a terracotta-red scarf. Both look toward the same open laptop and papers on the table. The only light comes from a small battery-powered camping lantern on the table; a power bank with a cable is connected to the laptop, a mug of tea nearby. The rest of the room is in deep darkness. No faces visible. Support, trust, work that goes on.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles, buildings, signs and lettering are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details; lettering may be soft and only half legible. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles, signs and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering except the Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. Signs of war appear only where and as the description places them, as the main subject or in the background, with no people holding weapons, no blood, no wounded, no explosions or fireballs. No letter Z.",
+        "prompt": "A close view from behind in a dark room during a power outage: a colleague stands beside a seated woman, cut by the edge of the frame so that only one arm shows, and rests that one hand on her shoulder in support; this single hand on the shoulder is the main subject of the frame, and there are no other hands in the air. The seated woman has chestnut shoulder-length wavy hair, an oatmeal knitted sweater and a terracotta-red scarf. Both look toward the same open laptop and papers on the table. The only light comes from a small battery-powered camping lantern on the table; a power bank with a cable is connected to the laptop, a mug of tea nearby. The rest of the room is in deep darkness. No faces visible. Support, trust, work that goes on.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles, buildings, signs and lettering are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details; lettering may be soft and only half legible. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles, signs and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering except the Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. Signs of war appear only where and as the description places them, as the main subject or in the background, with no people holding weapons, no blood, no wounded, no explosions or fireballs. No letter Z.",
         "refs": [
           "asset:wVFJmXuDlRXSYePj8fTm"
         ],
         "file": "work/01-natalia/frames/frame-27.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
-        "credits": 609,
-        "completed_at": "2026-11-05T04:18:17.726Z"
+        "credits": 677,
+        "completed_at": "2026-11-05T04:40:57.044Z"
       }
     },
     "frame/28": {
@@ -1453,7 +1509,7 @@
     "created_at": "2026-11-05T00:41:54.681Z",
     "design_credits_source": "docs"
   },
-  "updated_at": "2026-11-05T04:38:55.509Z",
+  "updated_at": "2026-11-05T04:41:09.581Z",
   "narration": {
     "model_id": "eleven_v4",
     "voice_id": "49POAIkFDXsxrtR84sdj",
@@ -1568,8 +1624,8 @@
   "image_prices": {
     "gemini-3.1-flash-image@1K": {
       "max": 1218,
-      "last": 609,
-      "count": 51
+      "last": 677,
+      "count": 53
     },
     "gemini-3.1-flash-image@512": {
       "max": 409,
