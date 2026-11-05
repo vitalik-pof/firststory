@@ -1,7 +1,7 @@
 {
   "story": "01-natalia",
   "credits": {
-    "total_spent": 37254,
+    "total_spent": 37660,
     "runs": [
       {
         "script": "voice-previews",
@@ -229,6 +229,15 @@
         "credits_before": 37109,
         "credits_after": 37786,
         "spent_run": 677
+      },
+      {
+        "script": "frames",
+        "started_at": "2026-11-05T06:10:30.000Z",
+        "finished_at": "2026-11-05T06:12:00.000Z",
+        "credits_before": 37970,
+        "credits_after": 38376,
+        "spent_run": 406,
+        "note": "зупинено продюсером після першого кадру"
       }
     ]
   },
@@ -547,7 +556,7 @@
         "completed_at": "2026-11-05T03:44:47.418Z"
       }
     },
-    "frame/01": {
+    "frame-v3/01": {
       "history": [],
       "regen_count": 0,
       "current": {
@@ -557,14 +566,14 @@
         "height": 1376,
         "prompt": "An old green Soviet-design eight-wheeled armoured personnel carrier stands in the middle of a home courtyard in Donetsk on a hot July midday: it is the clear main subject, in the centre of the frame, seen from above through an open fourth-floor window. Its hatches are shut and its armour is dusty; its heavy wheels have rolled over the edge of a blooming rose bed, crushing some roses, and left dusty tyre marks across the asphalt. It has taken over the courtyard like an intruder. Around it, an ordinary courtyard between Soviet-era nine-storey panel apartment blocks: rose bushes, a bench, an empty metal children's swing. There is nobody in the courtyard: no residents, no children, no soldiers. In the near foreground, only the edge of a white window frame, a tulle curtain and a red geranium on the sill: we are looking from home. A bleached calm sky above the opposite building. Hot still air and silence: a home courtyard occupied by a foreign military vehicle.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles, buildings, signs and lettering are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details; lettering may be soft and only half legible. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles, signs and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering except the Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. Signs of war appear only where and as the description places them, as the main subject or in the background, with no people holding weapons, no blood, no wounded, no explosions or fireballs. No letter Z.",
         "refs": [],
-        "file": "work/01-natalia/frames/frame-01.png",
+        "file": "work/01-natalia/frames-v3/frame-01.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 406,
         "completed_at": "2026-11-05T03:53:50.396Z"
       }
     },
-    "frame/02": {
+    "frame-v3/02": {
       "history": [],
       "regen_count": 0,
       "current": {
@@ -576,14 +585,14 @@
         "refs": [
           "asset:pdOJgsg0CdK16mF72UB9"
         ],
-        "file": "work/01-natalia/frames/frame-02.png",
+        "file": "work/01-natalia/frames-v3/frame-02.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 609,
         "completed_at": "2026-11-05T03:54:53.736Z"
       }
     },
-    "frame/03": {
+    "frame-v3/03": {
       "history": [
         {
           "generation_id": "oI8zUyum5i4bYE4WYBeS",
@@ -592,7 +601,7 @@
           "height": 1376,
           "prompt": "A small silver Daewoo Lanos sedan with a roof rack piled with bags and bundles tied with rope drives away from the viewer along a two-lane road out of the city into the open steppe on a hot July midday, seen from behind and slightly above: the car is the main subject, in the centre of the road, and inside it are only tiny dark silhouettes, no faces. The car has just passed a makeshift roadside checkpoint that narrows the road to one lane: a few grey concrete blocks, sandbags and old tyres, with no people visible. In the foreground at the right roadside stands a white rectangular Ukrainian end-of-settlement sign with a thin black border, the black name «ДОНЕЦЬК» crossed by one red diagonal stripe from the lower left to the upper right. Sunflower fields on both sides, a conical spoil heap on the horizon, a huge pale summer sky in the upper half of the frame. Midday haze: leaving the home city behind.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles, buildings, signs and lettering are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details; lettering may be soft and only half legible. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles, signs and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering except the Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. Signs of war appear only where and as the description places them, as the main subject or in the background, with no people holding weapons, no blood, no wounded, no explosions or fireballs. No letter Z.",
           "refs": [],
-          "file": "work/01-natalia/frames/frame-03.v1.png",
+          "file": "work/01-natalia/frames-v3/frame-03.v1.png",
           "aspect_ratio": "9:16",
           "resolution": "1K",
           "credits": 406,
@@ -607,14 +616,14 @@
         "height": 1376,
         "prompt": "A small silver Daewoo Lanos sedan with a roof rack piled with bags and bundles tied with rope drives away from the viewer along a two-lane road out of the city into the open steppe on a hot July midday, seen from behind and slightly above: the car is the main subject, in the centre of the road, and inside it are only tiny dark silhouettes, no faces. The car has just passed a makeshift roadside checkpoint, which now stays behind it, nearer to the viewer, at the left roadside: a few grey concrete blocks, sandbags and old tyres, with no people visible. In the foreground at the right roadside stands a white rectangular Ukrainian end-of-settlement sign with a thin black border, soft and loosely painted like the road, the black name ДОНЕЦЬК without any quotation marks, crossed by one red diagonal stripe from the lower left to the upper right. Sunflower fields on both sides, a conical spoil heap on the horizon, a huge pale summer sky in the upper half of the frame. Midday haze: leaving the home city behind.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles, buildings, signs and lettering are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details; lettering may be soft and only half legible. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles, signs and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering except the Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. Signs of war appear only where and as the description places them, as the main subject or in the background, with no people holding weapons, no blood, no wounded, no explosions or fireballs. No letter Z.",
         "refs": [],
-        "file": "work/01-natalia/frames/frame-03.png",
+        "file": "work/01-natalia/frames-v3/frame-03.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 657,
         "completed_at": "2026-11-05T04:28:52.523Z"
       }
     },
-    "frame/04": {
+    "frame-v3/04": {
       "history": [
         {
           "generation_id": "5tzEgGfG8jXK2xN5nOdB",
@@ -623,7 +632,7 @@
           "height": 1376,
           "prompt": "The national flag of Ukraine, sky blue on top and sunflower yellow below, flies on a tall flagpole in front of a modest one-storey whitewashed village council building with a grey slate roof at the edge of a small village on a hot July afternoon: the flag is the clear main subject. Along the quiet steppe road beside it, a small silver Daewoo Lanos sedan with bags tied on its roof rack drives past, small in the frame, no people visible. Sunflower fields, a dusty apricot tree, a huge pale sky. No text or signs on the building. A first breath of safety: land that is not occupied.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles, buildings, signs and lettering are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details; lettering may be soft and only half legible. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles, signs and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering except the Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. Signs of war appear only where and as the description places them, as the main subject or in the background, with no people holding weapons, no blood, no wounded, no explosions or fireballs. No letter Z.",
           "refs": [],
-          "file": "work/01-natalia/frames/frame-04.v1.png",
+          "file": "work/01-natalia/frames-v3/frame-04.v1.png",
           "aspect_ratio": "9:16",
           "resolution": "1K",
           "credits": 406,
@@ -638,14 +647,14 @@
         "height": 1376,
         "prompt": "The national flag of Ukraine, sky blue on top and sunflower yellow below, flies on a tall flagpole in front of a modest one-storey whitewashed village council building with a grey slate roof at the edge of a small village on a hot July afternoon: the flag is the clear main subject. Along the quiet steppe road beside it, a small silver Daewoo Lanos sedan with bags tied on its roof rack drives past, small in the frame, no people visible. Sunflower fields, a dusty apricot tree, a huge pale sky. No text or signs on the building. The dusty road and roadside grass run down to the very bottom edge of the frame, with no blank paper below. A first breath of safety: land that is not occupied.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles, buildings, signs and lettering are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details; lettering may be soft and only half legible. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles, signs and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering except the Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. Signs of war appear only where and as the description places them, as the main subject or in the background, with no people holding weapons, no blood, no wounded, no explosions or fireballs. No letter Z.",
         "refs": [],
-        "file": "work/01-natalia/frames/frame-04.png",
+        "file": "work/01-natalia/frames-v3/frame-04.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 594,
         "completed_at": "2026-11-05T04:29:49.576Z"
       }
     },
-    "frame/05": {
+    "frame-v3/05": {
       "history": [],
       "regen_count": 0,
       "current": {
@@ -655,14 +664,14 @@
         "height": 1376,
         "prompt": "Two new matching school backpacks for first-graders stand side by side on a neatly made bed in a small Soviet-era children's room in Donetsk on a summer afternoon, each with a big fluffy white nylon hair bow on top, as Ukrainian girls wear on their first day of school: the backpacks are the main subject in the centre of the frame. On the wardrobe door hang two small dark-blue school pinafore dresses with white blouses, ready. Tulle curtains, warm stripes of sunlight on a worn parquet floor and a woven rug, a child's drawing on the wallpaper. No people. Everything is ready for the first of September and waiting for the girls to come back soon.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles, buildings, signs and lettering are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details; lettering may be soft and only half legible. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles, signs and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering except the Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. Signs of war appear only where and as the description places them, as the main subject or in the background, with no people holding weapons, no blood, no wounded, no explosions or fireballs. No letter Z.",
         "refs": [],
-        "file": "work/01-natalia/frames/frame-05.png",
+        "file": "work/01-natalia/frames-v3/frame-05.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 406,
         "completed_at": "2026-11-05T03:57:42.354Z"
       }
     },
-    "frame/07": {
+    "frame-v3/07": {
       "history": [],
       "regen_count": 0,
       "current": {
@@ -672,14 +681,14 @@
         "height": 1376,
         "prompt": "Close view of an old-fashioned tear-off wall calendar, a thick block of thin pages, hanging on faded floral wallpaper in a modest rented room: it is the main subject of the frame. Its top page shows a large number «28» with the Ukrainian month name «СЕРПЕНЬ» above it: the last days of summer, September is near. Below it, softly out of focus on a wooden table, a mobile phone, a bunch of keys with a small terracotta-red tassel and a folded paper map. Late evening, warm lamp light from the side, deep indigo shadows. No people. Time to decide.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles, buildings, signs and lettering are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details; lettering may be soft and only half legible. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles, signs and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering except the Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. Signs of war appear only where and as the description places them, as the main subject or in the background, with no people holding weapons, no blood, no wounded, no explosions or fireballs. No letter Z.",
         "refs": [],
-        "file": "work/01-natalia/frames/frame-07.png",
+        "file": "work/01-natalia/frames-v3/frame-07.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 406,
         "completed_at": "2026-11-05T03:58:43.050Z"
       }
     },
-    "frame/08": {
+    "frame-v3/08": {
       "history": [],
       "regen_count": 0,
       "current": {
@@ -692,14 +701,14 @@
           "asset:pdOJgsg0CdK16mF72UB9",
           "asset:AI1sdoVee9iwlrRkbBhk"
         ],
-        "file": "work/01-natalia/frames/frame-08.png",
+        "file": "work/01-natalia/frames-v3/frame-08.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 812,
         "completed_at": "2026-11-05T03:59:58.026Z"
       }
     },
-    "frame/09": {
+    "frame-v3/09": {
       "history": [
         {
           "generation_id": "lRWfYenHw9wUhtPCR0oZ",
@@ -708,7 +717,7 @@
           "height": 1376,
           "prompt": "Night turning into dawn on an empty steppe highway on the way to Pavlohrad, seen from behind a small car. The upper two thirds of the vertical frame is an enormous deep indigo sky full of stars, with the first pale gold of dawn along the flat horizon ahead. Below, a straight two-lane road runs away from the viewer toward the dawn, and on it a small car, seen from behind with its red tail lights glowing and its headlights lighting the road ahead, drives away from us toward the horizon. A little ahead of the car, at the right roadside, stands a white rectangular Ukrainian settlement entry sign with a thin black border, without any red stripe, facing the car and the viewer and reading «ПАВЛОГРАД»; the car has not reached it yet. The faint lights of a town glow far away on the horizon. A tiny car in a vast landscape driving into the dawn: trust and quiet hope. No visible people.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles, buildings, signs and lettering are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details; lettering may be soft and only half legible. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles, signs and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering except the Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. Signs of war appear only where and as the description places them, as the main subject or in the background, with no people holding weapons, no blood, no wounded, no explosions or fireballs. No letter Z.",
           "refs": [],
-          "file": "work/01-natalia/frames/frame-09.v1.png",
+          "file": "work/01-natalia/frames-v3/frame-09.v1.png",
           "aspect_ratio": "9:16",
           "resolution": "1K",
           "credits": 406,
@@ -723,14 +732,14 @@
         "height": 1376,
         "prompt": "Night turning into dawn on an empty steppe highway on the way to Pavlohrad, seen from behind a small car. The upper two thirds of the vertical frame is an enormous deep indigo sky full of stars, with the first pale gold of dawn along the flat horizon ahead. Below, a straight two-lane road runs away from the viewer toward the dawn, and on it a small car, seen from behind with its red tail lights glowing and its headlights lighting the road ahead, drives away from us toward the horizon. A little ahead of the car, at the right roadside, stands a white rectangular Ukrainian settlement entry sign with a thin black border, without any red stripe, facing the car and the viewer, soft and loosely painted like the road, reading ПАВЛОГРАД without any quotation marks; the car has not reached it yet. The faint lights of a town glow far away on the horizon. A tiny car in a vast landscape driving into the dawn: trust and quiet hope. No visible people.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles, buildings, signs and lettering are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details; lettering may be soft and only half legible. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles, signs and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering except the Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. Signs of war appear only where and as the description places them, as the main subject or in the background, with no people holding weapons, no blood, no wounded, no explosions or fireballs. No letter Z.",
         "refs": [],
-        "file": "work/01-natalia/frames/frame-09.png",
+        "file": "work/01-natalia/frames-v3/frame-09.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 406,
         "completed_at": "2026-11-05T04:31:18.321Z"
       }
     },
-    "frame/11": {
+    "frame-v3/11": {
       "history": [],
       "regen_count": 0,
       "current": {
@@ -742,14 +751,14 @@
         "refs": [
           "asset:pdOJgsg0CdK16mF72UB9"
         ],
-        "file": "work/01-natalia/frames/frame-11.png",
+        "file": "work/01-natalia/frames-v3/frame-11.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 609,
         "completed_at": "2026-11-05T04:02:12.491Z"
       }
     },
-    "frame/12": {
+    "frame-v3/12": {
       "history": [],
       "regen_count": 0,
       "current": {
@@ -762,14 +771,14 @@
           "asset:C96KDsln5nzlCZNylXxW",
           "asset:UZYawogNdmWq89sm1FL3"
         ],
-        "file": "work/01-natalia/frames/frame-12.png",
+        "file": "work/01-natalia/frames-v3/frame-12.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 812,
         "completed_at": "2026-11-05T04:03:04.649Z"
       }
     },
-    "frame/13": {
+    "frame-v3/13": {
       "history": [
         {
           "generation_id": "GOlYDqfH8NM2E8XJ4a5l",
@@ -780,7 +789,7 @@
           "refs": [
             "asset:C96KDsln5nzlCZNylXxW"
           ],
-          "file": "work/01-natalia/frames/frame-13.v1.png",
+          "file": "work/01-natalia/frames-v3/frame-13.v1.png",
           "aspect_ratio": "9:16",
           "resolution": "1K",
           "credits": 609,
@@ -797,14 +806,14 @@
         "refs": [
           "asset:C96KDsln5nzlCZNylXxW"
         ],
-        "file": "work/01-natalia/frames/frame-13.png",
+        "file": "work/01-natalia/frames-v3/frame-13.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 994,
         "completed_at": "2026-11-05T04:33:18.071Z"
       }
     },
-    "frame/14": {
+    "frame-v3/14": {
       "history": [
         {
           "generation_id": "b6fgcTh2J3LDGbEI25jf",
@@ -815,7 +824,7 @@
           "refs": [
             "asset:C96KDsln5nzlCZNylXxW"
           ],
-          "file": "work/01-natalia/frames/frame-14.v1.png",
+          "file": "work/01-natalia/frames-v3/frame-14.v1.png",
           "aspect_ratio": "9:16",
           "resolution": "1K",
           "credits": 609,
@@ -832,14 +841,14 @@
         "refs": [
           "asset:C96KDsln5nzlCZNylXxW"
         ],
-        "file": "work/01-natalia/frames/frame-14.png",
+        "file": "work/01-natalia/frames-v3/frame-14.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 705,
         "completed_at": "2026-11-05T04:35:00.039Z"
       }
     },
-    "frame/15": {
+    "frame-v3/15": {
       "history": [],
       "regen_count": 0,
       "current": {
@@ -851,14 +860,14 @@
         "refs": [
           "asset:AI1sdoVee9iwlrRkbBhk"
         ],
-        "file": "work/01-natalia/frames/frame-15.png",
+        "file": "work/01-natalia/frames-v3/frame-15.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 609,
         "completed_at": "2026-11-05T04:05:58.366Z"
       }
     },
-    "frame/16": {
+    "frame-v3/16": {
       "history": [
         {
           "generation_id": "gIOH83SHGEyD8TocwTKc",
@@ -871,7 +880,7 @@
             "asset:zcrqSVmbaIfrqTQNcj4Q",
             "asset:XSvwDv9dVuefEiKmfu0c"
           ],
-          "file": "work/01-natalia/frames/frame-16.v1.png",
+          "file": "work/01-natalia/frames-v3/frame-16.v1.png",
           "aspect_ratio": "9:16",
           "resolution": "1K",
           "credits": 1015,
@@ -890,14 +899,14 @@
           "asset:zcrqSVmbaIfrqTQNcj4Q",
           "asset:XSvwDv9dVuefEiKmfu0c"
         ],
-        "file": "work/01-natalia/frames/frame-16.png",
+        "file": "work/01-natalia/frames-v3/frame-16.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 1015,
         "completed_at": "2026-11-05T04:35:56.784Z"
       }
     },
-    "frame/17": {
+    "frame-v3/17": {
       "history": [
         {
           "generation_id": "uIX1ASUcO1XTgXcN9s2Q",
@@ -906,7 +915,7 @@
           "height": 1376,
           "prompt": "Moving to Dnipro, seen from high above on a spring morning: a small car with bags on its roof rack crosses a long road bridge over the very wide Dnipro river toward the city on the high green right bank; the car on the bridge, heading into the city, is what the eye follows. Sunlit water below, Soviet-era apartment blocks among trees on the high bank. A big spring sky with soft clouds fills the upper part of the vertical frame. No visible people. Fresh and open, a new beginning.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles, buildings, signs and lettering are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details; lettering may be soft and only half legible. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles, signs and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering except the Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. Signs of war appear only where and as the description places them, as the main subject or in the background, with no people holding weapons, no blood, no wounded, no explosions or fireballs. No letter Z.",
           "refs": [],
-          "file": "work/01-natalia/frames/frame-17.v1.png",
+          "file": "work/01-natalia/frames-v3/frame-17.v1.png",
           "aspect_ratio": "9:16",
           "resolution": "1K",
           "credits": 406,
@@ -921,14 +930,14 @@
         "height": 1376,
         "prompt": "Moving to Dnipro, seen from high above on a spring morning: a small car with bags on its roof rack crosses a long road bridge over the very wide Dnipro river toward the city on the high green right bank; the car on the bridge, heading into the city, is what the eye follows. Sunlit water below, Soviet-era apartment blocks among trees on the high bank. A big spring sky with soft clouds fills the upper part of the vertical frame. The sky, the river and the bridge are painted to every edge of the frame, with no border line and no blank margin. No visible people. Fresh and open, a new beginning.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles, buildings, signs and lettering are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details; lettering may be soft and only half legible. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles, signs and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering except the Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. Signs of war appear only where and as the description places them, as the main subject or in the background, with no people holding weapons, no blood, no wounded, no explosions or fireballs. No letter Z.",
         "refs": [],
-        "file": "work/01-natalia/frames/frame-17.png",
+        "file": "work/01-natalia/frames-v3/frame-17.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 406,
         "completed_at": "2026-11-05T04:36:50.729Z"
       }
     },
-    "frame/18": {
+    "frame-v3/18": {
       "history": [
         {
           "generation_id": "kxWdpdDtyKyGaM2QGHdQ",
@@ -942,7 +951,7 @@
             "asset:zcrqSVmbaIfrqTQNcj4Q",
             "asset:XSvwDv9dVuefEiKmfu0c"
           ],
-          "file": "work/01-natalia/frames/frame-18.v1.png",
+          "file": "work/01-natalia/frames-v3/frame-18.v1.png",
           "aspect_ratio": "9:16",
           "resolution": "1K",
           "credits": 1218,
@@ -962,14 +971,14 @@
           "asset:zcrqSVmbaIfrqTQNcj4Q",
           "asset:XSvwDv9dVuefEiKmfu0c"
         ],
-        "file": "work/01-natalia/frames/frame-18.png",
+        "file": "work/01-natalia/frames-v3/frame-18.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 1218,
         "completed_at": "2026-11-05T04:37:49.529Z"
       }
     },
-    "frame/19": {
+    "frame-v3/19": {
       "history": [],
       "regen_count": 0,
       "current": {
@@ -981,14 +990,14 @@
         "refs": [
           "asset:pdOJgsg0CdK16mF72UB9"
         ],
-        "file": "work/01-natalia/frames/frame-19.png",
+        "file": "work/01-natalia/frames-v3/frame-19.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 609,
         "completed_at": "2026-11-05T04:09:56.493Z"
       }
     },
-    "frame/20": {
+    "frame-v3/20": {
       "history": [
         {
           "generation_id": "sUe7SCoMaQ3LZTkDczqX",
@@ -999,7 +1008,7 @@
           "refs": [
             "asset:wVFJmXuDlRXSYePj8fTm"
           ],
-          "file": "work/01-natalia/frames/frame-20.v1.png",
+          "file": "work/01-natalia/frames-v3/frame-20.v1.png",
           "aspect_ratio": "9:16",
           "resolution": "1K",
           "credits": 609,
@@ -1016,14 +1025,14 @@
         "refs": [
           "asset:wVFJmXuDlRXSYePj8fTm"
         ],
-        "file": "work/01-natalia/frames/frame-20.png",
+        "file": "work/01-natalia/frames-v3/frame-20.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 609,
         "completed_at": "2026-11-05T04:38:55.509Z"
       }
     },
-    "frame/21": {
+    "frame-v3/21": {
       "history": [],
       "regen_count": 0,
       "current": {
@@ -1033,14 +1042,14 @@
         "height": 1376,
         "prompt": "A tidy accountant's work desk by a window in daylight, the main subject of the frame: an open laptop showing abstract spreadsheet columns with no readable numbers or text, a calculator, a neat stack of folders and documents with abstract lines, a cup of coffee. Over the back of the office chair hangs a long terracotta-red theatre fabric from the stage. A small potted plant on the windowsill. No people. A new profession and a beloved stage side by side. Calm daylight, quiet satisfaction.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles, buildings, signs and lettering are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details; lettering may be soft and only half legible. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles, signs and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering except the Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. Signs of war appear only where and as the description places them, as the main subject or in the background, with no people holding weapons, no blood, no wounded, no explosions or fireballs. No letter Z.",
         "refs": [],
-        "file": "work/01-natalia/frames/frame-21.png",
+        "file": "work/01-natalia/frames-v3/frame-21.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 406,
         "completed_at": "2026-11-05T04:11:47.476Z"
       }
     },
-    "frame/22": {
+    "frame-v3/22": {
       "history": [],
       "regen_count": 0,
       "current": {
@@ -1050,14 +1059,14 @@
         "height": 1376,
         "prompt": "Seen from directly above: many hands stacked on top of each other in the middle of a circle, people of different ages joining hands together before a performance; the stacked hands are the main subject in the centre of the frame. Sleeves of black clothing, a knitted sweater, denim; one woman's hand wears a thin terracotta-red bracelet. Below the hands, a wooden stage floor and the edge of colourful fabrics in terracotta, ochre and teal. Warm light. No faces visible. The people met along the way: togetherness and trust.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles, buildings, signs and lettering are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details; lettering may be soft and only half legible. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles, signs and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering except the Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. Signs of war appear only where and as the description places them, as the main subject or in the background, with no people holding weapons, no blood, no wounded, no explosions or fireballs. No letter Z.",
         "refs": [],
-        "file": "work/01-natalia/frames/frame-22.png",
+        "file": "work/01-natalia/frames-v3/frame-22.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 406,
         "completed_at": "2026-11-05T04:12:57.587Z"
       }
     },
-    "frame/23": {
+    "frame-v3/23": {
       "history": [],
       "regen_count": 0,
       "current": {
@@ -1069,14 +1078,14 @@
         "refs": [
           "asset:wVFJmXuDlRXSYePj8fTm"
         ],
-        "file": "work/01-natalia/frames/frame-23.png",
+        "file": "work/01-natalia/frames-v3/frame-23.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 609,
         "completed_at": "2026-11-05T04:13:48.943Z"
       }
     },
-    "frame/24": {
+    "frame-v3/24": {
       "history": [
         {
           "generation_id": "SDfc2UTb8AaHDgOOvjOH",
@@ -1087,7 +1096,7 @@
           "refs": [
             "asset:wVFJmXuDlRXSYePj8fTm"
           ],
-          "file": "work/01-natalia/frames/frame-24.v1.png",
+          "file": "work/01-natalia/frames-v3/frame-24.v1.png",
           "aspect_ratio": "9:16",
           "resolution": "1K",
           "credits": 609,
@@ -1104,14 +1113,14 @@
         "refs": [
           "asset:wVFJmXuDlRXSYePj8fTm"
         ],
-        "file": "work/01-natalia/frames/frame-24.png",
+        "file": "work/01-natalia/frames-v3/frame-24.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 609,
         "completed_at": "2026-11-05T04:39:49.254Z"
       }
     },
-    "frame/25": {
+    "frame-v3/25": {
       "history": [],
       "regen_count": 0,
       "current": {
@@ -1123,14 +1132,14 @@
         "refs": [
           "asset:wVFJmXuDlRXSYePj8fTm"
         ],
-        "file": "work/01-natalia/frames/frame-25.png",
+        "file": "work/01-natalia/frames-v3/frame-25.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 609,
         "completed_at": "2026-11-05T04:16:01.980Z"
       }
     },
-    "frame/26": {
+    "frame-v3/26": {
       "history": [],
       "regen_count": 0,
       "current": {
@@ -1140,14 +1149,14 @@
         "height": 1376,
         "prompt": "A winter night in Dnipro during a wartime power blackout. The main subject is a single window in the middle of the vertical frame, in a dark nine-storey apartment block, glowing with the soft light of a small battery-powered lamp; inside it, the small silhouettes of a few people sitting close together around a table, working together, no faces or details. Every other window and every street lamp is dark. Around it, a dark district of Soviet-era panel blocks under a deep indigo starry sky, thin snow on the ground and the roofs; on the street corner below, two steel anti-tank hedgehogs of crossed beams and a low wall of sandbags, dusted with snow and faint in the moonlight. Dark times, and one warm window where people keep doing important work.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles, buildings, signs and lettering are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details; lettering may be soft and only half legible. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles, signs and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering except the Ukrainian Cyrillic words given in the description; no English or Russian text, no logos, no brands, no watermark. Signs of war appear only where and as the description places them, as the main subject or in the background, with no people holding weapons, no blood, no wounded, no explosions or fireballs. No letter Z.",
         "refs": [],
-        "file": "work/01-natalia/frames/frame-26.png",
+        "file": "work/01-natalia/frames-v3/frame-26.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 406,
         "completed_at": "2026-11-05T04:17:16.734Z"
       }
     },
-    "frame/27": {
+    "frame-v3/27": {
       "history": [
         {
           "generation_id": "lBScXuWieNWmDrJgV5hL",
@@ -1158,7 +1167,7 @@
           "refs": [
             "asset:wVFJmXuDlRXSYePj8fTm"
           ],
-          "file": "work/01-natalia/frames/frame-27.v1.png",
+          "file": "work/01-natalia/frames-v3/frame-27.v1.png",
           "aspect_ratio": "9:16",
           "resolution": "1K",
           "credits": 609,
@@ -1175,14 +1184,14 @@
         "refs": [
           "asset:wVFJmXuDlRXSYePj8fTm"
         ],
-        "file": "work/01-natalia/frames/frame-27.png",
+        "file": "work/01-natalia/frames-v3/frame-27.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 677,
         "completed_at": "2026-11-05T04:40:57.044Z"
       }
     },
-    "frame/28": {
+    "frame-v3/28": {
       "history": [],
       "regen_count": 0,
       "current": {
@@ -1194,14 +1203,14 @@
         "refs": [
           "asset:wVFJmXuDlRXSYePj8fTm"
         ],
-        "file": "work/01-natalia/frames/frame-28.png",
+        "file": "work/01-natalia/frames-v3/frame-28.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 609,
         "completed_at": "2026-11-05T04:19:07.552Z"
       }
     },
-    "frame/06": {
+    "frame-v3/06": {
       "history": [],
       "regen_count": 0,
       "current": {
@@ -1213,14 +1222,14 @@
         "refs": [
           "generation:uGCo8AItuQiQ8DmI4L37"
         ],
-        "file": "work/01-natalia/frames/frame-06.png",
+        "file": "work/01-natalia/frames-v3/frame-06.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 609,
         "completed_at": "2026-11-05T04:21:01.331Z"
       }
     },
-    "frame/10": {
+    "frame-v3/10": {
       "history": [
         {
           "generation_id": "C0tr6LVti2iRZxGM3EO7",
@@ -1231,7 +1240,7 @@
           "refs": [
             "generation:qL5d2v1414b20GsHUAyp"
           ],
-          "file": "work/01-natalia/frames/frame-10.v1.png",
+          "file": "work/01-natalia/frames-v3/frame-10.v1.png",
           "aspect_ratio": "9:16",
           "resolution": "1K",
           "credits": 609,
@@ -1248,12 +1257,28 @@
         "refs": [
           "generation:qL5d2v1414b20GsHUAyp"
         ],
-        "file": "work/01-natalia/frames/frame-10.png",
+        "file": "work/01-natalia/frames-v3/frame-10.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 866,
         "completed_at": "2026-11-05T04:32:23.664Z"
       }
+    },
+    "dropped/v4-frame-01": {
+      "history": [],
+      "regen_count": 0,
+      "pending": {
+        "kind": "initial",
+        "status": "created",
+        "prompt": "Medium close shot from inside a dim apartment, camera at standing eye height just behind a white tulle curtain, 50mm lens, looking down through the window into a courtyard four floors below. In the foreground, a woman's fingers, the edge of a short terracotta-red sleeve at the wrist, hold the edge of the tulle drawn aside by exactly one hand's width; the rest of the window stays covered by the curtain. Through that narrow gap, in the sunlit courtyard between Soviet-era nine-storey panel blocks, an old green eight-wheeled armoured personnel carrier stands parked across the asphalt beside a metal swing and a bench, its plain armour bare of any markings, its rear hatch hanging open, a thin bluish exhaust haze hanging in the air behind it. The courtyard is empty and the swing hangs still. The armoured vehicle is the main subject of the picture and its clearest, most readable form; the fingers and the tulle in the foreground stay soft. The single light source is the bright July midday sun outside; inside, the room is in shadow, and one bar of that daylight falls across the fingers. The armoured vehicle, seen through the gap, sits in the centre and upper half of the frame; the dim windowsill fills the lower fifth.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles and buildings are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering, no logos, no brands, no watermark. No people holding weapons, no blood, no wounded, no explosions or fireballs.",
+        "refs": [],
+        "aspect_ratio": "9:16",
+        "resolution": "1K",
+        "requested_at": "2026-11-05T06:10:58.377Z",
+        "generation_id": "EdfbvzlXVFbjsXXFvtqg",
+        "credits_before": 37970
+      },
+      "note": "Кадр 1 четвертої розкадровки (бронетранспортер): генерацію завершено на сервері, але запуск зупинено до збереження, бо режисер прибрав солдатів і повернув текст історії. Картинка не потрібна."
     }
   },
   "assets": {
@@ -1509,7 +1534,7 @@
     "created_at": "2026-11-05T00:41:54.681Z",
     "design_credits_source": "docs"
   },
-  "updated_at": "2026-11-05T04:41:09.581Z",
+  "updated_at": "2026-11-05T06:10:59.214Z",
   "narration": {
     "model_id": "eleven_v4",
     "voice_id": "49POAIkFDXsxrtR84sdj",
