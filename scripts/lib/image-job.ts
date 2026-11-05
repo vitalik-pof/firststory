@@ -84,12 +84,12 @@ export function planJob(story: string, job: ImageJob): { action: JobAction; why:
   return { action: 'generate', why: 'нова генерація' };
 }
 
-async function toPng(data: Buffer, contentType: string | null): Promise<Buffer> {
+export async function toPng(data: Buffer, contentType: string | null): Promise<Buffer> {
   if (contentType?.includes('png') || (data[0] === 0x89 && data[1] === 0x50)) return data;
   return sharp(data).png().toBuffer();
 }
 
-function writeAtomic(file: string, data: Buffer): void {
+export function writeAtomic(file: string, data: Buffer): void {
   mkdirSync(dirname(file), { recursive: true });
   writeFileSync(`${file}.tmp`, data);
   renameSync(`${file}.tmp`, file);

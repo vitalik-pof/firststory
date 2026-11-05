@@ -6,7 +6,7 @@
 // просто пропускаються.
 
 import type { Alignment } from './elevenlabs';
-import { TAG_RE, collapseWs, stripTags } from './text';
+import { TAG_RE, collapseWs, sha1, stripTags } from './text';
 
 export interface SpeechFragmentInput {
   n: number;
@@ -217,3 +217,11 @@ export function checkTimings(fragments: FragmentTiming[], duration: number): str
 }
 
 export { collapseWs };
+
+/**
+ * Хеш частини озвучення: ім'я файлів narration.part-<хеш>.mp3 і ключ у manifest.narration.parts.
+ * Спільний для narrate.ts і restore-media.ts: за ним відновлена з історії відповідь упізнається однозначно.
+ */
+export function narrationPartHash(body: Record<string, unknown>, voiceId: string, outputFormat: string): string {
+  return sha1(JSON.stringify({ body, voice: voiceId, outputFormat })).slice(0, 10);
+}

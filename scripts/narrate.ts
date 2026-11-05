@@ -24,8 +24,7 @@ import { readManifest, updateManifest } from './lib/manifest';
 import { assertStoryExists, paths } from './lib/paths';
 import { estimateTts, fmt, ttsRate } from './lib/pricing';
 import { RunContext } from './lib/run-context';
-import { sha1 } from './lib/text';
-import { buildFragmentTimings, buildSpeechText, checkTimings, shiftFragments, type FragmentTiming, type TimingsFile, type TimingsPart } from './lib/timings';
+import { buildFragmentTimings, buildSpeechText, checkTimings, narrationPartHash, shiftFragments, type FragmentTiming, type TimingsFile, type TimingsPart } from './lib/timings';
 
 const MODEL_ID = 'eleven_v4';
 const HELP = `Крок 6: озвучення з таймінгами.
@@ -122,7 +121,7 @@ async function main(): Promise<void> {
     if (langCode) body.language_code = langCode;
     if (Object.keys(voiceSettings).length) body.voice_settings = voiceSettings;
     if (values.seed !== undefined) body.seed = Number(values.seed);
-    const hash = sha1(JSON.stringify({ body, voice: voice.voiceId, outputFormat })).slice(0, 10);
+    const hash = narrationPartHash(body, voice.voiceId, outputFormat);
     return {
       index, fragments: fr, text, spans, body, hash, chars: text.length,
       mp3: paths.workFile(story, `narration.part-${hash}.mp3`), raw: paths.workFile(story, `narration.part-${hash}.response.json`),

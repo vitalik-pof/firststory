@@ -340,7 +340,7 @@ export function renderVoiceBody(d: { voice?: VoiceEntry; previews: Array<{ n: nu
   }
   voiceBody += '<h3>Три проби голосу</h3>';
   voiceBody += d.previews.length
-    ? d.previews.map((p) => `<div class="card"><span class="badge">Проба ${p.n}${p.chosen ? ', обрана для озвучення' : ''}</span>${rel(p.key) ? `<audio controls preload="none" src="${esc(rel(p.key)!)}"></audio>` : ''}</div>`).join('\n')
+    ? d.previews.map((p) => `<div class="card"><span class="badge">Проба ${p.n}${p.chosen ? ', обрана для озвучення' : ''}</span>${rel(p.key) ? `<audio controls preload="none" src="${esc(rel(p.key)!)}"></audio>` : '<p class="muted">Файл проби недоступний: ElevenLabs його не зберіг.</p>'}</div>`).join('\n')
     : '<div class="note">Проб ще немає (крок 5).</div>';
   voiceBody += '<h3>Повне озвучення</h3>';
   voiceBody += rel('narration') ? `<audio controls preload="none" src="${esc(rel('narration')!)}"></audio>${d.timings ? `<p class="muted">Тривалість ${fmtTime(d.timings.duration)} (${d.timings.duration} с), голос ${esc(d.timings.voice_id)}, модель ${esc(d.timings.model_id)}.</p>` : ''}` : '<div class="note">Озвучення ще немає (крок 6).</div>';

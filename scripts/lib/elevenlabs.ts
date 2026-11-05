@@ -174,6 +174,21 @@ export interface HistoryItem {
   character_count_change_to: number;
 }
 
+/** Повний запис історії (GET /v1/history/{id}): у списку text і voice_id порожні, а тут є dialogue і alignments. */
+export interface HistoryItemDetail extends HistoryItem {
+  dialogue?: Array<{ text: string; voice_id: string | null; voice_name?: string | null }> | null;
+  alignments?: { alignment?: Alignment | null; normalized_alignment?: Alignment | null } | null;
+  output_format?: string | null;
+  content_type?: string | null;
+  settings?: Record<string, unknown> | null;
+}
+
+export interface VoiceInfo {
+  voice_id: string;
+  name: string;
+  samples?: Array<{ sample_id: string; duration_secs?: number | null; size_bytes?: number | null }> | null;
+}
+
 /** Один запис у списку: сторінка, курсор, чи є далі. */
 export interface Page<T> {
   items: T[];
@@ -490,6 +505,36 @@ export class ElevenLabsClient {
       await this.sleep(this.stableEveryMs);
       waited += this.stableEveryMs;
     }
+  }
+
+  // ---------------------------------------------------------------- відновлення файлів (усе безкоштовне, лише читання)
+
+  /** Повний запис історії озвучення: текст запиту (dialogue), таймінги символів (alignments), формат. */
+  async getHistoryItem(id: string): Promise<HistoryItemDetail> {
+    return (await this.request<HistoryItemDetail>({ method: 'GET', path: `/v1/history/${encodeURIComponent(id)}`, response: 'json', label: `history get ${id}` })).data;
+  }
+
+  /** Аудіо запису історії (той самий MP3, що повернув виклик озвучення). */
+  async downloadHistoryAudio(id: string): Promise<Buffer> {
+    return (await this.request<Buffer>({ method: 'GET', path: `/v1/history/${encodeURIComponent(id)}/audio`, response: 'binary', timeoutMs: 180_000, label: `history audio ${id}` })).data;
+  }
+
+  async getVoice(voiceId: string): Promise<VoiceInfo> {
+    return (await this.request<VoiceInfo>({ method: 'GET', path: `/v1/voices/${encodeURIComponent(voiceId)}`, response: 'json', label: `voices get ${voiceId}` })).data;
+  }
+
+  /** Зразок голосу, збереженого з проби Voice Design (для створеного голосу це його проба). */
+  async downloadVoiceSample(voiceId: string, sampleId: string): Promise<Buffer> {
+    return (await this.request<Buffer>({ method: 'GET', path: `/v1/voices/${encodeURIComponent(voiceId)}/samples/${encodeURIComponent(sampleId)}/audio`, response: 'binary', timeoutMs: 120_000, label: `voice sample ${sampleId}` })).data;
+  }
+
+  /** Проба з Voice Design за generated_voice_id: працює лише якщо проби створювались із потоковим режимом (інакше 400). */
+  async streamVoicePreview(generatedVoiceId: string): Promise<Buffer> {
+    return (await this.request<Buffer>({ method: 'GET', path: `/v1/text-to-voice/${encodeURIComponent(generatedVoiceId)}/stream`, response: 'binary', timeoutMs: 120_000, label: `voice preview ${generatedVoiceId}` })).data;
+  }
+
+  async getAsset(id: string): Promise<Asset> {
+    return (await this.request<Asset>({ method: 'GET', path: `/v1/assets/${encodeURIComponent(id)}`, response: 'json', label: `assets get ${id}` })).data;
   }
 
   // ---------------------------------------------------------------- голос
