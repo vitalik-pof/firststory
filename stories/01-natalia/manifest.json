@@ -2993,5 +2993,28 @@
     "silent_fragments": [],
     "duration": 128.209,
     "assembled_at": "2026-11-06T05:36:30.658Z"
+  },
+  "film_en": {
+    "file": "work/01-natalia/en/film.mp4",
+    "language_code": "en",
+    "duration_s": 122.539,
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "video_codec": "h264",
+    "audio_codec": "aac",
+    "crf": 18,
+    "size_bytes": 123485621,
+    "sha256": "3e46cbba237bccf1c23e7504e318c63a8c5021db4863d40967e22003b665694c",
+    "rendered_at": "2026-11-06",
+    "render_command": "cd remotion && npx tsx render-film.ts --lang en --full",
+    "inputs": {
+      "props": "work/01-natalia/en/film-props.json",
+      "mix": "work/01-natalia/en/mix.mp3",
+      "timings": "stories/01-natalia/en/timings.json"
+    },
+    "credits": 0,
+    "delivered": "файлом режисерові в застосунок Claude 6 листопада 2026 року",
+    "drive_url": null
   }
 }
