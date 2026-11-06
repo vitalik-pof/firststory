@@ -1,7 +1,7 @@
 {
   "story": "01-natalia",
   "credits": {
-    "total_spent": 72226,
+    "total_spent": 73450,
     "runs": [
       {
         "script": "voice-previews",
@@ -390,6 +390,14 @@
         "credits_before": 89480,
         "credits_after": 90751,
         "spent_run": 1271
+      },
+      {
+        "script": "narrate",
+        "started_at": "2026-11-06T05:03:05.505Z",
+        "finished_at": "2026-11-06T05:04:03.410Z",
+        "credits_before": 90751,
+        "credits_after": 91975,
+        "spent_run": 1224
       }
     ]
   },
@@ -2371,7 +2379,7 @@
     "created_at": "2026-11-05T00:41:54.681Z",
     "design_credits_source": "docs"
   },
-  "updated_at": "2026-11-05T20:57:50.238Z",
+  "updated_at": "2026-11-06T05:04:03.411Z",
   "narration": {
     "model_id": "eleven_v4",
     "voice_id": "49POAIkFDXsxrtR84sdj",
@@ -2489,15 +2497,43 @@
         ],
         "generated_at": "2026-11-05T20:57:26.037Z",
         "history_item_id": "t6PMF5OUa5mXCjwH9U00"
+      },
+      "e40ba25c97": {
+        "hash": "e40ba25c97",
+        "mp3": "work/01-natalia/narration.part-e40ba25c97.mp3",
+        "response_file": "work/01-natalia/narration.part-e40ba25c97.response.json",
+        "chars_sent": 2525,
+        "credits": 1224,
+        "credits_source": "history",
+        "fragments": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17
+        ],
+        "generated_at": "2026-11-06T05:03:50.236Z"
       }
     },
     "file": "work/01-natalia/narration.mp3",
     "active_parts": [
-      "831d437d6b"
+      "e40ba25c97"
     ],
     "silent_fragments": [],
-    "duration": 126.511,
-    "assembled_at": "2026-11-05T20:57:26.253Z"
+    "duration": 118.518,
+    "assembled_at": "2026-11-06T05:03:50.413Z"
   },
   "mix_sample": {
     "file": "work/01-natalia/audio/mix-sample.mp3",
@@ -2743,7 +2779,7 @@
     "inputs": {
       "edit": "stories/01-natalia/edit.md",
       "mix": "work/01-natalia/mix.mp3",
-      "mix_duration_s": 134.0
+      "mix_duration_s": 134
     },
     "credits": 0,
     "delivered": "файлом режисерові в застосунок Claude 6 листопада 2026 року",
