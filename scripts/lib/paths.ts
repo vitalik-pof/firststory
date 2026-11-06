@@ -15,13 +15,33 @@ export function getRoot(): string {
   return root;
 }
 
+/** Мова за замовчуванням: українська лежить у корені теки історії й корені work/<id>/. */
+export const DEFAULT_LANG = 'uk';
+
+/**
+ * Код мовної версії: два-три малі літери (`en`, `fr`, `de`); без коду це українська.
+ * Невідомий формат (наприклад, `../x`) відхиляється, бо код стає ім'ям теки.
+ */
+export function normalizeLang(lang?: string): string {
+  const l = (lang ?? DEFAULT_LANG).trim();
+  if (!/^[a-z]{2,3}$/.test(l)) throw new Error(`Некоректний код мови «${lang}»: очікується два-три малі латинські літери (uk, en, fr, de).`);
+  return l;
+}
+export const isDefaultLang = (lang?: string): boolean => normalizeLang(lang) === DEFAULT_LANG;
+
 export const paths = {
   storyDir: (story: string) => join(root, 'stories', story),
   storyFile: (story: string, name: string) => join(root, 'stories', story, name),
+  /** Тека мовної версії: stories/<id>/<код> (для української це корінь stories/<id>). */
+  langDir: (story: string, lang?: string) => (isDefaultLang(lang) ? join(root, 'stories', story) : join(root, 'stories', story, normalizeLang(lang))),
+  langFile: (story: string, lang: string | undefined, name: string) => join(paths.langDir(story, lang), name),
   manifest: (story: string) => join(root, 'stories', story, 'manifest.json'),
-  timings: (story: string) => join(root, 'stories', story, 'timings.json'),
+  timings: (story: string, lang?: string) => join(paths.langDir(story, lang), 'timings.json'),
   workDir: (story: string) => join(root, 'work', story),
   workFile: (story: string, ...parts: string[]) => join(root, 'work', story, ...parts),
+  /** Тека медіа мовної версії: work/<id>/<код> (для української це корінь work/<id>). */
+  workLangDir: (story: string, lang?: string) => (isDefaultLang(lang) ? join(root, 'work', story) : join(root, 'work', story, normalizeLang(lang))),
+  workLangFile: (story: string, lang: string | undefined, ...parts: string[]) => join(paths.workLangDir(story, lang), ...parts),
   charactersWork: () => join(root, 'work', 'characters'),
   characterDoc: (id: string) => join(root, 'characters', `${id}.md`),
   voicesDoc: () => join(root, 'voices.md'),
