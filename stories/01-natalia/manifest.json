@@ -2837,27 +2837,33 @@
   },
   "film": {
     "file": "work/01-natalia/film.mp4",
-    "duration_s": 134.016,
+    "duration_s": 126.784,
     "width": 1080,
     "height": 1920,
     "fps": 30,
     "video_codec": "h264",
     "audio_codec": "aac",
     "crf": 18,
-    "size_bytes": 134511960,
-    "sha256": "d5739657cb9a88b7001c1e072c21ac5a38b58c53e2fa6015d964525e1ebdf283",
-    "rendered_at": "2026-11-06T00:46:38Z",
+    "size_bytes": 129926805,
+    "sha256": "28f6d7e464171261e1599a72a6494f92b22588cae8eb69e0024ed2101475587d",
+    "rendered_at": "2026-11-06",
     "render_seconds": 3239,
     "render_command": "cd remotion && npx tsx render-film.ts --full",
     "inputs": {
       "edit": "stories/01-natalia/edit.md",
       "mix": "work/01-natalia/mix.mp3",
-      "mix_duration_s": 134
+      "mix_duration_s": 126.767,
+      "props": "work/01-natalia/film-props.json"
     },
     "credits": 0,
-    "delivered": "файлом режисерові в застосунок Claude 6 листопада 2026 року",
+    "delivered": "файлом режисерові в застосунок Claude 6 листопада 2026 року (версія без звуків дихання, кадри 14 і 24 перемальовано)",
     "drive_url": null,
-    "drive_note": "конектор Google Drive приймає файл лише вмістом у виклику (base64), відео 134.5 МБ через нього не проходить; на Drive переносить режисер"
+    "drive_note": "конектор Google Drive приймає файл лише вмістом у виклику (base64), відео 134.5 МБ через нього не проходить; на Drive переносить режисер",
+    "previous": {
+      "file": "work/01-natalia/film.v1.mp4",
+      "duration_s": 134.016,
+      "sha256": "d5739657cb9a88b7001c1e072c21ac5a38b58c53e2fa6015d964525e1ebdf283"
+    }
   },
   "narration_en": {
     "model_id": "eleven_v4",
