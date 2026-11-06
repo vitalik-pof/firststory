@@ -1,17 +1,19 @@
-// Рендер повного фільму 01-natalia (композиція Film). Пропси щоразу будуються з edit.md і timings.json.
+// Рендер повного фільму 01-natalia (композиція Film). Пропси щоразу будуються з edit.md і таймінгів мови.
 //
 //   npx tsx render-film.ts --still 0,100,300     # стоп-кадри в work/01-natalia/film-stills/still-N.png
 //   npx tsx render-film.ts --test                # тестовий шматок, кадри 0–711 → work/01-natalia/film-test.mp4
 //   npx tsx render-film.ts --full                # весь фільм → work/01-natalia/film.mp4 (довго, запускай у фоні)
+//   npx tsx render-film.ts --lang fr --still 0,3700   # мовна версія: пропси, звук і вихід у work/01-natalia/fr/
 //
-// Додатково: --story <id>, --range a-b (свій шматок → film-range-a-b.mp4), --crf N (18 за замовчуванням),
-// --concurrency N, --props-only (лише записати work/<id>/film-props.json).
+// Додатково: --story <id>, --lang <код> (en, fr, de; без нього українська), --range a-b (свій шматок → film-range-a-b.mp4),
+// --crf N (18 за замовчуванням), --concurrency N, --props-only (лише записати film-props.json мови).
 import { bundle } from "@remotion/bundler";
 import { renderMedia, renderStill, selectComposition } from "@remotion/renderer";
 import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildFilmProps, readBumps } from "../scripts/lib/film-props";
+import { normalizeLang, paths } from "../scripts/lib/paths";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(here, "..");
@@ -23,8 +25,10 @@ const arg = (name: string): string | null => {
 const flag = (name: string): boolean => args.includes(`--${name}`);
 
 const story = arg("story") ?? "01-natalia";
-const workDir = path.join(repoRoot, "work", story);
-const PUBLIC_DIR = path.join(here, ".cache/film-public");
+const lang = normalizeLang(arg("lang") ?? undefined);
+const storyWork = path.join(repoRoot, "work", story); // спільне для всіх мов: кадри (frames/)
+const workDir = paths.workLangDir(story, lang); // мовне: звук, пропси, стоп-кадри, відео
+const PUBLIC_DIR = path.join(here, `.cache/film-public-${lang}`);
 const TEST_RANGE: [number, number] = [0, 711];
 const crf = Number(arg("crf") ?? 18);
 const concurrency = arg("concurrency") ? Number(arg("concurrency")) : null;
@@ -37,7 +41,7 @@ const main = async (): Promise<void> => {
   const modes = [arg("still") !== null, flag("test"), flag("full"), arg("range") !== null, flag("props-only")].filter(Boolean).length;
   if (modes !== 1) throw new Error("Потрібен рівно один режим: --still N[,N], --test, --full, --range a-b або --props-only.");
 
-  const { props, warnings } = buildFilmProps({ story, bumps: readBumps(story) });
+  const { props, warnings } = buildFilmProps({ story, lang, bumps: readBumps(story) });
   for (const w of warnings) log(`УВАГА: ${w}`);
   mkdirSync(workDir, { recursive: true });
   writeFileSync(path.join(workDir, "film-props.json"), JSON.stringify(props, null, 1) + "\n");
@@ -47,12 +51,12 @@ const main = async (): Promise<void> => {
   rmSync(PUBLIC_DIR, { recursive: true, force: true });
   mkdirSync(path.join(PUBLIC_DIR, "frames"), { recursive: true });
   for (const s of props.shots) {
-    const src = path.join(workDir, "frames", path.basename(s.src));
+    const src = path.join(storyWork, "frames", path.basename(s.src));
     if (!existsSync(src)) throw new Error(`Нема кадру ${src}`);
     cpSync(src, path.join(PUBLIC_DIR, s.src));
   }
   if (props.audio) cpSync(path.join(workDir, props.audio), path.join(PUBLIC_DIR, props.audio));
-  else if (!arg("still")) throw new Error(`Нема ${path.join(workDir, "mix.mp3")}: без звуку фільм не рендерю (збери його: npx tsx scripts/mix-full.ts --story ${story}).`);
+  else if (!arg("still")) throw new Error(`Нема ${path.join(workDir, "mix.mp3")}: без звуку фільм не рендерю (збери його: npx tsx scripts/mix-full.ts --story ${story}${lang === "uk" ? "" : ` --lang ${lang}`} --tail-frames 157).`);
 
   log("збираю бандл");
   const serveUrl = await bundle({

@@ -4,35 +4,49 @@
 // Кредитів не витрачає і в API не ходить: лише ffmpeg (декодування/кодування) і власна крива гучності
 // з lib/mix.ts (та сама, що в зразку зведення, плюс шуми й ділянки-винятки).
 //
-//   npx tsx scripts/mix-full.ts --story 01-natalia            # work/<id>/mix.mp3 (+ mix.json)
-//   npx tsx scripts/mix-full.ts --story 01-natalia --dry-run  # лише розібрати sound.md й показати план
+//   npx tsx scripts/mix-full.ts --story 01-natalia --tail-frames 157            # українська: work/<id>/mix.mp3 (+ mix.json)
+//   npx tsx scripts/mix-full.ts --story 01-natalia --lang en --tail-frames 157  # англійська: work/<id>/en/mix.mp3
+//   npx tsx scripts/mix-full.ts --story 01-natalia --lang fr --tail-frames 157 --dry-run  # лише план: вікна, паузи, швидкість
 //
-// Маніфест не чіпається: нічого, крім файлів у work/<id>/, скрипт не пише.
+// Розділ «Зведення» sound.md тепер це правила для будь-якої мови (lib/mix-rules.ts): вікна прив'язані до слів,
+// фрагментів і пауз timings.json мови, швидкість читання музики v = 114.0 / (3.0 + duration) у межах 0.80…1.08.
+// Довжина фільму L приходить ззовні: --film-length L, --tail F (L = 3.0 + duration + F) або --tail-frames N
+// (L = F_total / 30 за правилами edit.md: tD + N кадрів, саме така довжина mix.mp3 кожної мови).
+// Старий формат розділу (секунди української версії прозою) читається, як раніше, лише для української.
+//
+// Маніфест не чіпається: нічого, крім файлів у work/<id>/[<код>/], скрипт не пише.
 
 import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
-import { dirname } from 'node:path';
+import { dirname, join } from 'node:path';
 import { parseArgs } from 'node:util';
 import { parseSound } from './lib/docs';
 import { UsageError, runMain } from './lib/cli';
 import { log } from './lib/log';
 import { CH, SR, baseMusicEnvelope, dbAt, decodeMusic, decodeStereo, encodeStereoMp3, lowpass, mixFilm, padVoice, rmsOver, speechIntervals, withPatches, type FilmSfx } from './lib/mix';
+import { boostFilmDb, checkRulesAgainstDoc, filmLengthFromArgs, isLanguageIndependentMix, musicLevelFn, planLangMix, RULES } from './lib/mix-rules';
 import { parseFilmLength, parseFilmMix, parseVoiceDelay } from './lib/mix-spec';
-import { assertStoryExists, paths } from './lib/paths';
+import { assertStoryExists, getRoot, isDefaultLang, normalizeLang, paths } from './lib/paths';
 import type { TimingsFile } from './lib/timings';
 
 const HELP = `Повне зведення фільму (безкоштовно).
 Прапорці:
-  --story <id>   історія (обов'язково)
-  --dry-run      лише розібрати sound.md і показати план, файлів не створювати
-  --out <файл>   інший файл виводу (за замовчуванням work/<id>/mix.mp3)
-  --kbps N       бітрейт MP3 (128 за замовчуванням)`;
+  --story <id>         історія (обов'язково)
+  --lang <код>         мовна версія: en, fr, de (таймінги stories/<id>/<код>/timings.json, результат work/<id>/<код>/mix.mp3
+                       і mix.json); без прапорця українська (work/<id>/mix.mp3)
+  --film-length <с>    довжина фільму L, секунди
+  --tail <с>           фінальний титр F після кінця файлу озвучення, секунди: L = 3.0 + duration + F
+  --tail-frames <N>    фінальний титр у кадрах (157 за edit.md): L = (tD + N) / 30, tD за правилами edit.md. Рекомендовано.
+                       Одне з трьох обов'язкове (для старого формату «Зведення» не потрібне): довжину скрипт не вгадує.
+  --dry-run            лише розібрати sound.md і показати план, файлів не створювати
+  --out <файл>         інший файл виводу (за замовчуванням work/<id>[/<код>]/mix.mp3)
+  --kbps N             бітрейт MP3 (128 за замовчуванням)`;
 
 const fmt = (x: number): string => (Math.round(x * 100) / 100).toString();
 
 async function main(): Promise<void> {
-  let values: { story?: string; 'dry-run'?: boolean; out?: string; kbps?: string; help?: boolean };
+  let values: { story?: string; lang?: string; 'film-length'?: string; tail?: string; 'tail-frames'?: string; 'dry-run'?: boolean; out?: string; kbps?: string; help?: boolean };
   try {
-    values = parseArgs({ options: { story: { type: 'string' }, 'dry-run': { type: 'boolean' }, out: { type: 'string' }, kbps: { type: 'string' }, help: { type: 'boolean' } }, strict: true }).values;
+    values = parseArgs({ options: { story: { type: 'string' }, lang: { type: 'string' }, 'film-length': { type: 'string' }, tail: { type: 'string' }, 'tail-frames': { type: 'string' }, 'dry-run': { type: 'boolean' }, out: { type: 'string' }, kbps: { type: 'string' }, help: { type: 'boolean' } }, strict: true }).values;
   } catch (e) {
     throw new UsageError((e as Error).message);
   }
@@ -43,10 +57,13 @@ async function main(): Promise<void> {
   const kbps = Number(values.kbps ?? 128);
   if (!Number.isFinite(kbps) || kbps < 32) throw new UsageError('--kbps має бути числом не менше 32.');
 
-  const timingsFile = paths.timings(story);
-  if (!existsSync(timingsFile)) throw new Error('Немає timings.json: спершу озвучення (narrate.ts).');
+  const lang = normalizeLang(values.lang);
+  const timingsFile = paths.timings(story, lang);
+  if (!existsSync(timingsFile)) throw new Error(`Немає ${paths.rel(timingsFile)}: спершу озвучення цієї мови (narrate.ts${isDefaultLang(lang) ? '' : ` --lang ${lang}`}).`);
   const timings = JSON.parse(readFileSync(timingsFile, 'utf8')) as TimingsFile;
   const sound = parseSound(story);
+  if (isLanguageIndependentMix(sound.mix)) return mixByRules(story, lang, timings, sound, values, kbps);
+  if (!isDefaultLang(lang)) throw new Error('Розділ «Зведення» у sound.md у старому форматі (секунди української версії): мовні версії зводяться лише за новими правилами. Роль: composer.');
   // Затримка озвучення: з документа (не хардкод); слова, пауза й кінець фільму зсуваються на неї.
   const delay = parseVoiceDelay(sound.mix) ?? 0;
   const words = timings.fragments.flatMap((f) => f.words).map((w) => ({ start: w.start + delay, end: w.end + delay }));
@@ -135,3 +152,70 @@ async function main(): Promise<void> {
 }
 
 runMain(main);
+
+type Values = { 'film-length'?: string; tail?: string; 'tail-frames'?: string; 'dry-run'?: boolean; out?: string };
+
+/** Зведення за правилами розділу «Зведення» для будь-якої мови (див. lib/mix-rules.ts). */
+async function mixByRules(story: string, lang: string, timings: TimingsFile, sound: ReturnType<typeof parseSound>, values: Values, kbps: number): Promise<void> {
+  const { L, how } = filmLengthFromArgs(timings.duration, values);
+  const plan = planLangMix(timings, L);
+  const check = checkRulesAgainstDoc(sound.mix);
+  const warnings = [...check, ...plan.warnings];
+  // «Загальна тривалість» у sound.md це довжина української версії; для інших мов число інше.
+  if (isDefaultLang(lang) && sound.totalSeconds !== undefined && Math.abs(sound.totalSeconds - L) > 0.05) {
+    warnings.push(`«Загальна тривалість» у sound.md ${sound.totalSeconds} с, а довжина зведення ${fmt(L)} с (${how}).`);
+  }
+  log(`Зведення фільму ${story}, версія ${lang}: L = ${fmt(L)} с (${how}); озвучення D = ${fmt(plan.D)} с стоїть із ${RULES.O} с, перше слово W1 = ${fmt(plan.W1)} с, останнє закінчується E = ${fmt(plan.E)} с.`);
+  log(`Читання музики: з ${RULES.O} с файлу, швидкість v = ${plan.speed.v}${plan.speed.limited ? ` (за формулою ${plan.speed.raw}, обмежено межею)` : ''}, підсилення початку (секунди файлу): ${RULES.boost.map(([t, db]) => `${t} с ${db > 0 ? '+' : ''}${db}`).join(', ')}.`);
+  log(`Рівні: музика під голосом ${RULES.underDb} дБ, у паузах довших за ${RULES.pauseMin} с ${RULES.pauseDb} дБ (зміна за ${RULES.fade} с).`);
+  log(`P1 (найдовша пауза у фрагменті 1): ${plan.P1 ? `${fmt(plan.P1.a)}–${fmt(plan.P1.b)} с (${fmt(plan.P1.b - plan.P1.a)} с)` : 'немає'}.`);
+  log('Вікна пунктів (секунди фільму):');
+  for (const w of plan.windows) log(`  ${w.item}. ${w.label}: ${fmt(w.from)}–${fmt(w.to)} с`);
+  log(`Паузи довші за ${RULES.pauseMin} с: ${plan.pauses.length ? plan.pauses.map((p) => `${fmt(p.a)}–${fmt(p.b)} с (${fmt(p.g)} с)`).join('; ') : 'немає'}.`);
+  log(`Події файлу музики на секундах фільму (f − ${RULES.O}) / v: ${plan.fileEvents.map((e) => `файл ${e.file} → ${fmt(e.film)} с`).join(', ')}.`);
+  for (const n of plan.notes) log(`ПРОЧИТАНО: ${n}`);
+  for (const w of warnings) log(`УВАГА: ${w}`);
+
+  const narration = timings.audio_file && existsSync(join(getRoot(), timings.audio_file)) ? join(getRoot(), timings.audio_file) : paths.workLangFile(story, lang, 'narration.mp3');
+  const musicFile = paths.workFile(story, 'audio', 'music.mp3');
+  const out = values.out ?? paths.workLangFile(story, lang, 'mix.mp3');
+  const missing = [narration, musicFile].filter((f) => !existsSync(f));
+  if (values['dry-run']) {
+    if (missing.length) log(`(Для справжнього зведення бракує файлів: ${missing.map((f) => paths.rel(f)).join(', ')}.)`);
+    return void log(`\nСУХИЙ ПРОГІН: файл ${paths.rel(out)} не створено.`);
+  }
+  if (missing.length) throw new Error(`Немає файлів: ${missing.map((f) => paths.rel(f)).join(', ')}.`);
+
+  log('\nДекодую озвучення й музику…');
+  let voice = padVoice(decodeStereo(narration), RULES.O);
+  const wantFrames = Math.round(L * SR);
+  if (voice.length / CH < wantFrames) {
+    const grown = new Float32Array(wantFrames * CH);
+    grown.set(voice);
+    voice = grown;
+  } else if (voice.length / CH > wantFrames) voice = voice.slice(0, wantFrames * CH);
+  const music = decodeMusic(musicFile, RULES.O, plan.speed.v);
+  const original = decodeStereo(musicFile);
+  const fileSec = original.length / CH / SR;
+  const musicRms = rmsOver(original, [{ a: RULES.rmsFrom, b: Math.min(RULES.rmsTo, fileSec) }]);
+  log(`RMS музики по оригінальному файлу від ${RULES.rmsFrom} до ${fmt(Math.min(RULES.rmsTo, fileSec))} с (файл ${fmt(fileSec)} с); музика у фільмі ${fmt(music.length / CH / SR)} с.`);
+  const level = musicLevelFn(plan);
+  const v = plan.speed.v;
+  log('Зводжу…');
+  const r = mixFilm(voice, music, { words: plan.words, pauseMin: RULES.pauseMin, musicDb: (t) => level(t) + boostFilmDb(t, v), endFade: RULES.endFade, musicFadeIn: RULES.fadeIn, musicRms, sfx: [] });
+  mkdirSync(dirname(out), { recursive: true });
+  log('Кодую MP3…');
+  encodeStereoMp3(r.pcm, out, kbps);
+  log(`RMS голосу ${r.voiceRmsDb.toFixed(1)} дБFS, музики ${r.musicRmsDb.toFixed(1)} дБFS (до вирівнювання).`);
+  if (r.musicShorterBy > 0.05) log(`УВАГА: музика коротша за фільм на ${r.musicShorterBy.toFixed(1)} с: наприкінці музики немає.`);
+  if (r.peakScale < 1) log(`УВАГА: щоб уникнути кліпінгу, загальну гучність зменшено на ${(-20 * Math.log10(r.peakScale)).toFixed(1)} дБ.`);
+  const info = join(dirname(out), 'mix.json');
+  const { words: _words, ...planOut } = plan;
+  void _words;
+  const seconds = Math.round((r.pcm.length / CH / SR) * 1000) / 1000;
+  writeFileSync(
+    info,
+    JSON.stringify({ file: paths.rel(out), lang, seconds, bytes: statSync(out).size, generated_at: new Date().toISOString(), credits: 0, duration: plan.D, L: plan.L, v: plan.speed.v, v_raw: plan.speed.raw, v_limited: plan.speed.limited, W1: plan.W1, E: plan.E, P1: plan.P1 ?? null, windows: plan.windows, pauses_over_1_2: plan.pauses, file_events: plan.fileEvents, warnings, plan: planOut }, null, 2) + '\n',
+  );
+  log(`Готово: ${paths.rel(out)}, ${seconds.toFixed(2)} с, ${(statSync(out).size / 1e6).toFixed(2)} МБ (параметри: ${paths.rel(info)}).`);
+}

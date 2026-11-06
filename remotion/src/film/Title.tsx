@@ -2,6 +2,7 @@ import React from "react";
 import type { TitleSpec, TitleElementSpec } from "../film-types";
 import { clamp01 } from "./math";
 import { widestLine } from "./fonts";
+import { splitTwoLines } from "./linebreak";
 
 export const rgba = (hex: string, alpha: number): string => {
   const n = Number.parseInt(hex.slice(1), 16);
@@ -38,7 +39,58 @@ export const Glow: React.FC<{ spec: TitleSpec; alpha: number; paper: string; fra
   );
 };
 
-const El: React.FC<{ e: TitleElementSpec; spec: TitleSpec; c: Common; size: number }> = ({ e, spec, c, size }) => {
+export type LaidOut = { size: number; lines: string[]; top: number };
+
+// Розкладка групи титру в браузері (потрібні виміри тексту): за edit.md кожен текст влазить у блок blockWidth.
+// Назва: шрифт зменшують кроком fitStep до minSize, нижче падіння з назвою мови й рядка. Автор, рядок про проєкт, сайт:
+// зменшують до minSize, потім переносять на другий рядок за тим самим правилом розриву, що й назву (і всі
+// елементи під ним зсуваються вниз на висоту доданого рядка). Низ групи нижчий за maxBottom: падіння.
+// Результат залежить лише від пропсів і шрифту, тож однаковий на кожному кадрі; кешується за spec.
+const layoutCache = new WeakMap<TitleSpec, LaidOut[]>();
+export const layoutTitle = (spec: TitleSpec, family: string): LaidOut[] => {
+  const cached = layoutCache.get(spec);
+  if (cached) return cached;
+  const lang = spec.lang ?? "?";
+  const out: LaidOut[] = [];
+  let shift = 0;
+  let bottom = 0;
+  for (const e of spec.elements) {
+    if (e.kind === "rule") {
+      out.push({ size: e.size, lines: [], top: e.topPx + shift });
+      bottom = Math.max(bottom, e.topPx + shift + e.size);
+      continue;
+    }
+    const widest = (lines: string[], size: number): number => widestLine(lines, e.weight, size, family, e.letterSpacing);
+    let size = e.size;
+    let lines = e.lines;
+    const min = e.minSize ?? e.size;
+    while (widest(lines, size) > spec.blockWidth + 0.5 && size - spec.fitStep >= min) size -= spec.fitStep;
+    if (widest(lines, size) > spec.blockWidth + 0.5) {
+      if (e.kind === "title") {
+        throw new Error(`Титр (${lang}): назва «${lines.join(" / ")}» не вміщується в ${spec.blockWidth} px навіть на найменшому розмірі ${min} px (ширший рядок ${Math.round(widest(lines, size))} px). Скоротіть назву в «Титрах» сценарію.`);
+      }
+      const two = splitTwoLines(lines.join(" "));
+      if (two.length < 2 || widest(two, size) > spec.blockWidth + 0.5) {
+        throw new Error(`Титр (${lang}): рядок «${lines.join(" ")}» не вміщується в ${spec.blockWidth} px навіть після переносу на другий рядок на розмірі ${size} px. Скоротіть текст у «Титрах» сценарію.`);
+      }
+      lines = two;
+      const top = e.topPx + shift;
+      out.push({ size, lines, top });
+      bottom = Math.max(bottom, top + lines.length * size * e.lineHeight);
+      shift += size * e.lineHeight; // додатковий рядок зсуває все, що нижче
+      continue;
+    }
+    out.push({ size, lines, top: e.topPx + shift });
+    bottom = Math.max(bottom, e.topPx + shift + lines.length * size * e.lineHeight);
+  }
+  if (spec.maxBottom !== undefined && bottom > spec.maxBottom) {
+    throw new Error(`Титр (${lang}): низ групи на y ${Math.round(bottom)} нижчий за ${spec.maxBottom}: текст завеликий. Скоротіть тексти в «Титрах» сценарію.`);
+  }
+  layoutCache.set(spec, out);
+  return out;
+};
+
+const El: React.FC<{ e: TitleElementSpec; spec: TitleSpec; c: Common; laid: LaidOut }> = ({ e, spec, c, laid }) => {
   const k = clamp01((c.frame - e.fromFrame) / Math.max(1, e.toFrame - e.fromFrame));
   const h = 1 - clamp01((c.frame - spec.hideFrom) / Math.max(1, spec.hideTo - spec.hideFrom));
   const opacity = k * h;
@@ -48,7 +100,7 @@ const El: React.FC<{ e: TitleElementSpec; spec: TitleSpec; c: Common; size: numb
       <div
         style={{
           position: "absolute",
-          top: e.topPx,
+          top: laid.top,
           left: (c.frameWidth - e.width) / 2,
           width: e.width,
           height: e.size,
@@ -66,13 +118,13 @@ const El: React.FC<{ e: TitleElementSpec; spec: TitleSpec; c: Common; size: numb
     <div
       style={{
         position: "absolute",
-        top: e.topPx,
+        top: laid.top,
         left: (c.frameWidth - spec.blockWidth) / 2,
         width: spec.blockWidth,
         boxSizing: "border-box",
         textAlign: "center",
         whiteSpace: "nowrap",
-        fontSize: size,
+        fontSize: laid.size,
         fontWeight: e.weight,
         lineHeight: e.lineHeight,
         color: rgba(e.color, e.alpha),
@@ -82,7 +134,7 @@ const El: React.FC<{ e: TitleElementSpec; spec: TitleSpec; c: Common; size: numb
         transform: e.rise ? `translateY(${(1 - k) * e.rise}px)` : undefined,
       }}
     >
-      {e.lines.map((l, i) => (
+      {laid.lines.map((l, i) => (
         <span key={i} style={{ display: "block", width: "max-content", margin: "0 auto", paddingLeft: pad }}>
           {l}
         </span>
@@ -91,23 +143,13 @@ const El: React.FC<{ e: TitleElementSpec; spec: TitleSpec; c: Common; size: numb
   );
 };
 
-// Підігнати назву: якщо найширший рядок ширший за блок, зменшувати всі рядки однаково кроком fitStep.
-export const fitSize = (e: TitleElementSpec, spec: TitleSpec, family: string): number => {
-  if (e.kind !== "title") return e.size;
-  let size = e.size;
-  for (let guard = 0; guard < 80 && size > 20; guard++) {
-    if (widestLine(e.lines, e.weight, size, family, e.letterSpacing) <= spec.blockWidth + 0.5) break;
-    size -= spec.fitStep;
-  }
-  return size;
-};
-
 export const TitleText: React.FC<{ spec: TitleSpec } & Common> = ({ spec, ...c }) => {
   if (c.frame < spec.activeFrom || c.frame >= spec.activeTo) return null;
+  const laid = layoutTitle(spec, c.family);
   return (
     <div style={{ position: "absolute", inset: 0, fontFamily: c.stack }}>
       {spec.elements.map((e, i) => (
-        <El key={i} e={e} spec={spec} c={c} size={fitSize(e, spec, c.family)} />
+        <El key={i} e={e} spec={spec} c={c} laid={laid[i]!} />
       ))}
     </div>
   );

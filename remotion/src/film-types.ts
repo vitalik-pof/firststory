@@ -40,6 +40,9 @@ export type TitleElementSpec = {
   alpha: number;
   letterSpacing: number; // em
   topPx: number;
+  // Найменший дозволений розмір, px: тримається в browser-підгонці (зменшувати кроком fitStep, не нижче minSize).
+  // Для назви нижче падіння, для решти тексту після цього перенос на другий рядок. Без поля: розмір не змінюється.
+  minSize?: number;
   fromFrame: number; // проявляється від fromFrame до toFrame
   toFrame: number;
   rise: number; // піднімається на стільки px до свого місця
@@ -51,6 +54,9 @@ export type TitleSpec = {
   activeTo: number;
   blockWidth: number;
   fitStep: number;
+  // Мова титру й найнижча допустима точка групи (px): для повідомлень про падіння під час підгонки.
+  lang?: string;
+  maxBottom?: number;
   // Текст і риска гаснуть від hideFrom до hideTo.
   hideFrom: number;
   hideTo: number;
@@ -89,9 +95,13 @@ export type SubtitleStyle = {
   stroke: string;
   strokeWidth: number;
   shadow: string; // CSS text-shadow
+  // Картка з одного слова, що не влазить у blockWidth: шрифт зменшують кроком fitStep до minSize, інакше падіння.
+  fitStep?: number;
+  minSize?: number;
 };
 
 export type FilmProps = {
+  lang?: string; // код мовної версії: uk, en, fr, de
   width: number;
   height: number;
   fps: number;
@@ -109,4 +119,6 @@ export type FilmProps = {
   subtitles: { style: SubtitleStyle; cards: SubtitleCard[] };
   // Файл зведення відносно public/; null означає без звуку.
   audio: string | null;
+  // Довідкові числа розрахунку кадрів (tD, A, S, E, D…) для звіту; композиція їх не читає.
+  meta?: Record<string, unknown>;
 };
