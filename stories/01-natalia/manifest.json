@@ -1,7 +1,7 @@
 {
   "story": "01-natalia",
   "credits": {
-    "total_spent": 73450,
+    "total_spent": 75074,
     "runs": [
       {
         "script": "voice-previews",
@@ -398,6 +398,22 @@
         "credits_before": 90751,
         "credits_after": 91975,
         "spent_run": 1224
+      },
+      {
+        "script": "frames",
+        "started_at": "2026-11-06T05:04:35.822Z",
+        "finished_at": "2026-11-06T05:05:59.174Z",
+        "credits_before": 91975,
+        "credits_after": 92990,
+        "spent_run": 1015
+      },
+      {
+        "script": "frames",
+        "started_at": "2026-11-06T05:05:59.872Z",
+        "finished_at": "2026-11-06T05:07:04.674Z",
+        "credits_before": 92990,
+        "credits_after": 93599,
+        "spent_run": 609
       }
     ]
   },
@@ -1840,15 +1856,32 @@
           "resolution": "1K",
           "credits": 1015,
           "completed_at": "2026-11-05T06:43:04.932Z"
+        },
+        {
+          "generation_id": "RGV7OS3K0gHN96ilg3qA",
+          "model_id": "gemini-3.1-flash-image",
+          "width": 768,
+          "height": 1376,
+          "prompt": "View inside the back seat of a small car on a spring morning, camera at seated head height facing the right-hand side window, 35mm lens. A woman in a long oatmeal knitted cardigan, cut off by the top of the frame at the chin, holds in her arms a newborn baby in a white quilted blanket envelope tied with a wide blue satin ribbon bow; only a small sleeping face shows in the folds. Beside her, by the window, a small girl of about seven with two short light-brown braids, in a mustard-yellow dress, sits with her short legs dangling well above the car floor and stretches up to press her palm and forehead to the window glass, her face turned away from us. On the woman's other side, nearer to us, her older sister, a slim long-legged girl of about ten with a high light-brown ponytail, in a mint-green dress, sleeps sitting up with her head resting on the woman's shoulder and her face turned into the cardigan; her knees rise above the edge of the seat and her white sandals stand flat on the car floor. Through the window, the railing posts of a long bridge flick past, and below them opens a very wide blue river with a high green far bank. Fresh morning light through the glass. The baby and the window sit in the centre and upper half of the frame; the dark seat front, the car floor and the older girl's sandals fill the lower fifth.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles and buildings are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering, no logos, no brands, no watermark. Everyone in the picture is an ordinary civilian going about daily life, and every place in it stands whole and peaceful.",
+          "refs": [
+            "asset:pdOJgsg0CdK16mF72UB9",
+            "asset:4PSC6mUBpTqffrns2ZVp",
+            "asset:XSvwDv9dVuefEiKmfu0c"
+          ],
+          "file": "work/01-natalia/frames/frame-14.v2.png",
+          "aspect_ratio": "9:16",
+          "resolution": "1K",
+          "credits": 2139,
+          "completed_at": "2026-11-05T17:34:22.809Z"
         }
       ],
-      "regen_count": 1,
+      "regen_count": 2,
       "current": {
-        "generation_id": "RGV7OS3K0gHN96ilg3qA",
+        "generation_id": "N0VtmVT9QXVKMXtSpSPI",
         "model_id": "gemini-3.1-flash-image",
         "width": 768,
         "height": 1376,
-        "prompt": "View inside the back seat of a small car on a spring morning, camera at seated head height facing the right-hand side window, 35mm lens. A woman in a long oatmeal knitted cardigan, cut off by the top of the frame at the chin, holds in her arms a newborn baby in a white quilted blanket envelope tied with a wide blue satin ribbon bow; only a small sleeping face shows in the folds. Beside her, by the window, a small girl of about seven with two short light-brown braids, in a mustard-yellow dress, sits with her short legs dangling well above the car floor and stretches up to press her palm and forehead to the window glass, her face turned away from us. On the woman's other side, nearer to us, her older sister, a slim long-legged girl of about ten with a high light-brown ponytail, in a mint-green dress, sleeps sitting up with her head resting on the woman's shoulder and her face turned into the cardigan; her knees rise above the edge of the seat and her white sandals stand flat on the car floor. Through the window, the railing posts of a long bridge flick past, and below them opens a very wide blue river with a high green far bank. Fresh morning light through the glass. The baby and the window sit in the centre and upper half of the frame; the dark seat front, the car floor and the older girl's sandals fill the lower fifth.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles and buildings are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering, no logos, no brands, no watermark. Everyone in the picture is an ordinary civilian going about daily life, and every place in it stands whole and peaceful.",
+        "prompt": "View inside the back seat of a small car on a spring morning, camera at seated head height facing the right-hand side window, 35mm lens. A woman of about 30 with chestnut-brown hair in a low ponytail, in a long oatmeal knitted cardigan, holds in her arms a newborn baby in a white quilted blanket envelope tied with a wide blue satin ribbon bow; only a small sleeping face shows in the folds. Her whole head sits inside the frame below the grey roof lining, painted as fully as her hands, her face in soft profile bent toward the baby, a few brush strokes with an even skin tone. Beside her, by the window, a small girl of about seven with two short light-brown braids, in a mustard-yellow dress, sits with her short legs dangling well above the car floor and stretches up to press her palm and forehead to the window glass, her face turned away from us. On the woman's other side, nearer to us, her older sister, a slim long-legged girl of about ten with a high light-brown ponytail, in a mint-green dress, sleeps sitting up with her head resting on the woman's shoulder and her face turned into the cardigan; her knees rise above the edge of the seat and her white sandals stand flat on the car floor. Through the window, the railing posts of a long bridge flick past, and below them opens a very wide blue river with a high green far bank. Fresh morning light through the glass. The baby and the window sit in the centre and upper half of the frame; the dark seat front, the car floor and the older girl's sandals fill the lower fifth.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles and buildings are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering, no logos, no brands, no watermark. Everyone in the picture is an ordinary civilian going about daily life, and every place in it stands whole and peaceful.",
         "refs": [
           "asset:pdOJgsg0CdK16mF72UB9",
           "asset:4PSC6mUBpTqffrns2ZVp",
@@ -1857,8 +1890,8 @@
         "file": "work/01-natalia/frames/frame-14.png",
         "aspect_ratio": "9:16",
         "resolution": "1K",
-        "credits": 2139,
-        "completed_at": "2026-11-05T17:34:22.809Z"
+        "credits": 1015,
+        "completed_at": "2026-11-06T05:05:46.598Z"
       }
     },
     "frame/15": {
@@ -2064,14 +2097,30 @@
       }
     },
     "frame/24": {
-      "history": [],
-      "regen_count": 0,
+      "history": [
+        {
+          "generation_id": "YRKN6ZyHs9ViJfnrdf2X",
+          "model_id": "gemini-3.1-flash-image",
+          "width": 768,
+          "height": 1376,
+          "prompt": "Medium close shot in a dark office on a winter evening during a power cut, camera at seated eye height beside the desk, 50mm lens. A woman of about 42 with loose chestnut-brown shoulder-length wavy hair, in an oatmeal knitted sweater and a terracotta-red scarf, sits at a desk over papers, her laptop screen dimmed, writing with a pen. A colleague stands beside her, cut off by the top of the frame at the shoulder, so that only one arm and one hand show: that hand holds a mobile phone with its flashlight on and points it down at the papers. The phone's flashlight is the single light source of this frame: its small cold white circle on the papers is the brightest and clearest thing in the picture, catching her hand with the pen and the edge of her cheek, and the rest of the room stays dark. Behind them, through the window, apartment blocks stand with every window dark and snow on the roofs. The lit papers sit in the centre of the frame; the dark front of the desk fills the lower fifth.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles and buildings are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering, no logos, no brands, no watermark. Everyone in the picture is an ordinary civilian going about daily life, and every place in it stands whole and peaceful.",
+          "refs": [
+            "asset:wVFJmXuDlRXSYePj8fTm"
+          ],
+          "file": "work/01-natalia/frames/frame-24.v1.png",
+          "aspect_ratio": "9:16",
+          "resolution": "1K",
+          "credits": 609,
+          "completed_at": "2026-11-05T06:52:57.970Z"
+        }
+      ],
+      "regen_count": 1,
       "current": {
-        "generation_id": "YRKN6ZyHs9ViJfnrdf2X",
+        "generation_id": "xw5dgHDd6q6Gr7enObDS",
         "model_id": "gemini-3.1-flash-image",
         "width": 768,
         "height": 1376,
-        "prompt": "Medium close shot in a dark office on a winter evening during a power cut, camera at seated eye height beside the desk, 50mm lens. A woman of about 42 with loose chestnut-brown shoulder-length wavy hair, in an oatmeal knitted sweater and a terracotta-red scarf, sits at a desk over papers, her laptop screen dimmed, writing with a pen. A colleague stands beside her, cut off by the top of the frame at the shoulder, so that only one arm and one hand show: that hand holds a mobile phone with its flashlight on and points it down at the papers. The phone's flashlight is the single light source of this frame: its small cold white circle on the papers is the brightest and clearest thing in the picture, catching her hand with the pen and the edge of her cheek, and the rest of the room stays dark. Behind them, through the window, apartment blocks stand with every window dark and snow on the roofs. The lit papers sit in the centre of the frame; the dark front of the desk fills the lower fifth.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles and buildings are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering, no logos, no brands, no watermark. Everyone in the picture is an ordinary civilian going about daily life, and every place in it stands whole and peaceful.",
+        "prompt": "Medium close shot in a dark office on a winter evening during a power cut, camera at seated eye height beside the desk, 50mm lens. A woman of about 42 with loose chestnut-brown shoulder-length wavy hair, in an oatmeal knitted sweater and a terracotta-red scarf, sits at a desk over papers, her laptop screen dimmed, writing with a pen. A colleague, a woman in a dark knitted sweater, leans over the desk beside her, her head and shoulders bent low over the papers and painted whole inside the frame, her face a few brush strokes in the glow from the papers; one hand holds a mobile phone with its flashlight on and points it down at the papers. The phone's flashlight is the single light source of this frame: its small cold white circle on the papers is the brightest and clearest thing in the picture, catching her hand with the pen and the edge of her cheek, and the rest of the room stays dark. Behind them, through the window, apartment blocks stand with every window dark and snow on the roofs. The lit papers sit in the centre of the frame; the dark front of the desk fills the lower fifth.\n\nLoose traditional watercolour painting on textured watercolour paper: transparent washes painted wet-into-wet, colours bleeding softly into each other, visible loose brush strokes, pigment blooms and granulation, a faint pencil underdrawing showing through in places, the paper itself left as the light. Rich but muted watercolour colour: deep indigo and grey-blue shadows, warm amber light, ochre, burnt sienna, terracotta, dusty rose and steppe olive, with soft natural light from a single source. Over the whole image lies a soft, hazy, dreamlike focus, like a scene remembered years later: the edges of forms melt into mist, warm lights glow with soft halos, the background dissolves into blurred washes, while the main subject stays readable. The whole picture has the same loose softness: vehicles and buildings are never sharper or more detailed than the people, with no hard mechanical edges, no crisp outlines and no precise small details. Photo references, when given, show only what a real object looks like; paint it loosely in the same watercolour, never with the sharpness of the photo. The painting fills the whole frame edge to edge, with no border, no margin and no blank paper around it. People are painted simply with a few loose brush strokes, gentle minimal facial features and natural muted skin tones, never a detailed portrait. Everyday Ukrainian setting: objects, vehicles and buildings are those of Ukraine at that time, not of any other country. In vertical frames keep the main subject in the centre and upper part, keep the lower fifth of the scene calm and free of important details, and leave space around the subject for slow camera moves. No photorealism, no 3D render, no plastic toy-like objects, no Pixar or Disney look, no Ghibli or anime look, no cute rosy cheek circles, no clean digital vector shapes, no smooth airbrushed gradients, no comic-book outlines, no lens flare, no neon. No text or lettering, no logos, no brands, no watermark. Everyone in the picture is an ordinary civilian going about daily life, and every place in it stands whole and peaceful.",
         "refs": [
           "asset:wVFJmXuDlRXSYePj8fTm"
         ],
@@ -2079,7 +2128,7 @@
         "aspect_ratio": "9:16",
         "resolution": "1K",
         "credits": 609,
-        "completed_at": "2026-11-05T06:52:57.970Z"
+        "completed_at": "2026-11-06T05:06:52.227Z"
       }
     },
     "frame/25": {
@@ -2379,7 +2428,7 @@
     "created_at": "2026-11-05T00:41:54.681Z",
     "design_credits_source": "docs"
   },
-  "updated_at": "2026-11-06T05:04:03.411Z",
+  "updated_at": "2026-11-06T05:07:04.674Z",
   "narration": {
     "model_id": "eleven_v4",
     "voice_id": "49POAIkFDXsxrtR84sdj",
@@ -2579,7 +2628,7 @@
     "gemini-3.1-flash-image@1K": {
       "max": 2139,
       "last": 609,
-      "count": 90
+      "count": 92
     },
     "gemini-3.1-flash-image@512": {
       "max": 409,
