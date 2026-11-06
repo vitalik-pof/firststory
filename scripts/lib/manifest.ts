@@ -4,7 +4,7 @@
 
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
-import { paths } from './paths';
+import { isDefaultLang, normalizeLang, paths } from './paths';
 
 export interface ImageVersion {
   generation_id: string;
@@ -63,6 +63,19 @@ export interface Manifest {
   /** Фактичні розміри перших згенерованих картинок для пари «модель@роздільність@формат». */
   image_sizes?: Record<string, { width: number; height: number; file: string }>;
   [k: string]: unknown;
+}
+
+/**
+ * Ключ запису озвучення в маніфесті: `narration` для української, `narration_<код>` для інших мов
+ * (запис однієї мови не затирає інший).
+ */
+export function narrationKey(lang?: string): string {
+  return isDefaultLang(lang) ? 'narration' : `narration_${normalizeLang(lang)}`;
+}
+
+/** Усі ключі озвучення, що є в маніфесті (`narration`, `narration_en`, …). */
+export function narrationKeys(m: Record<string, unknown>): string[] {
+  return Object.keys(m).filter((k) => /^narration(_[a-z]{2,3})?$/.test(k));
 }
 
 export function emptyManifest(story: string): Manifest {
