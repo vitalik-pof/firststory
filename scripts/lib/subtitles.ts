@@ -30,43 +30,97 @@ export const DEFAULT_RULES: SubtitleRules = { maxWords: 3, maxChars: 22, pauseSe
 
 const EPS = 1e-9;
 
-/** Слова озвучення з правками: зливає «Контакт ту ю» і «Фарба Фабра», міняє апостроф, прямі лапки на ялинки. */
-export function normalizeWords(words: TimedWord[]): SubWord[] {
-  const out: SubWord[] = [];
-  let i = 0;
-  while (i < words.length) {
-    const w = words[i]!;
-    const a = words[i + 1];
-    const b = words[i + 2];
-    if (w.text === '"Контакт' && a?.text === 'ту' && b && /^ю"([.,;:!?]*)$/.test(b.text)) {
-      const tail = /^ю"([.,;:!?]*)$/.exec(b.text)![1]!;
-      out.push({ text: `«Контакт2u»${tail}`, start: w.start, end: b.end });
-      i += 3;
-      continue;
-    }
-    if (w.text === '"Фарба' && a && /^Фабра"([.,;:!?]*)$/.test(a.text)) {
-      const tail = /^Фабра"([.,;:!?]*)$/.exec(a.text)![1]!;
-      out.push({ text: `«ФарбаФабра»${tail}`, start: w.start, end: a.end });
-      i += 2;
-      continue;
-    }
-    out.push({ text: w.text, start: w.start, end: w.end });
-    i++;
-  }
-  const bad = out.filter((w) => /["“”„]/.test(w.text));
-  if (bad.length) throw new Error(`Субтитри: у словах лишилися прямі лапки, правила їх заміни в аркуші немає: ${bad.map((w) => w.text).join(' ')}`);
-  return out.map((w) => ({ ...w, text: w.text.replace(/'/g, '’') }));
+/** Звучання → написання назви для субтитрів (розділ «Назви» мовного script.md; для української список у edit.md). */
+export interface NameRule {
+  spoken: string;
+  shown: string;
 }
 
-/** Скільки разів у словах озвучення зустрілися «Контакт»/«Фарба»: для перевірки, що злиття не промовчало. */
-export function countMerges(words: TimedWord[]): { contact: number; farba: number } {
-  let contact = 0;
-  let farba = 0;
-  words.forEach((w, i) => {
-    if (w.text === '"Контакт' && words[i + 1]?.text === 'ту' && /^ю"/.test(words[i + 2]?.text ?? '')) contact++;
-    if (w.text === '"Фарба' && /^Фабра"/.test(words[i + 1]?.text ?? '')) farba++;
-  });
-  return { contact, farba };
+/** Українські назви: як їх слова стоять у voice.md і як їх пишуть у субтитрах (з лапками, як у джерелі). */
+export const UK_NAMES: NameRule[] = [
+  { spoken: 'Контакт ту ю', shown: '«Контакт2u»' },
+  { spoken: 'Фарба Фабра', shown: '«ФарбаФабра»' },
+];
+
+const hasLetter = (t: string): boolean => /[\p{L}\p{N}]/u.test(t);
+const OPENERS = /^[«„“(\[]+$/;
+const QUOTES_EDGE_L = /^[«»“”„"'’‘(\[]+/;
+const QUOTES_EDGE_R = /[«»“”„"'’‘)\]]+$/;
+const PUNCT_EDGE_R = /[.,;:!?…]+$/;
+const PUNCT_EDGE_L = /^[.,;:!?…]+/;
+
+/** Токен для порівняння з назвою: без лапок і розділових знаків на початку й в кінці, без урахування регістру. */
+const bare = (t: string): string => t.replace(QUOTES_EDGE_L, '').replace(PUNCT_EDGE_L, '').replace(QUOTES_EDGE_R, '').replace(PUNCT_EDGE_R, '').replace(QUOTES_EDGE_R, '').toLocaleLowerCase();
+
+/** Розділові знаки з кінця токена (після останньої літери чи цифри), без лапок. */
+const tailPunct = (t: string): string => {
+  const i = [...t].map((c) => hasLetter(c)).lastIndexOf(true);
+  return [...t].slice(i + 1).join('').replace(/["'’‘«»“”„)\]]/g, '');
+};
+
+/**
+ * Слова озвучення → слова субтитрів (правки з розділу «Субтитри» edit.md, однакові для всіх мов):
+ * 1) токен без літер і цифр приклеюється до попереднього без пробілу, а відкриваючі «, „, “, (, [ до наступного
+ *    (час зливається: початок першого, кінець останнього);
+ * 2) назви: послідовність токенів, що збігається зі звучанням, замінюється одним словом: написання зі списку
+ *    плюс розділові знаки з кінця останнього токена; запис, якого не знайдено жодного разу, дає помилку;
+ * 3) прямий апостроф між літерами стає ’ (U+2019);
+ * 4) прямі лапки " після цього в словах лишитися не мають: помилка.
+ */
+export function normalizeWordsLang(words: TimedWord[], names: NameRule[], where = '', strict = true): SubWord[] {
+  // 1. Токени без літер.
+  const toks: SubWord[] = [];
+  let carry: SubWord | null = null; // відкриваюча лапка, що чекає на наступний токен
+  for (const w of words) {
+    if (!hasLetter(w.text)) {
+      if (OPENERS.test(w.text) || (!toks.length && !carry)) {
+        carry = carry ? { text: carry.text + w.text, start: carry.start, end: w.end } : { text: w.text, start: w.start, end: w.end };
+      } else if (toks.length) {
+        const prev = toks[toks.length - 1]!;
+        prev.text += w.text;
+        prev.end = Math.max(prev.end, w.end);
+      }
+      continue;
+    }
+    if (carry) {
+      toks.push({ text: carry.text + w.text, start: carry.start, end: w.end });
+      carry = null;
+    } else toks.push({ text: w.text, start: w.start, end: w.end });
+  }
+  if (carry && toks.length) {
+    const prev = toks[toks.length - 1]!;
+    prev.text += carry.text;
+    prev.end = Math.max(prev.end, carry.end);
+  }
+
+  // 2. Назви.
+  let cur = toks;
+  for (const name of names) {
+    const spoken = name.spoken.split(/\s+/).map((x) => x.toLocaleLowerCase());
+    const out: SubWord[] = [];
+    let found = 0;
+    for (let i = 0; i < cur.length; ) {
+      const hit = spoken.every((sw, k) => cur[i + k] !== undefined && bare(cur[i + k]!.text) === sw);
+      if (hit) {
+        const last = cur[i + spoken.length - 1]!;
+        out.push({ text: `${name.shown}${tailPunct(last.text)}`, start: cur[i]!.start, end: last.end });
+        i += spoken.length;
+        found++;
+      } else out.push(cur[i++]!);
+    }
+    if (!found && strict) throw new Error(`Субтитри${where ? ` (${where})` : ''}: запис із «Назв» «${name.spoken}» → «${name.shown}» не знайдено в словах озвучення жодного разу.`);
+    cur = out;
+  }
+
+  // 4. Прямі лапки, 3. апостроф.
+  const bad = cur.filter((w) => /"/.test(w.text));
+  if (bad.length) throw new Error(`Субтитри${where ? ` (${where})` : ''}: у словах лишилися прямі лапки, правила їх заміни в аркуші немає (сценарист додає їх у «Назви»): ${bad.map((w) => w.text).join(' ')}`);
+  return cur.map((w) => ({ ...w, text: w.text.replace(/(?<=[\p{L}\p{N}])'(?=[\p{L}\p{N}])/gu, '’') }));
+}
+
+/** Українські правила: «Контакт ту ю» і «Фарба Фабра» зливаються (див. UK_NAMES). */
+export function normalizeWords(words: TimedWord[]): SubWord[] {
+  return normalizeWordsLang(words, UK_NAMES, 'uk', false);
 }
 
 const letters = (w: string): number => (w.match(/[\p{L}\p{N}]/gu) ?? []).length;
@@ -78,7 +132,7 @@ export function splitPhrases(words: SubWord[], rules: SubtitleRules = DEFAULT_RU
   words.forEach((w, i) => {
     cur.push(w);
     const next = words[i + 1];
-    const punct = /[.,?!;:]$/.test(w.text);
+    const punct = /[.,?!;:…]$/.test(w.text.replace(/["'’«»“”„)\]]+$/, ''));
     const pause = next ? next.start - w.end >= rules.pauseSeconds - EPS : false;
     if (punct || pause || !next) {
       phrases.push(cur);
@@ -123,7 +177,8 @@ export function splitPhraseDetailed(phrase: SubWord[], rules: SubtitleRules = DE
       if (!prev) continue;
       const slice = phrase.slice(from, end);
       const text = slice.map((w) => w.text).join(' ');
-      if (text.length > rules.maxChars) continue;
+      // Одне слово довше за maxChars утворює окрему картку (німецькі складні слова): обмеження для нього не діє.
+      if (text.length > rules.maxChars && k > 1) continue;
       const bad = end < n && letters(slice[slice.length - 1]!.text) <= 2 ? 1 : 0;
       const cand: Score = { violations: prev.violations + bad, count: prev.count + 1, sumSq: prev.sumSq + k * k, maxLen: Math.max(prev.maxLen, text.length), cut: from };
       const cur = best[end];
@@ -164,6 +219,10 @@ export interface TimingRules {
   trailFrames: number;
   fadeOutFrames: number;
   minOnScreenFrames: number;
+  /** Жодна картка не стартує раніше за цей кадр (кінець початкового титру, 90). */
+  minInFrame?: number;
+  /** Остання картка не зникає пізніше за цей кадр (tD + 12). */
+  maxOutEnd?: number;
 }
 
 export const DEFAULT_TIMING: TimingRules = { fps: 30, offsetSeconds: 3, leadFrames: 2, fadeInFrames: 3, trailFrames: 6, fadeOutFrames: 3, minOnScreenFrames: 15 };
@@ -184,9 +243,11 @@ export interface CardFrames {
 export function cardFrames(cards: CardRaw[], t: TimingRules = DEFAULT_TIMING): CardFrames[] {
   const f = (sec: number): number => Math.round((sec + t.offsetSeconds) * t.fps);
   const out: CardFrames[] = cards.map((c) => {
-    const inFrame = f(c.words[0]!.start) - t.leadFrames;
+    let inFrame = f(c.words[0]!.start) - t.leadFrames;
+    if (t.minInFrame !== undefined && inFrame < t.minInFrame) inFrame = t.minInFrame;
     let outFrame = f(c.words[c.words.length - 1]!.end) + t.trailFrames;
     if (outFrame + t.fadeOutFrames - inFrame < t.minOnScreenFrames) outFrame = inFrame + t.minOnScreenFrames - t.fadeOutFrames;
+    if (t.maxOutEnd !== undefined && outFrame + t.fadeOutFrames > t.maxOutEnd) outFrame = Math.max(inFrame + t.fadeInFrames, t.maxOutEnd - t.fadeOutFrames);
     return { text: c.text, inFrame, inEnd: inFrame + t.fadeInFrames, outFrame, outEnd: outFrame + t.fadeOutFrames };
   });
   for (let i = 0; i + 1 < out.length; i++) {

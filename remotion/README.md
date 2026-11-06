@@ -5,7 +5,7 @@
 
 ## Фільм: композиція `Film`
 
-1080×1920, 30 к/с, довжина з `edit.md` (зараз 4020 кадрів, 134.0 с). Пропси будує `scripts/lib/film-props.ts` з `stories/<id>/edit.md` і `timings.json` (опис правил у `scripts/README.md`, «Повний фільм»), руками їх не пишуть. Усе, що йде в композицію, JSON (`src/film-types.ts`), час задається номером кадру.
+1080×1920, 30 к/с, довжина кожної мови `F_total = tD + 157` кадрів (`tD` кінець файлу озвучення мови; українська 118.518 с дає 3803 кадри, 126.767 с). Пропси будує `scripts/lib/film-props.ts` з `stories/<id>/edit.md` і `timings.json` мови (опис правил у `scripts/README.md`, «Повний фільм»), руками їх не пишуть. Усе, що йде в композицію, JSON (`src/film-types.ts`), час задається номером кадру.
 
 ```bash
 cd remotion
@@ -14,9 +14,14 @@ npx tsx render-film.ts --test               # кадри 0–711 (титр, пе
 nohup npx tsx render-film.ts --full > .cache/film-full.log 2>&1 &   # весь фільм → work/01-natalia/film.mp4
 npx tsx render-film.ts --range 1500-1700    # довільний шматок → film-range-A-B.mp4
 npx tsx render-film.ts --props-only         # лише work/01-natalia/film-props.json
+npx tsx render-film.ts --lang fr --still 60,4100   # мовна версія: пропси, звук і вихід у work/01-natalia/fr/
+npx tsx render-film.ts --lang de --test            # work/01-natalia/de/film-test.mp4
+nohup npx tsx render-film.ts --lang en --full > .cache/film-full-en.log 2>&1 &   # work/01-natalia/en/film.mp4
 ```
 
-Додатково `--crf N` (18 за замовчуванням), `--concurrency N`, `--story <id>`. npm-скрипти `film:props`, `film:test`, `film:full`. Скрипт копіює поточні `work/<id>/frames/frame-NN.png` (без `.v1`, `.v2`) і `mix.mp3` у `.cache/film-public/`, бо `staticFile()` на рендері бере файли звідти. Без `mix.mp3` стоп-кадри рендеряться, а відео ні. Браузер `/opt/pw-browsers/chromium`, `gl: "swangle"`. Студія: `npx remotion studio src/index.ts --props=../work/01-natalia/film-props.json`.
+Додатково `--crf N` (18 за замовчуванням), `--concurrency N`, `--story <id>`, `--lang <код>`.
+
+**Мовні версії.** Без `--lang` українська (усе як раніше: `work/01-natalia/film.mp4`). З `--lang en|fr|de` береться `stories/<id>/<код>/timings.json`, тексти титрів і назви для субтитрів зі `stories/<id>/<код>/script.md` («Титри», «Назви»), зведення `work/<id>/<код>/mix.mp3` (`scripts/mix-full.ts --lang <код> --tail-frames 157`), а пропси, стоп-кадри й відео лягають у `work/<id>/<код>/` (`film-props.json`, `film-stills/`, `film-test.mp4`, `film.mp4`). Кадри (картинки) спільні: `work/<id>/frames/`. Підготовка в `.cache/film-public-<код>/`. Шрифт Lora підключається з Google Fonts для кирилиці й латиниці з діакритикою (`latin`, `latin-ext`); `document.fonts.load` для кожного накреслення перевіряє літери, які справді є в текстах цієї мови. Перевірено стоп-кадрами французькою (`é`, нерозривний пробіл перед `?`) і німецькою (`ä ö ü ß`, перенос довгого рядка про проєкт на другий рядок). npm-скрипти `film:props`, `film:test`, `film:full`. Скрипт копіює поточні `work/<id>/frames/frame-NN.png` (без `.v1`, `.v2`) і `mix.mp3` у `.cache/film-public/`, бо `staticFile()` на рендері бере файли звідти. Без `mix.mp3` стоп-кадри рендеряться, а відео ні. Браузер `/opt/pw-browsers/chromium`, `gl: "swangle"`. Студія: `npx remotion studio src/index.ts --props=../work/01-natalia/film-props.json`.
 
 Скільки рендериться: тестовий шматок 0–711 (712 кадрів) 639 с (10 хв 40 с), ~0.9 с на кадр на 4 ядрах, ~23 МБ при crf 18. Це дає ~60 хв на весь фільм (4020 кадрів, переходи складають 45% кадрів у шматку і в фільмі однаково), файл ~125 МБ при crf 18. Титр із розмиттям і переходи найповільніші (software GL), звичайні кадри швидші.
 
@@ -26,8 +31,9 @@ npx tsx render-film.ts --props-only         # лише work/01-natalia/film-prop
 |---|---|
 | `src/film/Film.tsx` | Композиція: шари кадрів, тон під титрами, вуаль, пляма світла, зернистість, текст титрів, субтитри, звук (`Html5Audio`). Якщо звук коротший за фільм, решта тиша. |
 | `src/film/math.ts` | Камера (`cameraAt`, `cameraTransform`), крива проступання, тон під титрами. Усе з номера кадру. |
-| `src/film/Title.tsx` | Титр (початковий і фінальний однаковим компонентом): назва, риска, рядки, пляма світла, підгонка назви до блоку по `canvas.measureText`. |
-| `src/film/Subtitles.tsx` | Картки субтитрів: заливка, обведення `-webkit-text-stroke` з `paint-order: stroke fill`, тінь. |
+| `src/film/Title.tsx` | Титр (початковий і фінальний однаковим компонентом): назва, риска, рядки, пляма світла. `layoutTitle` у браузері за `canvas.measureText` підганяє розміри (назва, автор, рядок про проєкт), переносить текст на другий рядок і зсуває елементи нижче; не влазить, падає з мовою й рядком. |
+| `src/film/linebreak.ts` | Розрив тексту на два рядки (правило з `edit.md`), спільний для скрипта пропсів і композиції. |
+| `src/film/Subtitles.tsx` | Картки субтитрів: заливка, обведення `-webkit-text-stroke` з `paint-order: stroke fill`, тінь; картка з одного довгого слова зменшує шрифт кроком 2 до 48. |
 | `src/film/fonts.ts` | Lora з Google Fonts: рендер чекає (`delayRender`) таблицю стилів, `document.fonts.load` для кожного накреслення і `document.fonts.ready`. |
 | `src/film-types.ts` | Типи пропсів. |
 | `src/watercolor/presentation.tsx` | `MaskedReveal`: маска проступання (спільна для проб і фільму). |

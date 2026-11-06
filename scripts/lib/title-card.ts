@@ -145,7 +145,7 @@ export function parseTitleText(text: string): TitleCardResult {
   const grain = grainM ? (num(grainM[1]!) + (grainM[2] ? num(grainM[2]) : num(grainM[1]!))) / 2 / 100 : 0;
 
   // ---- зняття вуалі: «- 2.7–3.4: паперова вуаль, … знімаються разом»
-  const relB = bullets.map((b) => new RegExp(`^${N}\\s*${DASH}\\s*${N}:\\s*паперова вуаль`, 'i').exec(b)).find((m) => m);
+  const relB = bullets.map((b) => new RegExp(`^${N}\\s*${DASH}\\s*${N}\\s*(?:\\([^)]*\\))?:\\s*паперова вуаль`, 'i').exec(b)).find((m) => m);
   const release = relB ? { from: num(relB[1]!), to: num(relB[2]!) } : { from: duration - 0.3, to: duration + 0.4 };
   if (!relB) miss('секунд зняття вуалі («- A–B: паперова вуаль, …»)', `${release.from}–${release.to} с`);
 
@@ -173,7 +173,7 @@ export function parseTitleText(text: string): TitleCardResult {
   const shadowM = new RegExp(`тінь без зсуву\\s*\`?0 0 ${N}px\`?\\s*кольору\\s*\`?${HEX}\`?\\s*на\\s+${N}\\s*%`, 'i').exec(text);
 
   // ---- поява й зникнення
-  const apRe = new RegExp(`^${N}\\s*${DASH}\\s*${N}:`);
+  const apRe = new RegExp(`^${N}\\s*${DASH}\\s*${N}\\s*(?:\\([^)]*\\))?:`);
   const apBullets = bullets.filter((b) => apRe.test(b) && !/вуаль/i.test(b));
   const hideB = apBullets.map((b) => ({ b, m: apRe.exec(b)! })).find((x) => /гаснуть/i.test(x.b));
   const hide = hideB ? { from: num(hideB.m[1]!), to: num(hideB.m[2]!) } : { from: duration - 0.2, to: duration + 0.1 };

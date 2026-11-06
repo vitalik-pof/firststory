@@ -1,25 +1,35 @@
-// Пропси композиції `Film` (remotion/) з монтажного аркуша edit.md і timings.json.
+// Пропси композиції `Film` (remotion/) з монтажного аркуша edit.md і таймінгів мови.
 //
-// edit.md єдине джерело чисел: таблиця «Числа для збирання» вже в кадрах, її не округлюємо повторно.
-// Усе, що не розбирається однозначно, дає помилку з поясненням, а не вгадується. Результат серіалізується в JSON.
+// Аркуш не мовний: він дає правила прив'язки кадрів до фрагментів озвучення (`Fn.start`, `Fn.end`, `Fn.Sk`,
+// `Fn.Wk/N`), номінальні переходи, камеру числами й правила титрів та субтитрів. Кадри кожної мови рахуються
+// з її timings.json за розділом «Алгоритм» (lib/film-frames.ts, цілі мілісекунди й кадри). Тексти титрів і
+// написання назв для субтитрів: для української з edit.md, для інших мов із розділів «Титри» і «Назви»
+// мовного script.md. Усе, що не розбирається однозначно чи не застосовується, дає помилку з поясненням,
+// а не вгадується. Результат серіалізується в JSON.
 
 import { existsSync, readFileSync } from 'node:fs';
 import { blockText, readDoc, splitByHeading, type Doc, type Section } from './md';
-import { paths } from './paths';
+import { parseScript, type ScriptDoc } from './docs';
+import { FINAL_TITLE_FRAMES, FPS } from './film-time';
+import { FrameRuleError, parseRule, planFrames, type AnchorRule, type ExceptionRow, type FramePlan, type TimingsT } from './film-frames';
+import { DEFAULT_LANG, isDefaultLang, normalizeLang, paths } from './paths';
 import { parseTitleCardDoc, type TitleCard } from './title-card';
-import { buildCards, cardFrames, countMerges, normalizeWords, DEFAULT_RULES, DEFAULT_TIMING, type SubtitleRules, type TimingRules, type TimedWord } from './subtitles';
+import { buildCards, cardFrames, normalizeWordsLang, UK_NAMES, type NameRule, type SubtitleRules, type TimingRules } from './subtitles';
 import { VARIANTS } from '../../remotion/src/variants';
+import { splitTwoLines } from '../../remotion/src/film/linebreak';
 import type { WatercolorOptions } from '../../remotion/src/types';
 import type { CameraSpec, FilmProps, FilmShot, TitleElementSpec, TitleSpec, ToneState } from '../../remotion/src/film-types';
 
-const FPS = 30;
 const N = '(\\d+(?:[.,]\\d+)?)';
 const DASH = '[–-]';
 const num = (s: string): number => Number(s.replace(',', '.'));
-const sec2f = (s: number): number => Math.round(s * FPS);
-// З цієї тривалості (кадрів) і довше перехід «дихає» (breath): 2.5 с, як сказано в «Як переходи поводяться».
+// З цієї тривалості (кадрів) і довше перехід «дихає» (breath): 2.5 с, як сказано в кроці 9 алгоритму.
 const BREATH_FROM_FRAMES = 75;
 const BREATH = 0.012;
+/** Чисте вікно кадру не менше секунди (крок 7 алгоритму). */
+const MIN_CLEAN_FRAMES = 30;
+const FRAME_COUNT = 25;
+const FRAGMENT_COUNT = 17;
 
 export class FilmSheetError extends Error {
   constructor(message: string) {
@@ -48,137 +58,217 @@ function findSection(doc: Doc, level: number, re: RegExp, label: string): Sectio
   return s;
 }
 
+/** Підрозділ рівня 3 у «Монтажному аркуші». */
+function sheetSub(doc: Doc, re: RegExp, label: string): Section {
+  const sheet = findSection(doc, 2, /^Монтажний аркуш$/i, 'Монтажний аркуш');
+  const sub = splitByHeading(sheet.body, 3).sections.find((s) => re.test(s.title));
+  if (!sub) return fail(`у «Монтажному аркуші» немає розділу «${label}».`);
+  return sub;
+}
+
 function col(header: string[], re: RegExp, what: string): number {
   const i = header.findIndex((h) => re.test(h));
   if (i < 0) fail(`у таблиці немає колонки «${what}»; колонки в аркуші: ${header.join(' | ')}.`);
   return i;
 }
 
-// ---- числа для збирання
+// ---- таблиця прив'язок і переходів
 
-export interface SheetRow {
-  n: number;
-  start: number;
-  end: number;
-  length: number;
-  /** Перехід у наступний кадр, кадрів; 0 для останнього. */
-  transition: number;
+export interface AnchorTable {
+  /** Правила кадрів 2…25 (індекс = номер кадру). */
+  rules: Array<AnchorRule | undefined>;
+  /** Номінальні переходи D(N), N = 1…24 (індекс = N). */
+  nominalD: number[];
+  /** Скільки речень потрібно у фрагментах для правил Fn.Sk. */
+  sentenceCounts: Record<number, number>;
 }
 
-export function parseNumbers(doc: Doc): SheetRow[] {
-  const { sections } = splitByHeading(doc.lines, 2);
-  const sheet = sections.find((s) => /^Монтажний аркуш$/i.test(s.title));
-  if (!sheet) return fail('немає розділу «Монтажний аркуш».');
-  const sub = splitByHeading(sheet.body, 3).sections.find((s) => /^Числа для збирання/i.test(s.title));
-  if (!sub) return fail('у «Монтажному аркуші» немає розділу «Числа для збирання».');
+export function parseAnchorTable(doc: Doc): AnchorTable {
+  const sub = sheetSub(doc, /^Таблиця прив['’]язок/i, 'Таблиця прив\'язок і переходів');
   const rows = tableRows(sub);
-  if (rows.length < 2) return fail('таблиця «Числа для збирання» порожня.');
+  if (rows.length < 2) return fail('таблиця прив\'язок порожня.');
   const header = rows[0]!;
   const cN = col(header, /^Кадр/i, 'Кадр');
-  const cS = col(header, /^Початок/i, 'Початок');
-  const cE = col(header, /^Кінець/i, 'Кінець');
-  const cL = col(header, /^Довжина/i, 'Довжина');
-  const cT = col(header, /^Перех\S*.*кадр/i, 'Перехід у наступний, кадрів');
-  const out: SheetRow[] = [];
+  const cA = col(header, /^Прив['’]язка/i, 'Прив\'язка');
+  const cT = col(header, /^Перех/i, 'Перехід у наступний');
+  const token = (cell: string | undefined): string | undefined => /`([^`]+)`/.exec(cell ?? '')?.[1];
+  const rules: Array<AnchorRule | undefined> = new Array<AnchorRule | undefined>(FRAME_COUNT + 1).fill(undefined);
+  const nominalD: number[] = new Array<number>(FRAME_COUNT).fill(0);
+  const seen = new Set<number>();
   for (const r of rows.slice(1)) {
-    const int = (s: string | undefined, what: string): number => {
-      if (s === undefined || !/^\d+$/.test(s)) return fail(`у рядку кадру «${r[cN]}» поле «${what}» має бути цілим числом кадрів, а там «${s}».`);
-      return Number(s);
-    };
-    const n = int(r[cN], 'Кадр');
-    const tr = r[cT] ?? '';
-    const transition = /^(немає|—|-|0)?$/i.test(tr) ? 0 : int(tr, 'Перехід у наступний, кадрів');
-    out.push({ n, start: int(r[cS], 'Початок'), end: int(r[cE], 'Кінець'), length: int(r[cL], 'Довжина'), transition });
+    const n = Number(r[cN]);
+    if (!Number.isInteger(n) || n < 1 || n > FRAME_COUNT) return fail(`у таблиці прив'язок кадр «${r[cN]}» поза 1…${FRAME_COUNT}.`);
+    seen.add(n);
+    const a = token(r[cA]);
+    if (n === 1) {
+      if (a !== 'START') fail(`у кадру 1 прив'язка має бути \`START\`, а є «${a ?? r[cA]}».`);
+    } else {
+      if (!a) fail(`у кадру ${n} колонка «Прив'язка» не починається з правила в зворотних лапках (\`Fn.…\`): «${r[cA]}».`);
+      rules[n] = parseRule(a!);
+    }
+    if (n < FRAME_COUNT) {
+      const d = /`D=(\d+)`/.exec(r[cT] ?? '')?.[1];
+      if (!d) fail(`у кадру ${n} колонка «Перехід у наступний» не починається з \`D=<кадрів>\`: «${r[cT]}».`);
+      nominalD[n] = Number(d);
+    }
+  }
+  if (seen.size !== FRAME_COUNT) fail(`у таблиці прив'язок ${seen.size} кадрів, а має бути ${FRAME_COUNT}.`);
+  const sentenceCounts: Record<number, number> = {};
+  const line = blockText(sub.body).split('\n').find((l) => /Кількість речень, потрібна/i.test(l));
+  if (line) for (const m of line.matchAll(/F(\d+)`?\s*[—-]\s*(\d+)/g)) sentenceCounts[Number(m[1])] = Number(m[2]);
+  for (const r of rules) if (r?.kind === 'sentence' && sentenceCounts[r.n] === undefined) fail(`правило ${r.n} має \`Fn.Sk\`, а в рядку «Кількість речень, потрібна для Fn.Sk» немає F${r.n}.`);
+  return { rules, nominalD, sentenceCounts };
+}
+
+/** «Мовні винятки»: рядки (мова, кадр, що замінюється, значення); заготовка «(порожньо)» ігнорується. */
+export function parseExceptions(doc: Doc): ExceptionRow[] {
+  const sheet = findSection(doc, 2, /^Монтажний аркуш$/i, 'Монтажний аркуш');
+  const sub = splitByHeading(sheet.body, 3).sections.find((s) => /^Мовні винятки$/i.test(s.title));
+  if (!sub) return [];
+  const rows = tableRows(sub);
+  const out: ExceptionRow[] = [];
+  for (const r of rows.slice(1)) {
+    const lang = (r[0] ?? '').replace(/`/g, '').trim();
+    if (!lang || /^\(порожньо\)$/i.test(lang)) continue;
+    const frame = Number(r[1]);
+    const what = (r[2] ?? '').trim().charAt(0) === 'D' ? 'D' : 'A';
+    const value = (r[3] ?? '').replace(/`/g, '').trim();
+    if (!Number.isInteger(frame)) return fail(`у «Мовних винятках» кадр «${r[1]}» не число.`);
+    if (what === 'D') out.push({ lang, frame, what, frames: Number(value) });
+    else out.push({ lang, frame, what, rule: parseRule(value) });
   }
   return out;
 }
 
-export function checkNumbers(rows: SheetRow[], totalFrames: number, frameCount: number): void {
-  if (rows.length !== frameCount) fail(`у таблиці «Числа для збирання» ${rows.length} кадрів, а має бути ${frameCount}.`);
-  rows.forEach((r, i) => {
-    if (r.n !== i + 1) fail(`кадри в «Числах для збирання» мають іти підряд: на місці ${i + 1} стоїть кадр ${r.n}.`);
-    if (r.end - r.start !== r.length) fail(`кадр ${r.n}: Кінець − Початок = ${r.end - r.start}, а Довжина ${r.length}.`);
-    const next = rows[i + 1];
-    if (next) {
-      if (r.transition <= 0) fail(`кадр ${r.n}: перехід у наступний не заданий.`);
-      if (r.end - next.start !== r.transition) fail(`кадр ${r.n}: Кінець(${r.n}) − Початок(${next.n}) = ${r.end - next.start}, а перехід у таблиці ${r.transition} кадрів.`);
-    } else if (r.transition !== 0) fail(`останній кадр ${r.n} не може мати переходу далі.`);
-  });
-  if (rows[0]!.start !== 0) fail(`кадр 1 має починатися з кадру 0, а починається з ${rows[0]!.start}.`);
-  const last = rows[rows.length - 1]!;
-  if (last.end !== totalFrames) fail(`кадр ${last.n} закінчується на ${last.end}, а фільм має ${totalFrames} кадрів.`);
+// ---- камера числами
+
+export interface CameraRow {
+  n: number;
+  s0: number;
+  s1: number;
+  cx0: number;
+  cy0: number;
+  cx1: number;
+  cy1: number;
 }
 
-// ---- камера
+export function parseCameraNumbers(doc: Doc): CameraRow[] {
+  const sub = sheetSub(doc, /^Камера числами/i, 'Камера числами');
+  const rows = tableRows(sub);
+  const header = rows[0] ?? [];
+  const idx = (re: RegExp, what: string): number => col(header, re, what);
+  const [cN, cS0, cS1, cX0, cY0, cX1, cY1] = [idx(/^Кадр/i, 'Кадр'), idx(/^s0/i, 's0'), idx(/^s1/i, 's1'), idx(/^cx0/i, 'cx0'), idx(/^cy0/i, 'cy0'), idx(/^cx1/i, 'cx1'), idx(/^cy1/i, 'cy1')];
+  const out = rows.slice(1).map((r) => ({ n: Number(r[cN]), s0: num(r[cS0] ?? 'NaN') / 100, s1: num(r[cS1] ?? 'NaN') / 100, cx0: num(r[cX0] ?? 'NaN'), cy0: num(r[cY0] ?? 'NaN'), cx1: num(r[cX1] ?? 'NaN'), cy1: num(r[cY1] ?? 'NaN') }));
+  if (out.length !== FRAME_COUNT) fail(`у таблиці «Камера числами» ${out.length} кадрів, а має бути ${FRAME_COUNT}.`);
+  out.forEach((r, i) => {
+    if (r.n !== i + 1) fail(`у «Камері числами» на місці ${i + 1} стоїть кадр ${r.n}.`);
+    for (const [k, v] of Object.entries(r)) if (!Number.isFinite(v)) fail(`у «Камері числами» кадр ${r.n}: поле ${k} не число.`);
+  });
+  return out;
+}
 
-const CENTER = /\(\s*(\d(?:[.,]\d+)?)\s*;\s*(\d(?:[.,]\d+)?)\s*\)/g;
-
-export function parseCamera(cell: string, n: number, length: number, startFrame: number): CameraSpec {
-  const label = `кадр ${n}, «Рух камери»`;
-  let s0: number;
-  let s1: number;
-  const range = /(\d{2,3})\s*%\s*(?:→|->)\s*(\d{2,3})\s*%/.exec(cell);
-  if (range) {
-    s0 = num(range[1]!) / 100;
-    s1 = num(range[2]!) / 100;
-  } else {
-    const one = /масштаб(?:і|\s)\s*(\d{2,3})\s*%/.exec(cell);
-    if (!one) return fail(`${label}: не знайшов масштаб ні як «A% → B%», ні як «масштаб N%»: «${cell}».`);
-    s0 = s1 = num(one[1]!) / 100;
-  }
-  const centers = [...cell.matchAll(CENTER)].map((m) => [num(m[1]!), num(m[2]!)] as const);
-  if (centers.length < 1 || centers.length > 2) return fail(`${label}: очікую один центр «(x; y)» (без зсуву) або два через «→», знайшов ${centers.length}: «${cell}».`);
-  const [c0, c1] = [centers[0]!, centers[1] ?? centers[0]!];
-  // «від A до B с»: камера рухається лише до B, далі стоїть.
-  let holdFrame = length;
-  const hold = new RegExp(`від\\s+${N}\\s+до\\s+${N}\\s*с`).exec(cell);
-  if (hold) {
-    holdFrame = sec2f(num(hold[2]!)) - startFrame;
-    const a = sec2f(num(hold[1]!));
-    if (a !== startFrame) fail(`${label}: рух «від ${hold[1]} с» не збігається з початком вікна (${startFrame} кадрів).`);
-    if (holdFrame <= 0 || holdFrame > length) fail(`${label}: кінець руху «${hold[2]} с» поза вікном кадру.`);
-  }
-  if (s0 < 1 || s1 < 1) fail(`${label}: масштаб менший за 100% (${s0}, ${s1}).`);
-  const cam: CameraSpec = { s0, s1, cx0: c0[0], cy0: c0[1], cx1: c1[0], cy1: c1[1], holdFrame };
-  // Вікно не може виходити за зображення; дрібну неточність (до 0.01) компонент поправляє сам, більшу вважаємо помилкою аркуша.
-  for (const [s, cx, cy] of [[s0, c0[0], c0[1]], [s1, c1[0], c1[1]]] as const) {
+/** Камера кадру: лінійно за кадрами від 0 до holdFrame (довжина вікна кадру), вікно не виходить за зображення. */
+export function cameraSpec(row: CameraRow, holdFrame: number): CameraSpec {
+  const label = `кадр ${row.n}, «Камера числами»`;
+  if (row.s0 < 1 || row.s1 < 1) fail(`${label}: масштаб менший за 100% (${row.s0}, ${row.s1}).`);
+  for (const [s, cx, cy] of [[row.s0, row.cx0, row.cy0], [row.s1, row.cx1, row.cy1]] as const) {
     const halfW = 0.5 / s;
     const halfH = (0.5 * 1920) / 1935 / s;
     const over = Math.max(halfW - cx, cx + halfW - 1, halfH - cy, cy + halfH - 1);
+    // Дрібну неточність (до 0.01) компонент поправляє сам, більшу вважаємо помилкою аркуша.
     if (over > 0.01) fail(`${label}: вікно камери (масштаб ${s}, центр ${cx}; ${cy}) виходить за зображення на ${over.toFixed(3)} частки.`);
   }
-  return cam;
+  return { s0: row.s0, s1: row.s1, cx0: row.cx0, cy0: row.cy0, cx1: row.cx1, cy1: row.cy1, holdFrame };
 }
 
-export interface SheetCamera {
-  n: number;
-  cell: string;
-  startSec: number;
-  endSec: number;
+// ---- шапка й константи
+
+export interface SheetConstants {
+  /** Фінальний титр після кінця файлу озвучення, кадрів (F = 157). */
+  tailFrames: number;
+  /** Кадр, на якому закінчується розфокус початкового титру (кадри 81–102 → 102). */
+  releaseEnd: number;
+  /** Вуаль фінального титру починає рости на кадрі tD + veilOffset (7). */
+  veilOffset: number;
 }
 
-export function parseCameraTable(doc: Doc): SheetCamera[] {
-  const { sections } = splitByHeading(doc.lines, 2);
-  const sheet = sections.find((s) => /^Монтажний аркуш$/i.test(s.title));
-  if (!sheet) return fail('немає розділу «Монтажний аркуш».');
-  const sub = splitByHeading(sheet.body, 3).sections.find((s) => /^Таблиця$/i.test(s.title));
-  if (!sub) return fail('у «Монтажному аркуші» немає розділу «Таблиця».');
-  const rows = tableRows(sub);
-  const header = rows[0] ?? [];
-  const cN = col(header, /^Кадр/i, 'Кадр');
-  const cS = col(header, /^Початок/i, 'Початок, с');
-  const cE = col(header, /^Кінець/i, 'Кінець, с');
-  const cC = col(header, /Рух камери/i, 'Рух камери');
-  return rows.slice(1).map((r) => ({ n: Number(r[cN]), cell: r[cC] ?? '', startSec: num(r[cS] ?? 'NaN'), endSec: num(r[cE] ?? 'NaN') }));
+export function parseConstants(doc: Doc): SheetConstants {
+  const head = blockText(doc.lines.slice(0, 12));
+  const fmt = /(\d+)×(\d+),\s*(\d+)\s*кадр/.exec(head) ?? fail('у шапці немає «Формат: … 1080×1920, 30 кадрів на секунду».');
+  if (Number(fmt[1]) !== 1080 || Number(fmt[2]) !== 1920 || Number(fmt[3]) !== FPS) fail(`формат ${fmt[1]}×${fmt[2]}, ${fmt[3]} к/с, а композиція зроблена під 1080×1920 при ${FPS} к/с.`);
+  const f = /F\s*=\s*(\d+)\s*кадр/.exec(head) ?? fail('у шапці («Загальна тривалість») немає «F = N кадрів» (фінальний титр після кінця файлу озвучення).');
+  const sec = findSection(doc, 3, /^Як переходить у перший кадр$/i, 'Як переходить у перший кадр');
+  const rel = new RegExp(`кадри\\s+(\\d+)\\s*${DASH}\\s*(\\d+)`).exec(blockText(sec.body)) ?? fail('у «Як переходить у перший кадр» немає «(кадри A–B)» зняття розфокусу.');
+  const closing = blockText(findSection(doc, 2, /^Фінальний титр$/i, 'Фінальний титр').body);
+  const veil = /`tD\s*\+\s*(\d+)\s*…\s*tD\s*\+\s*\d+`[^:\n]*:\s*паперова вуаль росте/.exec(closing) ?? fail('у «Фінальному титрі» немає «`tD + A … tD + B`: паперова вуаль росте …».');
+  return { tailFrames: Number(f[1]), releaseEnd: Number(rel[2]), veilOffset: Number(veil[1]) };
 }
 
-// ---- фінальний титр
+// ---- титри
+
+export interface TitleTexts {
+  title: string[];
+  author: string;
+  project: string;
+}
+export interface ClosingTexts {
+  author: string;
+  project: string;
+  site: string;
+}
+
+/** Назва двома рядками: розрив «/» чи переніс, що дав сценарист, інакше правило розриву за пробілом. */
+export function titleLines(title: string | string[]): string[] {
+  const lines = Array.isArray(title) ? title : title.split(/\s*\/\s*/);
+  if (lines.length >= 2) return lines.map((x) => x.trim()).filter(Boolean);
+  return splitTwoLines(lines[0] ?? '');
+}
+
+/** Тексти початкового титру мови: для української з edit.md (card), для інших мов із «Титрів» script.md. */
+export function openingTexts(card: TitleCard, script: ScriptDoc | undefined, lang: string): TitleTexts {
+  if (isDefaultLang(lang)) {
+    const t = card.elements.find((e) => e.kind === 'title');
+    const a = card.elements.find((e) => e.kind === 'author');
+    const s = card.elements.find((e) => e.kind === 'small');
+    if (!t || !a || !s) fail('у «Початковому титрі» для української немає одного з текстів (назва, автор, рядок про проєкт).');
+    return { title: titleLines(t!.lines), author: a!.lines.join(' '), project: s!.lines.join(' ') };
+  }
+  const o = script?.titles?.opening;
+  const where = `stories/<id>/${lang}/script.md, «Титри», «Початковий титр»`;
+  if (!script?.titles) fail(`мова ${lang}: у ${paths.rel(paths.langFile('_', lang, 'script.md')).replace('_', '<id>')} немає розділу «Титри» (початковий титр).`);
+  if (!o?.title?.length) fail(`мова ${lang}: у ${where} немає «Назва…».`);
+  if (!o?.author) fail(`мова ${lang}: у ${where} немає «Автор…».`);
+  if (!o?.project) fail(`мова ${lang}: у ${where} немає «Рядок про проєкт…».`);
+  return { title: titleLines(o!.title!), author: o!.author!, project: o!.project! };
+}
+
+/** Тексти фінального титру: для української із «Текст» розділу «Фінальний титр» edit.md, для інших мов зі script.md. */
+export function closingTexts(doc: Doc, script: ScriptDoc | undefined, lang: string): ClosingTexts {
+  if (isDefaultLang(lang)) {
+    const sec = findSection(doc, 2, /^Фінальний титр$/i, 'Фінальний титр');
+    const items = blockText(sec.body).split('\n').map((l) => l.trim()).filter((l) => /^\d+\.\s/.test(l));
+    const q = (re: RegExp, what: string): string => {
+      const it = items.find((x) => re.test(x));
+      return /«([^»]+)»/.exec(it ?? '')?.[1]?.trim() ?? fail(`у «Фінальному титрі» немає пункту «${what}» з текстом у «…».`);
+    };
+    return { author: q(/^\d+\.\s*Автор/i, 'Автор'), project: q(/^\d+\.\s*Рядок про проєкт/i, 'Рядок про проєкт'), site: q(/^\d+\.\s*Адреса/i, 'Адреса сайту') };
+  }
+  const c = script?.titles?.closing;
+  const where = `stories/<id>/${lang}/script.md, «Титри», «Фінальний титр»`;
+  if (!c) fail(`мова ${lang}: у ${where} немає розділу (фінальний титр).`);
+  if (!c?.author) fail(`мова ${lang}: у ${where} немає «Автор…».`);
+  if (!c?.project) fail(`мова ${lang}: у ${where} немає «Рядок про проєкт…».`);
+  if (!c?.site) fail(`мова ${lang}: у ${where} немає «Адреса сайту…».`);
+  return { author: c!.author!, project: c!.project!, site: c!.site! };
+}
 
 interface ClosingParse {
   spec: TitleSpec;
   grow: { from: number; to: number; to_state: ToneState };
   cream: { from: number; to: number };
   from: ToneState;
+  /** Початок вуалі: tD + зсув (кадри відносно tD). */
+  veilOffset: number;
 }
 
 const bulletsOf = (sec: Section): string[] =>
@@ -187,28 +277,33 @@ const bulletsOf = (sec: Section): string[] =>
     .filter((l) => l.trim().startsWith('- '))
     .map((l) => l.trim().slice(2));
 
-export function parseClosing(doc: Doc, base: TitleCard, totalFrames: number): ClosingParse {
+/** Фінальний титр: стиль і положення з edit.md, час у кадрах від tD, тексти мови. */
+/** maxBottom: найнижча допустима точка групи (y 1536), та сама, що в початковому титрі: «ті самі правила розміру, переносу й падіння». */
+export function parseClosing(doc: Doc, base: TitleCard, texts: ClosingTexts, tD: number, total: number, lang: string, maxBottom: number): ClosingParse {
   const sec = findSection(doc, 2, /^Фінальний титр$/i, 'Фінальний титр');
   const text = blockText(sec.body);
   const items = text.split('\n').map((l) => l.trim()).filter((l) => /^\d+\.\s/.test(l));
   if (items.length !== 4) fail(`у «Фінальному титрі» очікую 4 пронумеровані пункти (автор, риска, рядок про проєкт, адреса), знайшов ${items.length}.`);
   const color = (s: string): string => /#[0-9A-Fa-f]{6}/.exec(s)?.[0] ?? fail(`у пункті «${s}» немає кольору #RRGGBB.`);
-  const quoted = (s: string): string => /«([^»]+)»/.exec(s)?.[1]?.trim() ?? fail(`у пункті «${s}» немає тексту в «…».`);
-  const textSpec = (s: string, kind: 'author' | 'small' | 'site'): Omit<TitleElementSpec, 'topPx' | 'fromFrame' | 'toFrame' | 'rise' | 'lineHeight'> => {
+  const textSpec = (s: string, kind: 'author' | 'small' | 'site', value: string): Omit<TitleElementSpec, 'topPx' | 'fromFrame' | 'toFrame' | 'rise' | 'lineHeight'> => {
     const w = /Lora\s+(\d{3})/.exec(s)?.[1] ?? fail(`у пункті «${s}» немає «Lora NNN».`);
     const size = new RegExp(`${N}\\s*піксел`).exec(s)?.[1] ?? fail(`у пункті «${s}» немає розміру «N пікселів».`);
     const ls = new RegExp(`розрідження\\s+${N}\\s*em`).exec(s)?.[1];
     const al = new RegExp(`на\\s+${N}\\s*%\\s*(?:не)?прозорості`).exec(s)?.[1];
-    return { kind, lines: [quoted(s)], size: num(size), width: 0, weight: Number(w), color: color(s), alpha: al ? num(al) / 100 : 1, letterSpacing: ls ? num(ls) : 0 };
+    return { kind, lines: [value], size: num(size), width: 0, weight: Number(w), color: color(s), alpha: al ? num(al) / 100 : 1, letterSpacing: ls ? num(ls) : 0 };
   };
   const [i1, i2, i3, i4] = items as [string, string, string, string];
   if (!/^\d+\.\s*Автор/i.test(i1) || !/риск/i.test(i2) || !/Рядок про проєкт/i.test(i3) || !/Адреса/i.test(i4)) fail('порядок пунктів «Фінального титру» має бути: автор, риска, рядок про проєкт, адреса.');
-  const author = textSpec(i1, 'author');
-  const small = textSpec(i3, 'small');
-  const site = textSpec(i4, 'site');
+  const author = textSpec(i1, 'author', texts.author);
+  const small = textSpec(i3, 'small', texts.project);
+  const site = textSpec(i4, 'site', texts.site);
   const ruleThick = new RegExp(`${N}\\s*піксел\\S*\\s*завтовшки`).exec(i2)?.[1] ?? fail('у пункті про риску немає «N пікселів завтовшки».');
   const ruleWide = new RegExp(`${N}\\s*завширшки`).exec(i2)?.[1] ?? fail('у пункті про риску немає «N завширшки».');
   const rule: TitleElementSpec = { kind: 'rule', lines: [], size: num(ruleThick), width: num(ruleWide), weight: 400, lineHeight: 1, color: color(i2), alpha: 1, letterSpacing: 0, topPx: 0, fromFrame: 0, toFrame: 0, rise: 0 };
+
+  // Найменші розміри й межа групи: «від 64 до 54 пікселів кроком у 2», «не менш як 38», «низ групи нижчий за y 1536».
+  const minAuthor = Number(/автор:\s*від\s+\d+\s+до\s+(\d+)\s+піксел\S*\s+кроком/i.exec(text)?.[1] ?? fail('у «Фінальному титрі» немає «автор: від N до M пікселів кроком у K».'));
+  const minSmall = Number(/не менш як\s+(\d+)/i.exec(text)?.[1] ?? fail('у «Фінальному титрі» немає «не менш як N» (найменший розмір дрібних рядків).'));
 
   // положення: «- автор: від y 617 до 697;», «риска на y 753–757», «рядок про проєкт: y 813–865», «адреса: y 905–957»
   const lay = bulletsOf(sec).filter((b) => /\by\s+\d+/.test(b));
@@ -222,22 +317,20 @@ export function parseClosing(doc: Doc, base: TitleCard, totalFrames: number): Cl
   const ySmall = yOf(new RegExp(`рядок про проєкт:\\s*y\\s+${N}\\s*${DASH}\\s*${N}`, 'i'), 'рядок про проєкт');
   const ySite = yOf(new RegExp(`адреса:\\s*y\\s+${N}\\s*${DASH}\\s*${N}`, 'i'), 'адреса');
   const lh = (y: [number, number], size: number): number => Math.round(((y[1] - y[0]) / size) * 1000) / 1000;
-  const a: TitleElementSpec = { ...author, lineHeight: lh(yAuthor, author.size), topPx: yAuthor[0], fromFrame: 0, toFrame: 0, rise: 0 };
+  const a: TitleElementSpec = { ...author, lineHeight: lh(yAuthor, author.size), topPx: yAuthor[0], minSize: minAuthor, fromFrame: 0, toFrame: 0, rise: 0 };
   rule.topPx = yRule[0];
-  const sm: TitleElementSpec = { ...small, lineHeight: lh(ySmall, small.size), topPx: ySmall[0], fromFrame: 0, toFrame: 0, rise: 0 };
-  const st: TitleElementSpec = { ...site, lineHeight: lh(ySite, site.size), topPx: ySite[0], fromFrame: 0, toFrame: 0, rise: 0 };
+  const sm: TitleElementSpec = { ...small, lineHeight: lh(ySmall, small.size), topPx: ySmall[0], minSize: minSmall, fromFrame: 0, toFrame: 0, rise: 0 };
+  const st: TitleElementSpec = { ...site, lineHeight: lh(ySite, site.size), topPx: ySite[0], minSize: minSmall, fromFrame: 0, toFrame: 0, rise: 0 };
 
-  // секунди й кадри: «- 129.70–130.00 (3891–3900): автор проявляється …»
+  // Час у кадрах від tD: «- `tD + 28 … tD + 37`: автор проявляється …».
   const tb = bulletsOf(sec)
-    .map((b) => new RegExp(`^${N}\\s*${DASH}\\s*${N}\\s*\\(\\s*(\\d+)\\s*${DASH}\\s*(\\d+)\\s*\\):\\s*(.*)$`).exec(b))
+    .map((b) => /^`tD\s*\+\s*(\d+)\s*…\s*tD\s*\+\s*(\d+)`[^:]*:\s*(.*)$/s.exec(b))
     .filter((m): m is RegExpExecArray => !!m)
-    .map((m) => ({ s0: num(m[1]!), s1: num(m[2]!), f0: Number(m[3]), f1: Number(m[4]), text: m[5]! }));
+    .map((m) => ({ f0: Number(m[1]), f1: Number(m[2]), text: m[3]! }));
   const pick = (re: RegExp, what: string): (typeof tb)[number] => {
     const hit = tb.filter((t) => re.test(t.text));
-    if (hit.length !== 1) return fail(`у «Як з'являється і зникає» очікую рівно один пункт про «${what}», знайшов ${hit.length}.`);
-    const t = hit[0]!;
-    if (Math.abs(sec2f(t.s0) - t.f0) > 1 || Math.abs(sec2f(t.s1) - t.f1) > 1) fail(`пункт про «${what}»: секунди ${t.s0}–${t.s1} і кадри ${t.f0}–${t.f1} розходяться більше ніж на кадр.`);
-    return t;
+    if (hit.length !== 1) return fail(`у «Як з'являється і зникає» очікую рівно один пункт про «${what}» у вигляді «\`tD + A … tD + B\`: …», знайшов ${hit.length}.`);
+    return hit[0]!;
   };
   const grow = pick(/^паперова вуаль росте/i, 'вуаль росте');
   const tAuthor = pick(/^автор проявляється/i, 'автор проявляється');
@@ -245,20 +338,22 @@ export function parseClosing(doc: Doc, base: TitleCard, totalFrames: number): Cl
   const tSmall = pick(/^проявляється рядок про проєкт/i, 'проявляється рядок про проєкт');
   const tSite = pick(/^проявляється адреса/i, 'проявляється адреса');
   const out = pick(/гаснуть/i, 'текст гасне і вуаль росте до 100%');
-  a.fromFrame = tAuthor.f0;
-  a.toFrame = tAuthor.f1;
+  a.fromFrame = tD + tAuthor.f0;
+  a.toFrame = tD + tAuthor.f1;
   a.rise = Number(new RegExp(`піднімається на\\s+${N}\\s*піксел`).exec(tAuthor.text)?.[1] ?? 0);
-  rule.fromFrame = tRule.f0;
-  rule.toFrame = tRule.f1;
-  sm.fromFrame = tSmall.f0;
-  sm.toFrame = tSmall.f1;
-  st.fromFrame = tSite.f0;
-  st.toFrame = tSite.f1;
-  const fadeSec = new RegExp(`за\\s+${N}\\s*${DASH}\\s*${N}`).exec(out.text);
-  if (!fadeSec) fail('у пункті про зникнення немає «за A–B» (секунди, коли гаснуть текст і риска).');
-  const hideFrom = sec2f(num(fadeSec![1]!));
-  const hideTo = sec2f(num(fadeSec![2]!));
-  const creamTo = /вуаль росте від\s+\d+\s*%\s+до\s+100\s*%/.test(out.text) ? out.f1 : fail('у пункті про зникнення немає «вуаль росте від N% до 100%».');
+  rule.fromFrame = tD + tRule.f0;
+  rule.toFrame = tD + tRule.f1;
+  sm.fromFrame = tD + tSmall.f0;
+  sm.toFrame = tD + tSmall.f1;
+  st.fromFrame = tD + tSite.f0;
+  st.toFrame = tD + tSite.f1;
+  const fadeRel = /за\s+`tD\s*\+\s*(\d+)\s*…\s*tD\s*\+\s*(\d+)`/.exec(out.text);
+  if (!fadeRel) fail('у пункті про зникнення немає «за `tD + A … tD + B`» (кадри, коли гаснуть текст і риска).');
+  const hideFrom = tD + Number(fadeRel![1]);
+  const hideTo = tD + Number(fadeRel![2]);
+  if (!/вуаль росте від\s+\d+\s*%\s+до\s+100\s*%/.test(out.text)) fail('у пункті про зникнення немає «вуаль росте від N% до 100%».');
+  const creamTo = tD + out.f1;
+  if (tD + out.f1 !== total) fail(`фінальний титр закінчується на tD + ${out.f1} = ${tD + out.f1}, а фільм має ${total} кадрів (tD + F).`);
 
   // тон вуалі: «від 0% до 72%», розмиття «від 0 до 32 пікселів», насиченість «від 100% до 80%», пляма «від 0% до 45%», масштаб «від 0 до +4%»
   const g = grow.text;
@@ -277,28 +372,38 @@ export function parseClosing(doc: Doc, base: TitleCard, totalFrames: number): Cl
   const centerY = (top + bottom) / 2;
   return {
     spec: {
-      activeFrom: grow.f0,
-      activeTo: totalFrames,
+      activeFrom: tD + grow.f0,
+      activeTo: total,
       blockWidth: base.blockWidth,
       fitStep: base.fitStep,
+      lang,
+      maxBottom,
       hideFrom,
       hideTo,
       glow: { width: num(glowM![2]!), height: num(glowM![3]!), feather: num(glowM![4]!), centerY },
       elements: els,
     },
-    grow: { from: grow.f0, to: grow.f1, to_state: full },
-    cream: { from: out.f0, to: creamTo },
+    grow: { from: tD + grow.f0, to: tD + grow.f1, to_state: full },
+    cream: { from: tD + out.f0, to: creamTo },
     from: clear,
+    veilOffset: grow.f0,
   };
 }
 
-// ---- початковий титр (розбір у title-card.ts, той самий, що в аніматику)
+// ---- початковий титр (розбір у title-card.ts, той самий, що в аніматику) + тексти мови
 
-export function openingSpec(card: TitleCard): { spec: TitleSpec; initial: ToneState; releaseFrom: number; releaseTo: number } {
+export function openingSpec(card: TitleCard, texts: TitleTexts, doc: Doc, lang: string): { spec: TitleSpec; initial: ToneState; releaseFrom: number; releaseTo: number } {
   const bg = card.background;
+  const sec = findSection(doc, 2, /^Початковий титр$/i, 'Початковий титр');
+  const t = blockText(sec.body);
+  // Найменші розміри: «нижче 72 пікселів не спускати, інакше скрипт падає», «до 44, потім переносити», «нижче 38 пікселів не спускати:».
+  const minTitle = Number(/нижче\s+(\d+)\s+піксел\S*\s+не спускати,\s+інакше/i.exec(t)?.[1] ?? fail('у «Початковому титрі» немає «нижче N пікселів не спускати, інакше скрипт падає» (найменший розмір назви).'));
+  const minAuthor = Number(/кроком у\s+\d+\s+піксел\S*\s+до\s+(\d+),\s*потім переносити/i.exec(t)?.[1] ?? fail('у «Початковому титрі» немає «кроком у N пікселі до M, потім переносити» (найменший розмір автора).'));
+  const minSmall = Number(/нижче\s+(\d+)\s+піксел\S*\s+не спускати:/i.exec(t)?.[1] ?? fail('у «Початковому титрі» немає «нижче N пікселів не спускати:» (найменший розмір рядка про проєкт).'));
+  const maxBottom = Number(/низ групи нижчий за y\s+(\d+)/i.exec(t)?.[1] ?? fail('у «Початковому титрі» немає «низ групи нижчий за y N».'));
   const els: TitleElementSpec[] = card.elements.map((e) => ({
     kind: e.kind,
-    lines: e.lines,
+    lines: e.kind === 'title' ? texts.title : e.kind === 'author' ? [texts.author] : e.kind === 'small' ? [texts.project] : e.lines,
     size: e.size,
     width: e.width,
     weight: e.weight,
@@ -307,8 +412,9 @@ export function openingSpec(card: TitleCard): { spec: TitleSpec; initial: ToneSt
     alpha: e.alpha,
     letterSpacing: e.letterSpacing,
     topPx: e.topPx,
-    fromFrame: e.from * FPS,
-    toFrame: e.to * FPS,
+    ...(e.kind === 'title' ? { minSize: minTitle } : e.kind === 'author' ? { minSize: minAuthor } : e.kind === 'small' ? { minSize: minSmall } : {}),
+    fromFrame: Math.round(e.from * FPS),
+    toFrame: Math.round(e.to * FPS),
     rise: e.rise,
   }));
   const top = Math.min(...els.map((e) => e.topPx));
@@ -316,17 +422,19 @@ export function openingSpec(card: TitleCard): { spec: TitleSpec; initial: ToneSt
   return {
     spec: {
       activeFrom: 0,
-      activeTo: sec2f(card.release.to),
+      activeTo: Math.round(card.release.to * FPS),
       blockWidth: card.blockWidth,
       fitStep: card.fitStep,
-      hideFrom: card.hide.from * FPS,
-      hideTo: card.hide.to * FPS,
+      lang,
+      maxBottom,
+      hideFrom: Math.round(card.hide.from * FPS),
+      hideTo: Math.round(card.hide.to * FPS),
       glow: { width: bg.glow.width, height: bg.glow.height, feather: bg.glow.feather, centerY: (top + bottom) / 2 },
       elements: els,
     },
     initial: { veil: bg.veil, glow: bg.glow.alpha, blur: bg.blur, saturation: bg.saturation, scale: bg.scale },
-    releaseFrom: card.release.from * FPS,
-    releaseTo: card.release.to * FPS,
+    releaseFrom: Math.round(card.release.from * FPS),
+    releaseTo: Math.round(card.release.to * FPS),
   };
 }
 
@@ -336,6 +444,8 @@ export interface SubtitleSpecParsed {
   rules: SubtitleRules;
   timing: TimingRules;
   style: FilmProps['subtitles']['style'];
+  /** Остання картка не зникає пізніше за tD + цей зсув (кадрів). */
+  lastOutOffset: number;
 }
 
 const WORDS: Record<string, number> = { двох: 2, трьох: 3, чотирьох: 4 };
@@ -348,12 +458,14 @@ export function parseSubtitleSpec(doc: Doc): SubtitleSpecParsed {
   const maxWords = WORDS[wordsM[1]!] ?? Number(wordsM[1]);
   const maxChars = Number(need(/до\s+(\d+)\s+символів/i, 'до N символів')[1]);
   const pause = num(need(new RegExp(`пауза\\s+${N}\\s*с`, 'i'), 'пауза N с')[1]!);
-  const offset = num(need(new RegExp(`start\\s*\\+\\s*${N}\\s*с`, 'i'), '`start + N с`')[1]!);
+  const offsetMs = Number(need(/ms\(start\)\s*\+\s*(\d+)/i, '`ms(start) + N` (час слова у фільмі)')[1]);
   const lead = Number(need(/за\s+(\d+)\s+кадр\S*\s+до початку свого першого слова/i, 'за N кадри до початку свого першого слова')[1]);
   const fin = Number(need(/від 0% до 100% за\s+(\d+)\s+кадр/i, 'від 0% до 100% за N кадри')[1]);
   const trail = Number(need(/через\s+(\d+)\s+кадр\S*\s+після кінця свого останнього слова/i, 'через N кадрів після кінця останнього слова')[1]);
   const fout = Number(need(/за\s+(\d+)\s+кадр\S*\s+від 100% до 0%/i, 'за N кадри від 100% до 0%')[1]);
   const min = Number(need(/не коротше ніж\s+(\d+)\s+кадр/i, 'не коротше ніж N кадрів')[1]);
+  const firstFrame = Number(need(/не стартує раніше за кадр\s+(\d+)/i, 'жодна картка не стартує раніше за кадр N')[1]);
+  const lastOffset = Number(need(/не зникає пізніше за кадр\s*`?tD\s*\+\s*(\d+)/i, 'остання картка не зникає пізніше за кадр tD + N')[1]);
   const block = Number(need(/блок завширшки\s+(\d+)\s+піксел/i, 'блок завширшки N пікселів')[1]);
   const bottom = Number(need(/Низ блоку на y\s+(\d+)/i, 'низ блоку на y N')[1]);
   const weight = Number(need(/Lora\s+(\d{3})/i, 'Lora NNN')[1]);
@@ -363,10 +475,12 @@ export function parseSubtitleSpec(doc: Doc): SubtitleSpecParsed {
   const fill = need(/заливки\s*`(#[0-9A-Fa-f]{6})`/i, 'колір заливки `#…`')[1]!;
   const strokeM = need(new RegExp(`обведення\\s*\`(#[0-9A-Fa-f]{6})\`\\s*завтовшки\\s+${N}\\s*піксел`, 'i'), 'обведення `#…` завтовшки N пікселів');
   const shM = need(/тінь\s*`([^`]+)`\s*кольору\s*`#([0-9A-Fa-f]{6})`\s*на\s+(\d+)\s*%/i, 'тінь `0 3px 14px` кольору `#…` на N%');
+  const fitM = need(/кроком у\s+(\d+)\s+піксел\S*\s+до\s+(\d+)/i, 'шрифт картки зменшують кроком у N пікселі до M');
   const rgb = Number.parseInt(shM[2]!, 16);
   return {
     rules: { maxWords, maxChars, pauseSeconds: pause },
-    timing: { fps: FPS, offsetSeconds: offset, leadFrames: lead, fadeInFrames: fin, trailFrames: trail, fadeOutFrames: fout, minOnScreenFrames: min },
+    timing: { fps: FPS, offsetSeconds: offsetMs / 1000, leadFrames: lead, fadeInFrames: fin, trailFrames: trail, fadeOutFrames: fout, minOnScreenFrames: min, minInFrame: firstFrame },
+    lastOutOffset: lastOffset,
     style: {
       blockWidth: block,
       bottomY: bottom,
@@ -378,67 +492,75 @@ export function parseSubtitleSpec(doc: Doc): SubtitleSpecParsed {
       stroke: strokeM[1]!,
       strokeWidth: num(strokeM[2]!),
       shadow: `${shM[1]} rgba(${(rgb >> 16) & 255}, ${(rgb >> 8) & 255}, ${rgb & 255}, ${num(shM[3]!) / 100})`,
+      fitStep: Number(fitM[1]),
+      minSize: Number(fitM[2]),
     },
   };
+}
+
+/** Назви для субтитрів мови: для української список з UK_NAMES (звірений з edit.md), для інших із «Назв» script.md. */
+export function subtitleNames(doc: Doc, script: ScriptDoc | undefined, lang: string): NameRule[] {
+  if (isDefaultLang(lang)) {
+    const text = blockText(findSection(doc, 2, /^Субтитри$/i, 'Субтитри').body);
+    for (const n of UK_NAMES) if (!text.includes(n.spoken)) fail(`у «Субтитрах» немає запису «${n.spoken}» зі списку для uk: код працює зі старим списком, оновіть UK_NAMES у scripts/lib/subtitles.ts.`);
+    return UK_NAMES;
+  }
+  if (!script) return fail(`мова ${lang}: немає script.md.`);
+  const names = script!.names;
+  if (!names.length) fail(`мова ${lang}: у stories/<id>/${lang}/script.md немає розділу «Назви» (звучання → написання для субтитрів).`);
+  return names.filter((n) => n.rename).map((n) => ({ spoken: n.spoken, shown: n.shown }));
 }
 
 // ---- збирання
 
 export interface BuildOptions {
   story: string;
-  frameCount?: number;
+  /** Код мовної версії; без нього українська. */
+  lang?: string;
   /** Додатковий масштаб до окремих кадрів (+2% тощо), якщо на стоп-кадрі видно край паперу. */
   bumps?: Record<number, number>;
-  /** Не падати, якщо секунди в таблиці й кадри в «Числах» розходяться більше ніж на кадр. */
-  allowSecondsMismatch?: boolean;
   /** Перекрити читання з диска в тестах. */
   doc?: Doc;
-  timings?: { fragments: Array<{ words: TimedWord[] }> };
+  timings?: TimingsT;
+  script?: ScriptDoc;
   audioExists?: boolean;
 }
 
 export interface BuildResult {
   props: FilmProps;
   warnings: string[];
+  plan: FramePlan;
 }
 
+/** Унікальні символи текстів для перевірки, що накреслення шрифту має всі потрібні літери (діакритика, кирилиця). */
+const sampleChars = (texts: string[]): string => [...new Set([...texts.join('')])].filter((c) => !/\s/.test(c)).join('');
+
 export function buildFilmProps(o: BuildOptions): BuildResult {
+  const lang = normalizeLang(o.lang);
   const warnings: string[] = [];
   const doc = o.doc ?? readDoc(paths.storyFile(o.story, 'edit.md'), 'editor');
-  const frameCount = o.frameCount ?? 25;
-  const head = blockText(doc.lines.slice(0, 20));
-  const fmt = /(\d+)×(\d+),\s*(\d+)\s*кадр/.exec(head) ?? fail('у шапці немає «Формат: … 1080×1920, 30 кадрів на секунду».');
-  if (Number(fmt[1]) !== 1080 || Number(fmt[2]) !== 1920 || Number(fmt[3]) !== FPS) fail(`формат ${fmt[1]}×${fmt[2]}, ${fmt[3]} к/с, а композиція зроблена під 1080×1920 при ${FPS} к/с.`);
-  const totalM = /Загальна тривалість:\s*[\d.,]+\s*с,\s*(\d+)\s*кадр/.exec(head) ?? fail('у шапці немає «Загальна тривалість: N с, M кадрів».');
-  const total = Number(totalM[1]);
+  const consts = parseConstants(doc);
+  const table = parseAnchorTable(doc);
+  const camera = parseCameraNumbers(doc);
+  const exceptions = parseExceptions(doc);
 
-  const rows = parseNumbers(doc);
-  checkNumbers(rows, total, frameCount);
+  const timingsFile = paths.timings(o.story, lang);
+  if (!o.timings && !existsSync(timingsFile)) fail(`мова ${lang}: немає ${paths.rel(timingsFile)}: спершу озвучення цієї мови (narrate.ts${isDefaultLang(lang) ? '' : ` --lang ${lang}`}).`);
+  const timings = o.timings ?? (JSON.parse(readFileSync(timingsFile, 'utf8')) as TimingsT);
+  const script = o.script ?? (isDefaultLang(lang) ? undefined : parseScript(o.story, lang));
 
-  // секунди з таблиці «Таблиця» проти кадрів із «Чисел»
-  const cams = parseCameraTable(doc);
-  if (cams.length !== frameCount) fail(`у таблиці «Таблиця» ${cams.length} кадрів, а має бути ${frameCount}.`);
-  const mismatches: string[] = [];
-  rows.forEach((r, i) => {
-    const c = cams[i]!;
-    if (c.n !== r.n) fail(`у таблиці «Таблиця» на місці ${i + 1} стоїть кадр ${c.n}.`);
-    if (Math.abs(c.startSec * FPS - r.start) > 1 || Math.abs(c.endSec * FPS - r.end) > 1) {
-      mismatches.push(`кадр ${r.n}: у секундах ${c.startSec}–${c.endSec} с (${(c.startSec * FPS).toFixed(1)}–${(c.endSec * FPS).toFixed(1)} кадрів), у «Числах» ${r.start}–${r.end}`);
-    }
-  });
-  if (mismatches.length) {
-    const msg = `секунди в «Таблиці» і кадри в «Числах для збирання» розходяться більше ніж на кадр: ${mismatches.join('; ')}.`;
-    if (o.allowSecondsMismatch) warnings.push(msg);
-    else fail(msg);
-  }
+  // кадри за алгоритмом
+  const plan = planFrames({ lang, timings, rules: table.rules, nominalD: table.nominalD, sentenceCounts: table.sentenceCounts, exceptions, releaseEnd: consts.releaseEnd, veilOffset: consts.veilOffset, tailFrames: consts.tailFrames, minClean: MIN_CLEAN_FRAMES, frameCount: FRAME_COUNT, fragmentCount: FRAGMENT_COUNT });
+  const veilOffset = consts.veilOffset;
+  const { tD, total } = plan;
 
   // титри
   const opened = parseTitleCardDoc(doc);
   if (!opened.card) fail(`не вдалося розібрати «Початковий титр»${opened.warnings.length ? `: ${opened.warnings.join(' ')}` : ''}.`);
   if (opened.warnings.length) fail(`«Початковий титр» розібрано з припущеннями, а я не вгадую: ${opened.warnings.join(' ')}`);
   const card = opened.card!;
-  const opening = openingSpec(card);
-  const closing = parseClosing(doc, card, total);
+  const opening = openingSpec(card, openingTexts(card, script, lang), doc, lang);
+  const closing = parseClosing(doc, card, closingTexts(doc, script, lang), tD, total, lang, opening.spec.maxBottom ?? 1536);
   const sub = parseSubtitleSpec(doc);
 
   // шрифт
@@ -447,49 +569,49 @@ export function buildFilmProps(o: BuildOptions): BuildResult {
   const checks = [...opening.spec.elements, ...closing.spec.elements]
     .filter((e) => e.kind !== 'rule')
     .map((e) => ({ spec: `${e.weight} ${e.size}px "${family}"`, text: e.lines.join(' ') }));
-  checks.push({ spec: `${sub.style.weight} ${sub.style.size}px "${family}"`, text: 'Контакт2u ФарбаФабра абвгґдеєжзиіїйклмнопрстуфхцчшщьюя' });
 
   // кадри
   const wc = VARIANTS.find((v) => v.id === 'wc-blots');
   if (!wc || wc.transition.kind !== 'watercolor') fail('у remotion/src/variants.ts немає варіанта wc-blots.');
   const baseOpts = (wc!.transition as { kind: 'watercolor'; options: WatercolorOptions }).options;
-  const camParsed: CameraSpec[] = rows.map((r, i) => parseCamera(cams[i]!.cell, r.n, r.length, r.start));
-  const shots: FilmShot[] = rows.map((r, i) => {
-    const prev = rows[i - 1];
-    const reveal = prev ? prev.transition : 0;
-    const opts: WatercolorOptions | null = prev
-      ? { ...baseOpts, seed: i === 1 ? baseOpts.seed : `${baseOpts.seed}-${i}`, ...(reveal >= BREATH_FROM_FRAMES ? { breath: BREATH } : {}) }
-      : null;
-    return {
-      n: r.n,
-      src: `frames/frame-${String(r.n).padStart(2, '0')}.png`,
-      startFrame: r.start,
-      endFrame: r.end,
+  const shots: FilmShot[] = [];
+  for (let n = 1; n <= FRAME_COUNT; n++) {
+    const reveal = n > 1 ? plan.D[n - 1]! : 0;
+    const i = n - 1;
+    const opts: WatercolorOptions | null =
+      n > 1 ? { ...baseOpts, seed: i === 1 ? baseOpts.seed : `${baseOpts.seed}-${i}`, ...(reveal >= BREATH_FROM_FRAMES ? { breath: BREATH } : {}) } : null;
+    // Камера лінійна між S(N) і E(N); у кадру 25 від'їзд закінчується на початку вуалі фінального титру (tD + зсув).
+    const hold = n === FRAME_COUNT ? tD + veilOffset - plan.S[n]! : plan.E[n]! - plan.S[n]!;
+    shots.push({
+      n,
+      src: `frames/frame-${String(n).padStart(2, '0')}.png`,
+      startFrame: plan.S[n]!,
+      endFrame: plan.E[n]!,
       revealFrames: reveal,
       reveal: opts,
-      camera: camParsed[i]!,
-      scaleBump: o.bumps?.[r.n] ?? 0,
-    };
-  });
+      camera: cameraSpec(camera[i]!, hold),
+      scaleBump: o.bumps?.[n] ?? 0,
+    });
+  }
   const last = shots[shots.length - 1]!;
   if (closing.grow.from < last.startFrame + last.revealFrames) fail(`вуаль фінального титру починає рости на кадрі ${closing.grow.from}, а кадр ${last.n} ще проступає до ${last.startFrame + last.revealFrames}.`);
 
   // субтитри
-  const timings = o.timings ?? (JSON.parse(readFileSync(paths.timings(o.story), 'utf8')) as { fragments: Array<{ words: TimedWord[] }> });
   const words = timings.fragments.flatMap((f) => f.words);
-  const merges = countMerges(words);
-  if (merges.contact !== 1 || merges.farba !== 1) fail(`у timings.json очікую по одному «"Контакт ту ю"» і «"Фарба Фабра"», знайшов ${merges.contact} і ${merges.farba}: правило злиття слів у аркуші розраховане на них.`);
-  const norm = normalizeWords(words);
+  const names = subtitleNames(doc, script, lang);
+  const norm = normalizeWordsLang(words, names, lang);
   const relaxed: string[] = [];
-  const cards = cardFrames(buildCards(norm, sub.rules, relaxed), sub.timing);
+  const cards = cardFrames(buildCards(norm, sub.rules, relaxed), { ...sub.timing, maxOutEnd: tD + sub.lastOutOffset });
   for (const r of relaxed) warnings.push(`субтитри: фразу ${r} не можна розкласти за правилом без порушень, взято розклад із найменшим числом порушень.`);
   const firstIn = cards[0]!.inFrame;
-  if (firstIn < opening.releaseTo - sec2f(0.4) - 5) warnings.push(`перша картка субтитрів на кадрі ${firstIn} починається ще до кінця титру.`);
+  if (firstIn < opening.releaseTo - Math.round(0.4 * FPS) - 5) warnings.push(`перша картка субтитрів на кадрі ${firstIn} починається ще до кінця титру.`);
   const lastCard = cards[cards.length - 1]!;
   if (lastCard.outEnd > closing.grow.to) fail(`остання картка субтитрів зникає на кадрі ${lastCard.outEnd}, а фінальний титр уже в повній силі з ${closing.grow.to}.`);
+  checks.push({ spec: `${sub.style.weight} ${sub.style.size}px "${family}"`, text: sampleChars(cards.map((c) => c.text)) });
 
-  const audioExists = o.audioExists ?? existsSync(paths.workFile(o.story, 'mix.mp3'));
+  const audioExists = o.audioExists ?? existsSync(paths.workLangFile(o.story, lang, 'mix.mp3'));
   const props: FilmProps = {
+    lang,
     width: 1080,
     height: 1920,
     fps: FPS,
@@ -511,15 +633,18 @@ export function buildFilmProps(o: BuildOptions): BuildResult {
     shots,
     subtitles: { style: sub.style, cards: cards.map((c) => ({ text: c.text, inFrame: c.inFrame, inEnd: c.inEnd, outFrame: c.outFrame, outEnd: c.outEnd })) },
     audio: audioExists ? 'mix.mp3' : null,
+    meta: { lang, tD, total, A_ms: plan.A.slice(2), S: plan.S.slice(1), E: plan.E.slice(1), D: plan.D.slice(1, FRAME_COUNT), clean: plan.clean.slice(1), reduced_transitions: plan.reduced },
   };
-  if (!audioExists) warnings.push('work/<id>/mix.mp3 не знайдено: фільм буде без звуку.');
-  return { props, warnings };
+  if (!audioExists) warnings.push(`${paths.rel(paths.workLangFile(o.story, lang, 'mix.mp3'))} не знайдено: фільм буде без звуку.`);
+  return { props, warnings, plan };
 }
 
-/** Додаткові масштаби кадрів із stories/<id>/film-bumps.json ({"8": 0.02}); без файлу порожньо. */
+/** Додаткові масштаби кадрів із stories/<id>/film-bumps.json ({"8": 0.02}); без файлу порожньо. Кадри однакові в усіх мовах. */
 export function readBumps(story: string): Record<number, number> {
   const f = paths.storyFile(story, 'film-bumps.json');
   if (!existsSync(f)) return {};
   const raw = JSON.parse(readFileSync(f, 'utf8')) as Record<string, number>;
   return Object.fromEntries(Object.entries(raw).map(([k, v]) => [Number(k), Number(v)]));
 }
+
+export { DEFAULT_LANG, FINAL_TITLE_FRAMES };

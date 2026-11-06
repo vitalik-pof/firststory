@@ -1,7 +1,7 @@
 {
   "story": "01-natalia",
   "credits": {
-    "total_spent": 75074,
+    "total_spent": 79355,
     "runs": [
       {
         "script": "voice-previews",
@@ -414,6 +414,30 @@
         "credits_before": 92990,
         "credits_after": 93599,
         "spent_run": 609
+      },
+      {
+        "script": "narrate",
+        "started_at": "2026-11-06T05:33:22.833Z",
+        "finished_at": "2026-11-06T05:34:15.745Z",
+        "credits_before": 93599,
+        "credits_after": 93599,
+        "spent_run": 0
+      },
+      {
+        "script": "narrate",
+        "started_at": "2026-11-06T05:34:16.415Z",
+        "finished_at": "2026-11-06T05:35:24.137Z",
+        "credits_before": 94921,
+        "credits_after": 94921,
+        "spent_run": 0
+      },
+      {
+        "script": "narrate",
+        "started_at": "2026-11-06T05:35:24.883Z",
+        "finished_at": "2026-11-06T05:36:43.057Z",
+        "credits_before": 96407,
+        "credits_after": 97880,
+        "spent_run": 1473
       }
     ]
   },
@@ -2428,7 +2452,7 @@
     "created_at": "2026-11-05T00:41:54.681Z",
     "design_credits_source": "docs"
   },
-  "updated_at": "2026-11-06T05:07:04.674Z",
+  "updated_at": "2026-11-06T05:36:43.057Z",
   "narration": {
     "model_id": "eleven_v4",
     "voice_id": "49POAIkFDXsxrtR84sdj",
@@ -2834,5 +2858,134 @@
     "delivered": "файлом режисерові в застосунок Claude 6 листопада 2026 року",
     "drive_url": null,
     "drive_note": "конектор Google Drive приймає файл лише вмістом у виклику (base64), відео 134.5 МБ через нього не проходить; на Drive переносить режисер"
+  },
+  "narration_en": {
+    "model_id": "eleven_v4",
+    "voice_id": "49POAIkFDXsxrtR84sdj",
+    "language_code": "en",
+    "output_format": "mp3_44100_128",
+    "parts": {
+      "79b8e9d453": {
+        "hash": "79b8e9d453",
+        "mp3": "work/01-natalia/en/narration.part-79b8e9d453.mp3",
+        "response_file": "work/01-natalia/en/narration.part-79b8e9d453.response.json",
+        "chars_sent": 2727,
+        "credits": 1322,
+        "credits_source": "history",
+        "fragments": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17
+        ],
+        "generated_at": "2026-11-06T05:34:03.023Z"
+      }
+    },
+    "file": "work/01-natalia/en/narration.mp3",
+    "active_parts": [
+      "79b8e9d453"
+    ],
+    "silent_fragments": [],
+    "duration": 114.286,
+    "assembled_at": "2026-11-06T05:34:03.159Z"
+  },
+  "narration_fr": {
+    "model_id": "eleven_v4",
+    "voice_id": "49POAIkFDXsxrtR84sdj",
+    "language_code": "fr",
+    "output_format": "mp3_44100_128",
+    "parts": {
+      "1cde57c2b4": {
+        "hash": "1cde57c2b4",
+        "mp3": "work/01-natalia/fr/narration.part-1cde57c2b4.mp3",
+        "response_file": "work/01-natalia/fr/narration.part-1cde57c2b4.response.json",
+        "chars_sent": 3065,
+        "credits": 1486,
+        "credits_source": "history",
+        "fragments": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17
+        ],
+        "generated_at": "2026-11-06T05:35:11.365Z"
+      }
+    },
+    "file": "work/01-natalia/fr/narration.mp3",
+    "active_parts": [
+      "1cde57c2b4"
+    ],
+    "silent_fragments": [],
+    "duration": 123.873,
+    "assembled_at": "2026-11-06T05:35:11.524Z"
+  },
+  "narration_de": {
+    "model_id": "eleven_v4",
+    "voice_id": "49POAIkFDXsxrtR84sdj",
+    "language_code": "de",
+    "output_format": "mp3_44100_128",
+    "parts": {
+      "27394a7b16": {
+        "hash": "27394a7b16",
+        "mp3": "work/01-natalia/de/narration.part-27394a7b16.mp3",
+        "response_file": "work/01-natalia/de/narration.part-27394a7b16.response.json",
+        "chars_sent": 3039,
+        "credits": 1473,
+        "credits_source": "history",
+        "fragments": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17
+        ],
+        "generated_at": "2026-11-06T05:36:30.509Z"
+      }
+    },
+    "file": "work/01-natalia/de/narration.mp3",
+    "active_parts": [
+      "27394a7b16"
+    ],
+    "silent_fragments": [],
+    "duration": 128.209,
+    "assembled_at": "2026-11-06T05:36:30.658Z"
   }
 }

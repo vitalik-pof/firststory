@@ -1,0 +1,1936 @@
+{
+  "version": 1,
+  "story": "01-natalia",
+  "language_code": "en",
+  "model_id": "eleven_v4",
+  "voice_id": "49POAIkFDXsxrtR84sdj",
+  "audio_file": "work/01-natalia/en/narration.mp3",
+  "duration": 114.286,
+  "fragment_joiner": "\n\n",
+  "part_gap": 0,
+  "parts": [
+    {
+      "index": 0,
+      "fragments": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "offset": 0,
+      "duration": 114.286
+    }
+  ],
+  "silent_fragments": [],
+  "fragments": [
+    {
+      "n": 1,
+      "start": 0.08,
+      "end": 8.6,
+      "text": "In July twenty fourteen, my family and I left our hometown of Donetsk for the part of the Donetsk region that wasn't occupied.",
+      "words": [
+        {
+          "text": "In",
+          "start": 0.08,
+          "end": 0.24
+        },
+        {
+          "text": "July",
+          "start": 0.4,
+          "end": 0.56
+        },
+        {
+          "text": "twenty",
+          "start": 0.72,
+          "end": 0.88
+        },
+        {
+          "text": "fourteen,",
+          "start": 0.96,
+          "end": 1.92
+        },
+        {
+          "text": "my",
+          "start": 2.04,
+          "end": 2.16
+        },
+        {
+          "text": "family",
+          "start": 2.32,
+          "end": 2.48
+        },
+        {
+          "text": "and",
+          "start": 2.56,
+          "end": 2.64
+        },
+        {
+          "text": "I",
+          "start": 2.72,
+          "end": 2.8
+        },
+        {
+          "text": "left",
+          "start": 2.88,
+          "end": 3.12
+        },
+        {
+          "text": "our",
+          "start": 3.2,
+          "end": 3.28
+        },
+        {
+          "text": "hometown",
+          "start": 3.32,
+          "end": 3.76
+        },
+        {
+          "text": "of",
+          "start": 3.8,
+          "end": 3.84
+        },
+        {
+          "text": "Donetsk",
+          "start": 3.92,
+          "end": 4.48
+        },
+        {
+          "text": "for",
+          "start": 5.12,
+          "end": 5.2
+        },
+        {
+          "text": "the",
+          "start": 5.28,
+          "end": 5.36
+        },
+        {
+          "text": "part",
+          "start": 5.44,
+          "end": 5.6
+        },
+        {
+          "text": "of",
+          "start": 5.68,
+          "end": 5.76
+        },
+        {
+          "text": "the",
+          "start": 5.8,
+          "end": 5.84
+        },
+        {
+          "text": "Donetsk",
+          "start": 5.92,
+          "end": 6.32
+        },
+        {
+          "text": "region",
+          "start": 6.4,
+          "end": 6.8
+        },
+        {
+          "text": "that",
+          "start": 7.2,
+          "end": 7.36
+        },
+        {
+          "text": "wasn't",
+          "start": 7.48,
+          "end": 7.68
+        },
+        {
+          "text": "occupied.",
+          "start": 7.76,
+          "end": 8.6
+        }
+      ]
+    },
+    {
+      "n": 2,
+      "start": 8.88,
+      "end": 13.24,
+      "text": "Our daughters were supposed to start first grade, so we thought we'd be back soon.",
+      "words": [
+        {
+          "text": "Our",
+          "start": 8.88,
+          "end": 9.04
+        },
+        {
+          "text": "daughters",
+          "start": 9.08,
+          "end": 9.36
+        },
+        {
+          "text": "were",
+          "start": 9.44,
+          "end": 9.52
+        },
+        {
+          "text": "supposed",
+          "start": 9.6,
+          "end": 9.92
+        },
+        {
+          "text": "to",
+          "start": 9.96,
+          "end": 10
+        },
+        {
+          "text": "start",
+          "start": 10.08,
+          "end": 10.32
+        },
+        {
+          "text": "first",
+          "start": 10.4,
+          "end": 10.64
+        },
+        {
+          "text": "grade,",
+          "start": 10.72,
+          "end": 11.24
+        },
+        {
+          "text": "so",
+          "start": 11.52,
+          "end": 11.68
+        },
+        {
+          "text": "we",
+          "start": 11.76,
+          "end": 11.84
+        },
+        {
+          "text": "thought",
+          "start": 11.96,
+          "end": 12.08
+        },
+        {
+          "text": "we'd",
+          "start": 12.133,
+          "end": 12.24
+        },
+        {
+          "text": "be",
+          "start": 12.32,
+          "end": 12.4
+        },
+        {
+          "text": "back",
+          "start": 12.48,
+          "end": 12.64
+        },
+        {
+          "text": "soon.",
+          "start": 12.72,
+          "end": 13.24
+        }
+      ]
+    },
+    {
+      "n": 3,
+      "start": 13.728,
+      "end": 15.32,
+      "text": "But it wasn't meant to be.",
+      "words": [
+        {
+          "text": "But",
+          "start": 13.728,
+          "end": 13.76
+        },
+        {
+          "text": "it",
+          "start": 13.84,
+          "end": 14
+        },
+        {
+          "text": "wasn't",
+          "start": 14.08,
+          "end": 14.24
+        },
+        {
+          "text": "meant",
+          "start": 14.32,
+          "end": 14.48
+        },
+        {
+          "text": "to",
+          "start": 14.56,
+          "end": 14.64
+        },
+        {
+          "text": "be.",
+          "start": 14.96,
+          "end": 15.32
+        }
+      ]
+    },
+    {
+      "n": 4,
+      "start": 15.44,
+      "end": 23.12,
+      "text": "As September got closer, we understood that we had to decide what to do next, and we started looking for a safe place in another city.",
+      "words": [
+        {
+          "text": "As",
+          "start": 15.44,
+          "end": 15.52
+        },
+        {
+          "text": "September",
+          "start": 15.76,
+          "end": 16
+        },
+        {
+          "text": "got",
+          "start": 16.08,
+          "end": 16.24
+        },
+        {
+          "text": "closer,",
+          "start": 16.32,
+          "end": 17
+        },
+        {
+          "text": "we",
+          "start": 17.04,
+          "end": 17.12
+        },
+        {
+          "text": "understood",
+          "start": 17.28,
+          "end": 17.6
+        },
+        {
+          "text": "that",
+          "start": 17.68,
+          "end": 17.76
+        },
+        {
+          "text": "we",
+          "start": 17.84,
+          "end": 17.92
+        },
+        {
+          "text": "had",
+          "start": 18,
+          "end": 18.16
+        },
+        {
+          "text": "to",
+          "start": 18.24,
+          "end": 18.32
+        },
+        {
+          "text": "decide",
+          "start": 18.44,
+          "end": 18.72
+        },
+        {
+          "text": "what",
+          "start": 18.8,
+          "end": 18.88
+        },
+        {
+          "text": "to",
+          "start": 18.92,
+          "end": 18.96
+        },
+        {
+          "text": "do",
+          "start": 19.04,
+          "end": 19.2
+        },
+        {
+          "text": "next,",
+          "start": 19.28,
+          "end": 20
+        },
+        {
+          "text": "and",
+          "start": 20.08,
+          "end": 20.16
+        },
+        {
+          "text": "we",
+          "start": 20.24,
+          "end": 20.32
+        },
+        {
+          "text": "started",
+          "start": 20.4,
+          "end": 20.72
+        },
+        {
+          "text": "looking",
+          "start": 20.88,
+          "end": 21.04
+        },
+        {
+          "text": "for",
+          "start": 21.08,
+          "end": 21.12
+        },
+        {
+          "text": "a",
+          "start": 21.28,
+          "end": 21.32
+        },
+        {
+          "text": "safe",
+          "start": 21.36,
+          "end": 21.6
+        },
+        {
+          "text": "place",
+          "start": 21.76,
+          "end": 21.92
+        },
+        {
+          "text": "in",
+          "start": 21.96,
+          "end": 22
+        },
+        {
+          "text": "another",
+          "start": 22.08,
+          "end": 22.4
+        },
+        {
+          "text": "city.",
+          "start": 22.48,
+          "end": 23.12
+        }
+      ]
+    },
+    {
+      "n": 5,
+      "start": 23.36,
+      "end": 30.495,
+      "text": "We literally put our trust in the Universe and went to the city of Pavlohrad. There, we found housing and work very quickly.",
+      "words": [
+        {
+          "text": "We",
+          "start": 23.36,
+          "end": 23.52
+        },
+        {
+          "text": "literally",
+          "start": 23.6,
+          "end": 24.08
+        },
+        {
+          "text": "put",
+          "start": 24.16,
+          "end": 24.24
+        },
+        {
+          "text": "our",
+          "start": 24.32,
+          "end": 24.4
+        },
+        {
+          "text": "trust",
+          "start": 24.52,
+          "end": 24.64
+        },
+        {
+          "text": "in",
+          "start": 24.72,
+          "end": 24.8
+        },
+        {
+          "text": "the",
+          "start": 24.84,
+          "end": 24.88
+        },
+        {
+          "text": "Universe",
+          "start": 24.96,
+          "end": 25.52
+        },
+        {
+          "text": "and",
+          "start": 25.6,
+          "end": 25.68
+        },
+        {
+          "text": "went",
+          "start": 25.76,
+          "end": 25.84
+        },
+        {
+          "text": "to",
+          "start": 25.92,
+          "end": 26
+        },
+        {
+          "text": "the",
+          "start": 26.04,
+          "end": 26.08
+        },
+        {
+          "text": "city",
+          "start": 26.16,
+          "end": 26.32
+        },
+        {
+          "text": "of",
+          "start": 26.4,
+          "end": 26.48
+        },
+        {
+          "text": "Pavlohrad.",
+          "start": 26.52,
+          "end": 27.52
+        },
+        {
+          "text": "There,",
+          "start": 27.6,
+          "end": 28.053
+        },
+        {
+          "text": "we",
+          "start": 28.107,
+          "end": 28.16
+        },
+        {
+          "text": "found",
+          "start": 28.28,
+          "end": 28.4
+        },
+        {
+          "text": "housing",
+          "start": 28.6,
+          "end": 28.8
+        },
+        {
+          "text": "and",
+          "start": 28.88,
+          "end": 28.96
+        },
+        {
+          "text": "work",
+          "start": 29.12,
+          "end": 29.28
+        },
+        {
+          "text": "very",
+          "start": 29.36,
+          "end": 29.6
+        },
+        {
+          "text": "quickly.",
+          "start": 29.68,
+          "end": 30.495
+        }
+      ]
+    },
+    {
+      "n": 6,
+      "start": 30.64,
+      "end": 33.847,
+      "text": "Later on, I found out I was pregnant.",
+      "words": [
+        {
+          "text": "Later",
+          "start": 30.64,
+          "end": 30.88
+        },
+        {
+          "text": "on,",
+          "start": 30.96,
+          "end": 31.56
+        },
+        {
+          "text": "I",
+          "start": 31.68,
+          "end": 31.76
+        },
+        {
+          "text": "found",
+          "start": 31.84,
+          "end": 31.92
+        },
+        {
+          "text": "out",
+          "start": 32,
+          "end": 32.08
+        },
+        {
+          "text": "I",
+          "start": 32.24,
+          "end": 32.453
+        },
+        {
+          "text": "was",
+          "start": 32.667,
+          "end": 32.88
+        },
+        {
+          "text": "pregnant.",
+          "start": 32.96,
+          "end": 33.847
+        }
+      ]
+    },
+    {
+      "n": 7,
+      "start": 34,
+      "end": 39.937,
+      "text": "I worked as a pharmacy manager until the ninth month. Every morning I took the bus to the town of Ternivka.",
+      "words": [
+        {
+          "text": "I",
+          "start": 34,
+          "end": 34.08
+        },
+        {
+          "text": "worked",
+          "start": 34.16,
+          "end": 34.24
+        },
+        {
+          "text": "as",
+          "start": 34.28,
+          "end": 34.32
+        },
+        {
+          "text": "a",
+          "start": 34.48,
+          "end": 34.507
+        },
+        {
+          "text": "pharmacy",
+          "start": 34.533,
+          "end": 34.96
+        },
+        {
+          "text": "manager",
+          "start": 35.16,
+          "end": 35.36
+        },
+        {
+          "text": "until",
+          "start": 35.52,
+          "end": 35.68
+        },
+        {
+          "text": "the",
+          "start": 35.72,
+          "end": 35.76
+        },
+        {
+          "text": "ninth",
+          "start": 35.84,
+          "end": 36.08
+        },
+        {
+          "text": "month.",
+          "start": 36.16,
+          "end": 36.8
+        },
+        {
+          "text": "Every",
+          "start": 36.882,
+          "end": 37.122
+        },
+        {
+          "text": "morning",
+          "start": 37.202,
+          "end": 37.522
+        },
+        {
+          "text": "I",
+          "start": 37.682,
+          "end": 37.722
+        },
+        {
+          "text": "took",
+          "start": 37.762,
+          "end": 37.922
+        },
+        {
+          "text": "the",
+          "start": 37.962,
+          "end": 38.002
+        },
+        {
+          "text": "bus",
+          "start": 38.082,
+          "end": 38.322
+        },
+        {
+          "text": "to",
+          "start": 38.362,
+          "end": 38.402
+        },
+        {
+          "text": "the",
+          "start": 38.482,
+          "end": 38.562
+        },
+        {
+          "text": "town",
+          "start": 38.682,
+          "end": 38.802
+        },
+        {
+          "text": "of",
+          "start": 38.882,
+          "end": 38.962
+        },
+        {
+          "text": "Ternivka.",
+          "start": 39.042,
+          "end": 39.937
+        }
+      ]
+    },
+    {
+      "n": 8,
+      "start": 40.147,
+      "end": 44.802,
+      "text": "The fear of being left without a livelihood drove me beyond my strength.",
+      "words": [
+        {
+          "text": "The",
+          "start": 40.147,
+          "end": 40.162
+        },
+        {
+          "text": "fear",
+          "start": 40.202,
+          "end": 40.402
+        },
+        {
+          "text": "of",
+          "start": 40.482,
+          "end": 40.642
+        },
+        {
+          "text": "being",
+          "start": 40.762,
+          "end": 40.882
+        },
+        {
+          "text": "left",
+          "start": 40.962,
+          "end": 41.202
+        },
+        {
+          "text": "without",
+          "start": 41.362,
+          "end": 41.522
+        },
+        {
+          "text": "a",
+          "start": 41.602,
+          "end": 41.642
+        },
+        {
+          "text": "livelihood",
+          "start": 41.682,
+          "end": 42.562
+        },
+        {
+          "text": "drove",
+          "start": 42.642,
+          "end": 43.042
+        },
+        {
+          "text": "me",
+          "start": 43.162,
+          "end": 43.282
+        },
+        {
+          "text": "beyond",
+          "start": 43.442,
+          "end": 43.762
+        },
+        {
+          "text": "my",
+          "start": 43.842,
+          "end": 44.002
+        },
+        {
+          "text": "strength.",
+          "start": 44.082,
+          "end": 44.802
+        }
+      ]
+    },
+    {
+      "n": 9,
+      "start": 44.882,
+      "end": 52.096,
+      "text": "My husband also mastered a new field. He started working at heights. We both gained new experience and new opportunities.",
+      "words": [
+        {
+          "text": "My",
+          "start": 44.882,
+          "end": 44.962
+        },
+        {
+          "text": "husband",
+          "start": 45.042,
+          "end": 45.442
+        },
+        {
+          "text": "also",
+          "start": 45.522,
+          "end": 45.762
+        },
+        {
+          "text": "mastered",
+          "start": 45.842,
+          "end": 46.162
+        },
+        {
+          "text": "a",
+          "start": 46.242,
+          "end": 46.282
+        },
+        {
+          "text": "new",
+          "start": 46.322,
+          "end": 46.482
+        },
+        {
+          "text": "field.",
+          "start": 46.762,
+          "end": 47.095
+        },
+        {
+          "text": "He",
+          "start": 47.149,
+          "end": 47.202
+        },
+        {
+          "text": "started",
+          "start": 47.282,
+          "end": 47.522
+        },
+        {
+          "text": "working",
+          "start": 47.602,
+          "end": 47.842
+        },
+        {
+          "text": "at",
+          "start": 47.922,
+          "end": 48.002
+        },
+        {
+          "text": "heights.",
+          "start": 48.202,
+          "end": 48.725
+        },
+        {
+          "text": "We",
+          "start": 48.804,
+          "end": 48.964
+        },
+        {
+          "text": "both",
+          "start": 49.044,
+          "end": 49.284
+        },
+        {
+          "text": "gained",
+          "start": 49.324,
+          "end": 49.604
+        },
+        {
+          "text": "new",
+          "start": 49.684,
+          "end": 49.764
+        },
+        {
+          "text": "experience",
+          "start": 49.844,
+          "end": 50.564
+        },
+        {
+          "text": "and",
+          "start": 50.644,
+          "end": 50.724
+        },
+        {
+          "text": "new",
+          "start": 50.804,
+          "end": 50.884
+        },
+        {
+          "text": "opportunities.",
+          "start": 50.964,
+          "end": 52.096
+        }
+      ]
+    },
+    {
+      "n": 10,
+      "start": 52.232,
+      "end": 58.814,
+      "text": "When our son was born, we moved to the city of Dnipro, because a chance came up for my husband to expand his work in that city.",
+      "words": [
+        {
+          "text": "When",
+          "start": 52.232,
+          "end": 52.244
+        },
+        {
+          "text": "our",
+          "start": 52.324,
+          "end": 52.484
+        },
+        {
+          "text": "son",
+          "start": 52.604,
+          "end": 52.724
+        },
+        {
+          "text": "was",
+          "start": 52.804,
+          "end": 52.884
+        },
+        {
+          "text": "born,",
+          "start": 52.964,
+          "end": 53.542
+        },
+        {
+          "text": "we",
+          "start": 53.666,
+          "end": 53.684
+        },
+        {
+          "text": "moved",
+          "start": 53.804,
+          "end": 53.924
+        },
+        {
+          "text": "to",
+          "start": 53.964,
+          "end": 54.004
+        },
+        {
+          "text": "the",
+          "start": 54.084,
+          "end": 54.164
+        },
+        {
+          "text": "city",
+          "start": 54.244,
+          "end": 54.324
+        },
+        {
+          "text": "of",
+          "start": 54.404,
+          "end": 54.484
+        },
+        {
+          "text": "Dnipro,",
+          "start": 54.524,
+          "end": 55.284
+        },
+        {
+          "text": "because",
+          "start": 55.364,
+          "end": 55.444
+        },
+        {
+          "text": "a",
+          "start": 55.604,
+          "end": 55.631
+        },
+        {
+          "text": "chance",
+          "start": 55.657,
+          "end": 55.844
+        },
+        {
+          "text": "came",
+          "start": 55.924,
+          "end": 56.084
+        },
+        {
+          "text": "up",
+          "start": 56.164,
+          "end": 56.244
+        },
+        {
+          "text": "for",
+          "start": 56.284,
+          "end": 56.324
+        },
+        {
+          "text": "my",
+          "start": 56.404,
+          "end": 56.484
+        },
+        {
+          "text": "husband",
+          "start": 56.604,
+          "end": 56.884
+        },
+        {
+          "text": "to",
+          "start": 56.924,
+          "end": 56.964
+        },
+        {
+          "text": "expand",
+          "start": 57.044,
+          "end": 57.444
+        },
+        {
+          "text": "his",
+          "start": 57.524,
+          "end": 57.604
+        },
+        {
+          "text": "work",
+          "start": 57.724,
+          "end": 57.844
+        },
+        {
+          "text": "in",
+          "start": 57.884,
+          "end": 57.924
+        },
+        {
+          "text": "that",
+          "start": 58.004,
+          "end": 58.164
+        },
+        {
+          "text": "city.",
+          "start": 58.484,
+          "end": 58.814
+        }
+      ]
+    },
+    {
+      "n": 11,
+      "start": 58.884,
+      "end": 65.849,
+      "text": "And it was the right decision. New connections, a new circle of acquaintances, a new way of building our everyday life.",
+      "words": [
+        {
+          "text": "And",
+          "start": 58.884,
+          "end": 58.964
+        },
+        {
+          "text": "it",
+          "start": 59.004,
+          "end": 59.044
+        },
+        {
+          "text": "was",
+          "start": 59.124,
+          "end": 59.204
+        },
+        {
+          "text": "the",
+          "start": 59.284,
+          "end": 59.444
+        },
+        {
+          "text": "right",
+          "start": 59.524,
+          "end": 59.684
+        },
+        {
+          "text": "decision.",
+          "start": 60.124,
+          "end": 60.571
+        },
+        {
+          "text": "New",
+          "start": 60.644,
+          "end": 60.804
+        },
+        {
+          "text": "connections,",
+          "start": 61.244,
+          "end": 61.711
+        },
+        {
+          "text": "a",
+          "start": 61.737,
+          "end": 61.764
+        },
+        {
+          "text": "new",
+          "start": 61.844,
+          "end": 62.004
+        },
+        {
+          "text": "circle",
+          "start": 62.164,
+          "end": 62.324
+        },
+        {
+          "text": "of",
+          "start": 62.364,
+          "end": 62.404
+        },
+        {
+          "text": "acquaintances,",
+          "start": 62.484,
+          "end": 63.564
+        },
+        {
+          "text": "a",
+          "start": 63.746,
+          "end": 63.755
+        },
+        {
+          "text": "new",
+          "start": 63.764,
+          "end": 63.924
+        },
+        {
+          "text": "way",
+          "start": 64.004,
+          "end": 64.084
+        },
+        {
+          "text": "of",
+          "start": 64.164,
+          "end": 64.244
+        },
+        {
+          "text": "building",
+          "start": 64.404,
+          "end": 64.564
+        },
+        {
+          "text": "our",
+          "start": 64.644,
+          "end": 64.724
+        },
+        {
+          "text": "everyday",
+          "start": 64.804,
+          "end": 65.204
+        },
+        {
+          "text": "life.",
+          "start": 65.524,
+          "end": 65.849
+        }
+      ]
+    },
+    {
+      "n": 12,
+      "start": 65.925,
+      "end": 77.211,
+      "text": "Playback theatre came into my life, and in time it became something I love doing, and there was even a change of career, one that now brings me not only an income, but also satisfaction in my work.",
+      "words": [
+        {
+          "text": "Playback",
+          "start": 65.925,
+          "end": 66.325
+        },
+        {
+          "text": "theatre",
+          "start": 66.405,
+          "end": 66.725
+        },
+        {
+          "text": "came",
+          "start": 66.805,
+          "end": 66.885
+        },
+        {
+          "text": "into",
+          "start": 67.005,
+          "end": 67.125
+        },
+        {
+          "text": "my",
+          "start": 67.205,
+          "end": 67.285
+        },
+        {
+          "text": "life,",
+          "start": 67.365,
+          "end": 67.935
+        },
+        {
+          "text": "and",
+          "start": 67.995,
+          "end": 68.005
+        },
+        {
+          "text": "in",
+          "start": 68.085,
+          "end": 68.245
+        },
+        {
+          "text": "time",
+          "start": 68.365,
+          "end": 68.485
+        },
+        {
+          "text": "it",
+          "start": 68.565,
+          "end": 68.645
+        },
+        {
+          "text": "became",
+          "start": 68.725,
+          "end": 69.045
+        },
+        {
+          "text": "something",
+          "start": 69.205,
+          "end": 69.365
+        },
+        {
+          "text": "I",
+          "start": 69.605,
+          "end": 69.645
+        },
+        {
+          "text": "love",
+          "start": 69.685,
+          "end": 69.925
+        },
+        {
+          "text": "doing,",
+          "start": 70.005,
+          "end": 70.605
+        },
+        {
+          "text": "and",
+          "start": 70.721,
+          "end": 70.726
+        },
+        {
+          "text": "there",
+          "start": 70.806,
+          "end": 70.886
+        },
+        {
+          "text": "was",
+          "start": 70.966,
+          "end": 71.046
+        },
+        {
+          "text": "even",
+          "start": 71.126,
+          "end": 71.206
+        },
+        {
+          "text": "a",
+          "start": 71.366,
+          "end": 71.446
+        },
+        {
+          "text": "change",
+          "start": 71.526,
+          "end": 71.606
+        },
+        {
+          "text": "of",
+          "start": 71.686,
+          "end": 71.766
+        },
+        {
+          "text": "career,",
+          "start": 72.166,
+          "end": 72.606
+        },
+        {
+          "text": "one",
+          "start": 72.726,
+          "end": 72.806
+        },
+        {
+          "text": "that",
+          "start": 72.886,
+          "end": 72.966
+        },
+        {
+          "text": "now",
+          "start": 73.046,
+          "end": 73.206
+        },
+        {
+          "text": "brings",
+          "start": 73.246,
+          "end": 73.446
+        },
+        {
+          "text": "me",
+          "start": 73.526,
+          "end": 73.686
+        },
+        {
+          "text": "not",
+          "start": 73.766,
+          "end": 73.846
+        },
+        {
+          "text": "only",
+          "start": 73.926,
+          "end": 74.086
+        },
+        {
+          "text": "an",
+          "start": 74.166,
+          "end": 74.246
+        },
+        {
+          "text": "income,",
+          "start": 74.326,
+          "end": 74.846
+        },
+        {
+          "text": "but",
+          "start": 74.886,
+          "end": 75.046
+        },
+        {
+          "text": "also",
+          "start": 75.126,
+          "end": 75.446
+        },
+        {
+          "text": "satisfaction",
+          "start": 75.526,
+          "end": 76.246
+        },
+        {
+          "text": "in",
+          "start": 76.286,
+          "end": 76.326
+        },
+        {
+          "text": "my",
+          "start": 76.406,
+          "end": 76.486
+        },
+        {
+          "text": "work.",
+          "start": 76.566,
+          "end": 77.211
+        }
+      ]
+    },
+    {
+      "n": 13,
+      "start": 77.287,
+      "end": 81.131,
+      "text": "And all of this is thanks to the people who crossed my path.",
+      "words": [
+        {
+          "text": "And",
+          "start": 77.287,
+          "end": 77.527
+        },
+        {
+          "text": "all",
+          "start": 77.607,
+          "end": 77.687
+        },
+        {
+          "text": "of",
+          "start": 77.767,
+          "end": 77.847
+        },
+        {
+          "text": "this",
+          "start": 77.927,
+          "end": 78.247
+        },
+        {
+          "text": "is",
+          "start": 78.327,
+          "end": 78.407
+        },
+        {
+          "text": "thanks",
+          "start": 78.487,
+          "end": 78.727
+        },
+        {
+          "text": "to",
+          "start": 78.807,
+          "end": 78.887
+        },
+        {
+          "text": "the",
+          "start": 78.927,
+          "end": 78.967
+        },
+        {
+          "text": "people",
+          "start": 79.047,
+          "end": 79.687
+        },
+        {
+          "text": "who",
+          "start": 79.907,
+          "end": 79.927
+        },
+        {
+          "text": "crossed",
+          "start": 80.047,
+          "end": 80.247
+        },
+        {
+          "text": "my",
+          "start": 80.327,
+          "end": 80.407
+        },
+        {
+          "text": "path.",
+          "start": 80.487,
+          "end": 81.131
+        }
+      ]
+    },
+    {
+      "n": 14,
+      "start": 81.21,
+      "end": 89.617,
+      "text": "Most of them, they're now the team of the Contact to You project, where I serve as the accountant, and sometimes as an actress in the playback community Farba Fabra.",
+      "words": [
+        {
+          "text": "Most",
+          "start": 81.21,
+          "end": 81.45
+        },
+        {
+          "text": "of",
+          "start": 81.49,
+          "end": 81.53
+        },
+        {
+          "text": "them,",
+          "start": 81.61,
+          "end": 81.957
+        },
+        {
+          "text": "they're",
+          "start": 81.983,
+          "end": 82.09
+        },
+        {
+          "text": "now",
+          "start": 82.17,
+          "end": 82.33
+        },
+        {
+          "text": "the",
+          "start": 82.41,
+          "end": 82.49
+        },
+        {
+          "text": "team",
+          "start": 82.57,
+          "end": 82.65
+        },
+        {
+          "text": "of",
+          "start": 82.73,
+          "end": 82.81
+        },
+        {
+          "text": "the",
+          "start": 82.85,
+          "end": 82.89
+        },
+        {
+          "text": "Contact",
+          "start": 82.97,
+          "end": 83.37
+        },
+        {
+          "text": "to",
+          "start": 83.41,
+          "end": 83.45
+        },
+        {
+          "text": "You",
+          "start": 83.53,
+          "end": 83.69
+        },
+        {
+          "text": "project,",
+          "start": 83.97,
+          "end": 84.37
+        },
+        {
+          "text": "where",
+          "start": 84.638,
+          "end": 84.65
+        },
+        {
+          "text": "I",
+          "start": 84.81,
+          "end": 84.85
+        },
+        {
+          "text": "serve",
+          "start": 84.89,
+          "end": 85.05
+        },
+        {
+          "text": "as",
+          "start": 85.13,
+          "end": 85.21
+        },
+        {
+          "text": "the",
+          "start": 85.25,
+          "end": 85.29
+        },
+        {
+          "text": "accountant,",
+          "start": 85.49,
+          "end": 86.13
+        },
+        {
+          "text": "and",
+          "start": 86.17,
+          "end": 86.33
+        },
+        {
+          "text": "sometimes",
+          "start": 86.41,
+          "end": 86.81
+        },
+        {
+          "text": "as",
+          "start": 86.89,
+          "end": 86.97
+        },
+        {
+          "text": "an",
+          "start": 87.01,
+          "end": 87.05
+        },
+        {
+          "text": "actress",
+          "start": 87.13,
+          "end": 87.45
+        },
+        {
+          "text": "in",
+          "start": 87.49,
+          "end": 87.53
+        },
+        {
+          "text": "the",
+          "start": 87.61,
+          "end": 87.69
+        },
+        {
+          "text": "playback",
+          "start": 87.81,
+          "end": 88.09
+        },
+        {
+          "text": "community",
+          "start": 88.33,
+          "end": 88.57
+        },
+        {
+          "text": "Farba",
+          "start": 88.65,
+          "end": 88.89
+        },
+        {
+          "text": "Fabra.",
+          "start": 88.97,
+          "end": 89.617
+        }
+      ]
+    },
+    {
+      "n": 15,
+      "start": 89.69,
+      "end": 96.49,
+      "text": "I'm so glad to be part of such a creative process, and a working one too, with inventive, purposeful people.",
+      "words": [
+        {
+          "text": "I'm",
+          "start": 89.69,
+          "end": 90.01
+        },
+        {
+          "text": "so",
+          "start": 90.13,
+          "end": 90.25
+        },
+        {
+          "text": "glad",
+          "start": 90.33,
+          "end": 90.57
+        },
+        {
+          "text": "to",
+          "start": 90.61,
+          "end": 90.65
+        },
+        {
+          "text": "be",
+          "start": 90.73,
+          "end": 90.81
+        },
+        {
+          "text": "part",
+          "start": 90.89,
+          "end": 91.05
+        },
+        {
+          "text": "of",
+          "start": 91.13,
+          "end": 91.21
+        },
+        {
+          "text": "such",
+          "start": 91.29,
+          "end": 91.45
+        },
+        {
+          "text": "a",
+          "start": 91.61,
+          "end": 91.77
+        },
+        {
+          "text": "creative",
+          "start": 91.93,
+          "end": 92.09
+        },
+        {
+          "text": "process,",
+          "start": 92.53,
+          "end": 93.023
+        },
+        {
+          "text": "and",
+          "start": 93.077,
+          "end": 93.13
+        },
+        {
+          "text": "a",
+          "start": 93.21,
+          "end": 93.25
+        },
+        {
+          "text": "working",
+          "start": 93.29,
+          "end": 93.53
+        },
+        {
+          "text": "one",
+          "start": 93.61,
+          "end": 93.77
+        },
+        {
+          "text": "too,",
+          "start": 93.85,
+          "end": 94.383
+        },
+        {
+          "text": "with",
+          "start": 94.437,
+          "end": 94.49
+        },
+        {
+          "text": "inventive,",
+          "start": 94.61,
+          "end": 95.33
+        },
+        {
+          "text": "purposeful",
+          "start": 95.37,
+          "end": 95.93
+        },
+        {
+          "text": "people.",
+          "start": 96.13,
+          "end": 96.49
+        }
+      ]
+    },
+    {
+      "n": 16,
+      "start": 96.73,
+      "end": 107.41,
+      "text": "People who, in times that are dark for all of us, do important things, inspiring with their energy, and giving a firm footing and support through their actions.",
+      "words": [
+        {
+          "text": "People",
+          "start": 96.73,
+          "end": 97.05
+        },
+        {
+          "text": "who,",
+          "start": 97.13,
+          "end": 97.69
+        },
+        {
+          "text": "in",
+          "start": 97.93,
+          "end": 98.09
+        },
+        {
+          "text": "times",
+          "start": 98.17,
+          "end": 98.49
+        },
+        {
+          "text": "that",
+          "start": 98.57,
+          "end": 98.65
+        },
+        {
+          "text": "are",
+          "start": 98.73,
+          "end": 98.81
+        },
+        {
+          "text": "dark",
+          "start": 98.89,
+          "end": 99.13
+        },
+        {
+          "text": "for",
+          "start": 99.21,
+          "end": 99.37
+        },
+        {
+          "text": "all",
+          "start": 99.45,
+          "end": 99.61
+        },
+        {
+          "text": "of",
+          "start": 99.65,
+          "end": 99.69
+        },
+        {
+          "text": "us,",
+          "start": 99.77,
+          "end": 100.13
+        },
+        {
+          "text": "do",
+          "start": 100.874,
+          "end": 100.89
+        },
+        {
+          "text": "important",
+          "start": 100.97,
+          "end": 101.53
+        },
+        {
+          "text": "things,",
+          "start": 101.61,
+          "end": 102.21
+        },
+        {
+          "text": "inspiring",
+          "start": 102.684,
+          "end": 103.13
+        },
+        {
+          "text": "with",
+          "start": 103.21,
+          "end": 103.29
+        },
+        {
+          "text": "their",
+          "start": 103.37,
+          "end": 103.45
+        },
+        {
+          "text": "energy,",
+          "start": 103.53,
+          "end": 104.13
+        },
+        {
+          "text": "and",
+          "start": 104.25,
+          "end": 104.41
+        },
+        {
+          "text": "giving",
+          "start": 104.45,
+          "end": 104.65
+        },
+        {
+          "text": "a",
+          "start": 104.73,
+          "end": 104.81
+        },
+        {
+          "text": "firm",
+          "start": 104.89,
+          "end": 105.21
+        },
+        {
+          "text": "footing",
+          "start": 105.29,
+          "end": 105.53
+        },
+        {
+          "text": "and",
+          "start": 105.61,
+          "end": 105.69
+        },
+        {
+          "text": "support",
+          "start": 105.93,
+          "end": 106.17
+        },
+        {
+          "text": "through",
+          "start": 106.25,
+          "end": 106.33
+        },
+        {
+          "text": "their",
+          "start": 106.41,
+          "end": 106.49
+        },
+        {
+          "text": "actions.",
+          "start": 106.65,
+          "end": 107.41
+        }
+      ]
+    },
+    {
+      "n": 17,
+      "start": 107.823,
+      "end": 114.41,
+      "text": "I know this firsthand. At one point I was lucky: thanks to them, I changed my life for the better.",
+      "words": [
+        {
+          "text": "I",
+          "start": 107.823,
+          "end": 107.85
+        },
+        {
+          "text": "know",
+          "start": 107.93,
+          "end": 108.01
+        },
+        {
+          "text": "this",
+          "start": 108.13,
+          "end": 108.25
+        },
+        {
+          "text": "firsthand.",
+          "start": 108.41,
+          "end": 109.063
+        },
+        {
+          "text": "At",
+          "start": 109.69,
+          "end": 109.85
+        },
+        {
+          "text": "one",
+          "start": 109.93,
+          "end": 110.09
+        },
+        {
+          "text": "point",
+          "start": 110.21,
+          "end": 110.33
+        },
+        {
+          "text": "I",
+          "start": 110.41,
+          "end": 110.45
+        },
+        {
+          "text": "was",
+          "start": 110.49,
+          "end": 110.65
+        },
+        {
+          "text": "lucky:",
+          "start": 110.69,
+          "end": 111.33
+        },
+        {
+          "text": "thanks",
+          "start": 111.69,
+          "end": 111.93
+        },
+        {
+          "text": "to",
+          "start": 112.01,
+          "end": 112.09
+        },
+        {
+          "text": "them,",
+          "start": 112.21,
+          "end": 112.65
+        },
+        {
+          "text": "I",
+          "start": 112.73,
+          "end": 112.81
+        },
+        {
+          "text": "changed",
+          "start": 112.97,
+          "end": 113.13
+        },
+        {
+          "text": "my",
+          "start": 113.21,
+          "end": 113.29
+        },
+        {
+          "text": "life",
+          "start": 113.37,
+          "end": 113.53
+        },
+        {
+          "text": "for",
+          "start": 113.61,
+          "end": 113.69
+        },
+        {
+          "text": "the",
+          "start": 113.73,
+          "end": 113.77
+        },
+        {
+          "text": "better.",
+          "start": 113.85,
+          "end": 114.41
+        }
+      ]
+    }
+  ]
+}

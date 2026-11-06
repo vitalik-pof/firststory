@@ -100,7 +100,7 @@ export const Film: React.FC<FilmProps> = (props) => {
       <AbsoluteFill style={{ backgroundImage: paperLayer }} />
       <TitleText spec={props.opening} {...common} />
       <TitleText spec={props.closing} {...common} />
-      <Subtitles cards={props.subtitles.cards} style={props.subtitles.style} frame={frame} frameWidth={width} frameHeight={height} stack={props.font.stack} />
+      <Subtitles cards={props.subtitles.cards} style={props.subtitles.style} frame={frame} frameWidth={width} frameHeight={height} stack={props.font.stack} family={props.font.family} />
       {props.audio ? <Html5Audio src={staticFile(props.audio)} /> : null}
     </AbsoluteFill>
   );

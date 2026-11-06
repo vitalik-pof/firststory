@@ -1,9 +1,15 @@
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
 import { describe, it } from 'node:test';
-import { buildFilmProps, checkNumbers, parseCamera, type SheetRow } from '../lib/film-props';
-import { buildCards, cardFrames, normalizeWords, splitPhrases, type SubWord, type TimedWord } from '../lib/subtitles';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { buildFilmProps, cameraSpec, parseAnchorTable, parseCameraNumbers, parseConstants, parseExceptions, titleLines } from '../lib/film-props';
+import { FrameRuleError, parseRule, planFrames, splitSentences, type TimingsT } from '../lib/film-frames';
+import { buildCards, cardFrames, normalizeWords, normalizeWordsLang, splitPhrases, type SubWord, type TimedWord } from '../lib/subtitles';
+import { readDoc } from '../lib/md';
 import { paths } from '../lib/paths';
+import type { ScriptDoc } from '../lib/docs';
 
 // Слова фрагмента 1 з timings.json фільму 01-natalia.
 const F1: TimedWord[] = [
@@ -85,66 +91,268 @@ describe('субтитри: алгоритм розбиття', () => {
   });
 });
 
-describe('камера з аркуша', () => {
-  it('наїзд з центром без зсуву', () => {
-    const c = parseCamera('наїзд 100% → 103%, центр (0.50; 0.50) без зсуву, дуже повільно', 1, 264, 0);
-    assert.deepEqual(c, { s0: 1, s1: 1.03, cx0: 0.5, cy0: 0.5, cx1: 0.5, cy1: 0.5, holdFrame: 264 });
+
+describe('субтитри: правила для мов', () => {
+  const w = (text: string, i: number): TimedWord => ({ text, start: i * 0.3, end: i * 0.3 + 0.25 });
+  const toks = (...t: string[]): TimedWord[] => t.map(w);
+
+  it('токен без літер приклеюється до попереднього, відкриваюча лапка до наступного', () => {
+    const r = normalizeWordsLang(toks('déplacés', '?', 'Il', 'a', 'dit', ':', '«', 'bonjour', '»', '!'), []);
+    assert.deepEqual(r.map((x) => x.text), ['déplacés?', 'Il', 'a', 'dit:', '«bonjour»!']);
+    assert.equal(r[0]!.end, 0.3 + 0.25, 'час приклеєного токена зливається з основним');
+    assert.equal(r[4]!.start, 6 * 0.3, 'відкриваюча лапка дає початок слову');
   });
-  it('статика: «масштаб N%» і один центр', () => {
-    const c = parseCamera('статика, масштаб 106%, центр (0.50; 0.50), точно як кадр 4', 3, 229, 349);
-    assert.equal(c.s0, 1.06);
-    assert.equal(c.s1, 1.06);
+
+  it('назва: «Contact to You» → Contact2u з розділовим знаком з кінця (англійська)', () => {
+    const r = normalizeWordsLang(toks('team', 'of', 'Contact', 'to', 'You,', 'where'), [{ spoken: 'Contact to You', shown: 'Contact2u' }]);
+    assert.deepEqual(r.map((x) => x.text), ['team', 'of', 'Contact2u,', 'where']);
+    assert.ok(Math.abs(r[2]!.start - 2 * 0.3) < 1e-9);
+    assert.ok(Math.abs(r[2]!.end - (4 * 0.3 + 0.25)) < 1e-9);
   });
-  it('панорама: «при масштабі N%» і два центри', () => {
-    const c = parseCamera('вертикальна панорама вниз при масштабі 125%: центр (0.50; 0.43) → (0.50; 0.57), від рук', 12, 246, 1501);
-    assert.equal(c.s0, 1.25);
-    assert.equal(c.cy1, 0.57);
+
+  it('назва без урахування регістру і з лапками на краях; «Farba Fabra.» → «FarbaFabra.»', () => {
+    const r = normalizeWordsLang(toks('«Farba', 'fabra».'), [{ spoken: 'Farba Fabra', shown: 'FarbaFabra' }]);
+    assert.deepEqual(r.map((x) => x.text), ['FarbaFabra.']);
   });
-  it('«від A до B с» зупиняє камеру в кадрі B', () => {
-    const c = parseCamera('повільний від\'їзд 116% → 104%, центр (0.45; 0.52) → (0.50; 0.50) від 117.23 до 129.00 с, далі масштаб 104% нерухомий', 25, 503, 3517);
-    assert.equal(c.holdFrame, 3870 - 3517);
+
+  it('запис «Назв», якого немає в словах, дає помилку з назвою запису', () => {
+    assert.throws(() => normalizeWordsLang(toks('hello', 'world'), [{ spoken: 'Contact tou you', shown: 'Contact2u' }], 'fr'), /«Contact tou you» → «Contact2u» не знайдено/);
   });
-  it('вікно, що виходить за зображення, дає помилку', () => {
-    assert.throws(() => parseCamera('наїзд 120% → 130%, центр (0.20; 0.50) → (0.50; 0.50)', 9, 100, 0), /виходить за зображення/);
+
+  it('прямий апостроф між літерами стає ’, прямі лапки поза назвами дають помилку', () => {
+    assert.deepEqual(normalizeWordsLang(toks("wasn't", "l'avoir", "Donetsk'"), []).map((x) => x.text), ['wasn’t', 'l’avoir', "Donetsk'"]);
+    assert.throws(() => normalizeWordsLang(toks('a', '"b"'), []), /прямі лапки/);
   });
-  it('без центру або масштабу падає з поясненням', () => {
-    assert.throws(() => parseCamera('наїзд 100% → 103%', 1, 10, 0), /центр/);
-    assert.throws(() => parseCamera('центр (0.5; 0.5)', 1, 10, 0), /масштаб/);
+
+  it('довге німецьке слово утворює окрему картку, а решта фрази не ламається', () => {
+    const words = ['Die', 'Binnenvertriebenenunterstützung', 'hilft', 'uns.'].map((t, i): SubWord => ({ text: t, start: i * 0.3, end: i * 0.3 + 0.25 }));
+    const cards = buildCards(words).map((c) => c.text);
+    assert.ok(cards.includes('Binnenvertriebenenunterstützung') || cards.some((c) => c.includes('Binnenvertriebenenunterstützung')), cards.join(' | '));
+    assert.ok(cards.every((c) => c.length <= 22 || !c.includes(' ')), 'картка довша за 22 символи може бути лише одним словом');
+  });
+
+  it('розрив фрази за «…» і за закінченням з лапкою', () => {
+    const words = ['Wait…', 'then', '«go.»', 'Now'].map((t, i): SubWord => ({ text: t, start: i * 0.1, end: i * 0.1 + 0.05 }));
+    assert.deepEqual(splitPhrases(words).map((p) => p.length), [1, 2, 1]);
+  });
+
+  it('жодна картка не стартує раніше за кадр 90, остання не зникає пізніше за tD + 12', () => {
+    const t = { fps: 30, offsetSeconds: 3, leadFrames: 2, fadeInFrames: 3, trailFrames: 6, fadeOutFrames: 3, minOnScreenFrames: 15, minInFrame: 90, maxOutEnd: 1000 };
+    const c = cardFrames([
+      { words: [{ text: 'a', start: 0, end: 0.2 }], text: 'a' },
+      { words: [{ text: 'b', start: 30.0, end: 30.2 }], text: 'b' },
+    ], t);
+    assert.equal(c[0]!.inFrame, 90);
+    assert.ok(c[1]!.outEnd <= 1000);
   });
 });
 
-describe('числа для збирання', () => {
-  const rows = (): SheetRow[] => [
-    { n: 1, start: 0, end: 100, length: 100, transition: 30 },
-    { n: 2, start: 70, end: 200, length: 130, transition: 0 },
-  ];
-  it('узгоджена таблиця проходить', () => checkNumbers(rows(), 200, 2));
-  it('перехід, що не збігається з перекриттям, дає помилку', () => {
-    const r = rows();
-    r[1]!.start = 60;
-    r[1]!.length = 140;
-    assert.throws(() => checkNumbers(r, 200, 2), /перехід у таблиці 30/);
+describe('розрив назви на два рядки', () => {
+  it('назва з «/» береться як дана сценаристом', () => {
+    assert.deepEqual(titleLines('Wie wurden wir / zu Binnenvertriebenen?'), ['Wie wurden wir', 'zu Binnenvertriebenen?']);
+    assert.deepEqual(titleLines(['A', 'B']), ['A', 'B']);
   });
-  it('сума, що не дорівнює довжині фільму, дає помилку', () => assert.throws(() => checkNumbers(rows(), 201, 2), /фільм має 201/));
+  it('назва в один рядок розривається за пробілом, найближчим до середини, лівіший при рівності', () => {
+    assert.deepEqual(titleLines('Як ми стали переселенцями?'), ['Як ми стали', 'переселенцями?']);
+    assert.deepEqual(titleLines('aaa bbb ccc ddd'), ['aaa bbb', 'ccc ddd']);
+    assert.deepEqual(titleLines('aaaa bbbb'), ['aaaa', 'bbbb']);
+  });
+  it('без розриву після слова з 1–2 літер', () => {
+    assert.deepEqual(titleLines('Wir in einer Zeit'), ['Wir in einer', 'Zeit']);
+    assert.deepEqual(titleLines('in das Haus'), ['in das', 'Haus']);
+  });
 });
 
-describe('збирання пропсів із поточного edit.md', { skip: !existsSync(paths.storyFile('01-natalia', 'edit.md')) || !existsSync(paths.timings('01-natalia')) }, () => {
-  const { props } = buildFilmProps({ story: '01-natalia', audioExists: true });
-  it('25 кадрів, кінець останнього збігається з довжиною фільму', () => {
-    assert.equal(props.shots.length, 25);
-    assert.equal(props.shots[24]!.endFrame, props.durationInFrames);
-    assert.equal(props.shots[0]!.startFrame, 0);
+// ---------------------------------------------------------------- кадри за алгоритмом edit.md
+
+const here = dirname(fileURLToPath(import.meta.url));
+const uk118 = JSON.parse(readFileSync(join(here, 'data', 'timings-uk-118.json'), 'utf8')) as TimingsT;
+const editFile = paths.storyFile('01-natalia', 'edit.md');
+const haveEdit = existsSync(editFile);
+
+// Довідкова таблиця з edit.md («Довідкова таблиця для української»): S, E, D для кадрів 1…25 (озвучення 118.518 с).
+const REF = [
+  [1, 0, 264, 75], [2, 189, 435, 90], [3, 345, 574, 90], [4, 484, 680, 75], [5, 605, 869, 90], [6, 779, 982, 60], [7, 922, 1068, 45],
+  [8, 1023, 1176, 60], [9, 1116, 1274, 60], [10, 1214, 1368, 60], [11, 1308, 1533, 120], [12, 1413, 1655, 45], [13, 1610, 1784, 90],
+  [14, 1694, 1999, 75], [15, 1924, 2078, 45], [16, 2033, 2210, 74], [17, 2136, 2299, 59], [18, 2240, 2436, 60], [19, 2376, 2586, 90],
+  [20, 2496, 2714, 75], [21, 2639, 2859, 45], [22, 2814, 2974, 75], [23, 2899, 3200, 120], [24, 3080, 3489, 150], [25, 3339, 3803, 0],
+] as const;
+const REF_A = [7560, 13000, 17640, 21400, 27456, 31723, 34843, 38203, 41458, 44605, 49085, 54420, 57967, 65389, 68527, 72442, 75648, 80208, 84689, 89209, 94556, 97889, 104662, 113809];
+
+describe('правила прив\'язки', () => {
+  it('розбір токенів', () => {
+    assert.deepEqual(parseRule('F1.start'), { kind: 'start', n: 1 });
+    assert.deepEqual(parseRule('`F2.end`'), { kind: 'end', n: 2 });
+    assert.deepEqual(parseRule('F5.S2'), { kind: 'sentence', n: 5, k: 2 });
+    assert.deepEqual(parseRule('F1.W12/20'), { kind: 'word', n: 1, k: 12, of: 20 });
+    assert.deepEqual(parseRule('F5.W3'), { kind: 'absWord', n: 5, j: 3 });
+    assert.throws(() => parseRule('F1.middle'), /Не розумію правило/);
   });
-  it('перехід у кадр N дорівнює перекриттю з попереднім, зерно маски в кожному своє', () => {
+  it('речення: кінець за . ! ? … після прибирання лапок і дужок', () => {
+    const w = (t: string): TimedWord => ({ text: t, start: 0, end: 0 });
+    assert.deepEqual(splitSentences([w('A'), w('b.'), w('«C'), w('d!»'), w('e')]), [[0, 1], [2, 3], [4]]);
+  });
+});
+
+describe('кадри: українська 118.518 с проти довідкової таблиці edit.md', { skip: !haveEdit }, () => {
+  const doc = readDoc(editFile, 'editor');
+  const { props, plan } = buildFilmProps({ story: '01-natalia', doc, timings: uk118, audioExists: true });
+  it('S, E і D усіх 25 кадрів збігаються з таблицею до кадра', () => {
+    for (const [n, S, E, D] of REF) {
+      assert.deepEqual([props.shots[n - 1]!.startFrame, props.shots[n - 1]!.endFrame], [S, E], `кадр ${n}`);
+      if (n < 25) assert.equal(plan.D[n], D, `D після кадру ${n}`);
+    }
+  });
+  it('A_ms, tD і довжина фільму', () => {
+    assert.deepEqual(plan.A.slice(2), REF_A);
+    assert.equal(plan.tD, 3646);
+    assert.equal(props.durationInFrames, 3803);
+    assert.deepEqual(plan.reduced, [16, 17]);
+  });
+  it('чисте вікно кожного кадру не менше 30 кадрів; кадр 17 рівно 30, кадр 4 31', () => {
+    for (let n = 1; n <= 25; n++) assert.ok(plan.clean[n]! >= 30, `кадр ${n}: ${plan.clean[n]}`);
+    assert.equal(plan.clean[17], 30);
+    assert.equal(plan.clean[4], 31);
+  });
+  it('перехід у кадр N дорівнює перекриттю з попереднім; зерно маски в кожного своє; breath від 75 кадрів', () => {
     for (let i = 1; i < props.shots.length; i++) assert.equal(props.shots[i - 1]!.endFrame - props.shots[i]!.startFrame, props.shots[i]!.revealFrames);
-    const seeds = new Set(props.shots.slice(1).map((s) => s.reveal!.seed));
-    assert.equal(seeds.size, 24);
+    assert.equal(new Set(props.shots.slice(1).map((s) => s.reveal!.seed)).size, 24);
+    assert.ok('breath' in props.shots[1]!.reveal! && !('breath' in props.shots[7]!.reveal!));
+  });
+  it('камера: кадр 25 від\'їжджає до tD + 7, решта до кінця вікна', () => {
+    assert.equal(props.shots[24]!.camera.holdFrame, 3646 + 7 - 3339);
+    assert.equal(props.shots[0]!.camera.holdFrame, 264);
+    assert.equal(props.shots[1]!.camera.s1, 1.33);
+  });
+  it('титри: українські тексти з edit.md, шрифт і мінімальні розміри', () => {
+    assert.deepEqual(props.opening.elements[0]!.lines, ['Як ми стали', 'переселенцями?']);
+    assert.equal(props.opening.elements[0]!.minSize, 72);
+    assert.equal(props.opening.elements[2]!.minSize, 44);
+    assert.equal(props.closing.elements[0]!.lines[0], 'Наталя, м. Донецьк');
+    assert.equal(props.closing.elements[3]!.lines[0], 'power-of-the-future.com');
+    assert.equal(props.closing.elements[0]!.fromFrame, 3646 + 28);
+    assert.equal(props.closing.hideFrom, 3646 + 142);
+    assert.equal(props.closing.activeTo, 3803);
+    assert.equal(props.opening.maxBottom, 1536);
+  });
+  it('субтитри: Контакт2u і ФарбаФабра, остання картка зникає не пізніше tD + 12', () => {
+    const all = props.subtitles.cards.map((c) => c.text).join(' ');
+    assert.match(all, /«Контакт2u»/);
+    assert.match(all, /«ФарбаФабра»/);
+    assert.doesNotMatch(all, /Контакт ту ю|Фарба Фабра/);
+    assert.equal(props.subtitles.cards.at(-1)!.outEnd, 3646 + 12);
+    assert.ok(props.subtitles.cards.every((c) => c.inFrame >= 90));
   });
   it('усе серіалізується в JSON без втрат', () => assert.deepEqual(JSON.parse(JSON.stringify(props)), props));
-  it('у субтитрах Контакт2u і ФарбаФабра', () => {
-    const all = props.subtitles.cards.map((c) => c.text).join(' ');
-    assert.match(all, /Контакт2u/);
-    assert.match(all, /ФарбаФабра/);
-    assert.doesNotMatch(all, /Контакт ту ю|Фарба Фабра/);
+  it('розбір аркуша: константи, таблиця, камера, винятки', () => {
+    const c = parseConstants(doc);
+    assert.deepEqual(c, { tailFrames: 157, releaseEnd: 102, veilOffset: 7 });
+    const t = parseAnchorTable(doc);
+    assert.deepEqual(t.sentenceCounts, { 5: 2, 7: 2, 9: 3 });
+    assert.equal(t.nominalD[24], 150);
+    assert.deepEqual(t.rules[2], { kind: 'word', n: 1, k: 12, of: 20 });
+    assert.deepEqual(t.rules[4], { kind: 'end', n: 2 });
+    assert.equal(parseCameraNumbers(doc).length, 25);
+    assert.deepEqual(parseExceptions(doc), []);
   });
+});
+
+// Синтетична «інша мова»: ті самі слова, час розтягнуто, тексти титрів і назви як із мовного script.md.
+function stretched(k: number, shift = 0): TimingsT {
+  const f = (x: number): number => Math.round((x * k + shift) * 1000) / 1000;
+  return {
+    duration: f(uk118.duration),
+    fragments: uk118.fragments.map((fr) => ({ ...fr, start: f(fr.start), end: f(fr.end), words: fr.words.map((w) => ({ ...w, start: f(w.start), end: f(w.end) })) })),
+  };
+}
+const SYN_SCRIPT: ScriptDoc = {
+  title: 'x', language: 'німецька', fragments: [], changes: '', questions: '', raw: '',
+  names: [
+    { what: 'Проєкт', spoken: 'Контакт ту ю', shown: 'Contact2u', rename: true, line: 1 },
+    { what: 'Спільнота', spoken: 'Фарба Фабра', shown: 'FarbaFabra', rename: true, line: 2 },
+  ],
+  titles: {
+    line: 1,
+    opening: { title: ['Wie wurden wir', 'zu Binnenvertriebenen?'], author: 'Natalja, Donezk', project: 'Geschichten Binnenvertriebener · Contact2u' },
+    closing: { author: 'Natalja, Donezk', project: 'Geschichten Binnenvertriebener · Contact2u', site: 'power-of-the-future.com' },
+  },
+};
+
+describe('кадри й пропси для іншої мови (синтетичні таймінги)', { skip: !haveEdit }, () => {
+  const doc = readDoc(editFile, 'editor');
+  it('розтягнуті на 8% таймінги: кадри йдуть за словами, довжина фільму від duration мови', () => {
+    const t = stretched(1.08);
+    const { props, plan } = buildFilmProps({ story: '01-natalia', lang: 'de', doc, timings: t, script: SYN_SCRIPT, audioExists: true });
+    assert.equal(props.lang, 'de');
+    assert.equal(plan.tD, Math.floor(((Math.round(t.duration * 1000) + 3000) * 30 + 500) / 1000));
+    assert.equal(props.durationInFrames, plan.tD + 157);
+    assert.equal(props.shots[24]!.endFrame, props.durationInFrames);
+    for (let n = 1; n <= 25; n++) assert.ok(plan.clean[n]! >= 30, `кадр ${n}`);
+    // кадр 2 прив'язаний до слова «Донецька» (12-те слово фрагмента 1) у цій мові: центр переходу на його початку
+    const w = t.fragments[0]!.words[12]!;
+    assert.equal(plan.A[2], Math.round(w.start * 1000) + 3000);
+  });
+  it('титри з мовного сценарію, субтитри з назвами зі «Назв»', () => {
+    const { props } = buildFilmProps({ story: '01-natalia', lang: 'de', doc, timings: stretched(1.08), script: SYN_SCRIPT, audioExists: true });
+    assert.deepEqual(props.opening.elements[0]!.lines, ['Wie wurden wir', 'zu Binnenvertriebenen?']);
+    assert.equal(props.opening.elements[1]!.kind, 'rule');
+    assert.equal(props.opening.elements[2]!.lines[0], 'Natalja, Donezk');
+    assert.equal(props.closing.elements[2]!.lines[0], 'Geschichten Binnenvertriebener · Contact2u');
+    assert.equal(props.closing.maxBottom, 1536);
+    assert.equal(props.closing.lang, 'de');
+    const all = props.subtitles.cards.map((c) => c.text).join(' ');
+    assert.match(all, /Contact2u/);
+    assert.match(all, /FarbaFabra/);
+    assert.doesNotMatch(all, /Контакт ту ю/);
+    assert.match(props.font.checks.at(-1)!.text, /ü|Ü|ä|ö|ß|і/);
+  });
+  it('таймінги, що не вкладаються: не вистачає місця для кадру → падіння з числами', () => {
+    const t = stretched(0.55);
+    assert.throws(() => buildFilmProps({ story: '01-natalia', lang: 'de', doc, timings: t, script: SYN_SCRIPT, audioExists: true }), (e: Error) => e instanceof FrameRuleError && /не вистачає місця/.test(e.message) && /de/.test(e.message));
+  });
+  it('кількість речень у фрагменті 5 не така: правило F5.S2 не застосовується, падіння з поділом', () => {
+    const t = stretched(1.08);
+    t.fragments[4]!.words = t.fragments[4]!.words.map((w) => ({ ...w, text: w.text.replace(/\.$/, ',') }));
+    assert.throws(() => buildFilmProps({ story: '01-natalia', lang: 'fr', doc, timings: t, script: SYN_SCRIPT, audioExists: true }), (e: Error) => /F5\.S2 не застосовується/.test(e.message) && /fr/.test(e.message) && /речення 1: перше слово/.test(e.message));
+  });
+  it('виняток із «Мовних винятків» має перевагу над правилом', () => {
+    const t = stretched(1.08);
+    const exc = [{ lang: 'de', frame: 2, what: 'A' as const, rule: parseRule('F1.W5') }];
+    const plan = planFrames({ lang: 'de', timings: t, rules: parseAnchorTable(doc).rules, nominalD: parseAnchorTable(doc).nominalD, sentenceCounts: { 5: 2, 7: 2, 9: 3 }, exceptions: exc, releaseEnd: 102, veilOffset: 7, tailFrames: 157, minClean: 30, frameCount: 25, fragmentCount: 17 });
+    assert.equal(plan.A[2], Math.round(t.fragments[0]!.words[5]!.start * 1000) + 3000);
+  });
+  it('прив\'язки, що не зростають, дають помилку', () => {
+    const t = stretched(1.08);
+    // фрагмент 4 раніше за кінець фрагмента 2: ламаємо часи фрагмента 4
+    t.fragments[3]!.words = t.fragments[3]!.words.map((w) => ({ ...w, start: w.start - 3, end: w.end - 3 }));
+    assert.throws(() => buildFilmProps({ story: '01-natalia', lang: 'de', doc, timings: t, script: SYN_SCRIPT, audioExists: true }), /не зростають|назад у часі/);
+  });
+  it('перевірка таймінгів: не 17 фрагментів', () => {
+    const t = stretched(1.08);
+    t.fragments.pop();
+    assert.throws(() => buildFilmProps({ story: '01-natalia', lang: 'en', doc, timings: t, script: SYN_SCRIPT, audioExists: true }), /фрагментів 16, а має бути 17/);
+  });
+  it('кінець останнього слова пізніший за duration + 0.2 с: падіння', () => {
+    const t = stretched(1.08);
+    t.duration -= 1;
+    assert.throws(() => buildFilmProps({ story: '01-natalia', lang: 'en', doc, timings: t, script: SYN_SCRIPT, audioExists: true }), /duration \+ 0\.2/);
+  });
+  it('бракує тексту титру: падіння називає мову й текст', () => {
+    const noAuthor: ScriptDoc = { ...SYN_SCRIPT, titles: { line: 1, opening: { ...SYN_SCRIPT.titles!.opening!, author: undefined }, closing: SYN_SCRIPT.titles!.closing } };
+    assert.throws(() => buildFilmProps({ story: '01-natalia', lang: 'fr', doc, timings: stretched(1.08), script: noAuthor, audioExists: true }), /мова fr.*«Автор…»/);
+    const noSite: ScriptDoc = { ...SYN_SCRIPT, titles: { line: 1, opening: SYN_SCRIPT.titles!.opening, closing: { ...SYN_SCRIPT.titles!.closing!, site: undefined } } };
+    assert.throws(() => buildFilmProps({ story: '01-natalia', lang: 'fr', doc, timings: stretched(1.08), script: noSite, audioExists: true }), /мова fr.*«Адреса сайту…»/);
+    assert.throws(() => buildFilmProps({ story: '01-natalia', lang: 'fr', doc, timings: stretched(1.08), script: { ...SYN_SCRIPT, titles: undefined }, audioExists: true }), /мова fr.*немає розділу «Титри»/);
+  });
+  it('запис «Назв» не знайдено в словах: падіння називає запис', () => {
+    const bad: ScriptDoc = { ...SYN_SCRIPT, names: [{ what: 'x', spoken: 'Kontakt tu ju', shown: 'Contact2u', rename: true, line: 1 }] };
+    assert.throws(() => buildFilmProps({ story: '01-natalia', lang: 'de', doc, timings: stretched(1.08), script: bad, audioExists: true }), /«Kontakt tu ju» → «Contact2u» не знайдено/);
+  });
+});
+
+describe('камера з таблиці «Камера числами»', () => {
+  const row = { n: 2, s0: 1, s1: 1.33, cx0: 0.5, cy0: 0.5, cx1: 0.495, cy1: 0.625 };
+  it('вікно кадру і holdFrame', () => assert.deepEqual(cameraSpec(row, 246), { s0: 1, s1: 1.33, cx0: 0.5, cy0: 0.5, cx1: 0.495, cy1: 0.625, holdFrame: 246 }));
+  it('вікно, що виходить за зображення, дає помилку', () => assert.throws(() => cameraSpec({ ...row, s0: 1.2, s1: 1.3, cx0: 0.2 }, 100), /виходить за зображення/));
+  it('масштаб менший за 100% дає помилку', () => assert.throws(() => cameraSpec({ ...row, s0: 0.9 }, 100), /менший за 100%/));
 });
