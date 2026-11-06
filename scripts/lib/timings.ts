@@ -48,6 +48,8 @@ export interface TimingsPart {
 export interface TimingsFile {
   version: 1;
   story: string;
+  /** Код мовної версії (en, fr, de…); у старих файлах української його немає. */
+  language_code?: string;
   model_id: string;
   voice_id: string;
   audio_file: string;
@@ -84,6 +86,9 @@ export function buildSpeechText(fragments: SpeechFragmentInput[], joiner: string
 
 const isWs = (c: string | undefined): boolean => c !== undefined && /\s/.test(c);
 
+/** Символ для порівняння відповіді API з надісланим текстом: NFC, типографські апострофи й лапки до прямих. */
+const foldChar = (c: string): string => c.normalize('NFC').replace(/[’ʼ‘`´]/g, "'").replace(/[“”„]/g, '"');
+
 function tagMask(text: string): boolean[] {
   const mask = new Array<boolean>(text.length).fill(false);
   for (const m of text.matchAll(TAG_RE)) {
@@ -102,6 +107,7 @@ export function alignToSentText(sent: string, chars: string[]): number[] {
   const map: number[] = new Array<number>(chars.length).fill(-1);
   let i = 0;
   let j = 0;
+  let pending = 0; // скільки комбінованих знаків відповіді ще чекаємо для поточної літери надісланого тексту
   const context = (): string =>
     `надіслано «…${sent.slice(Math.max(0, i - 15), i + 15).replace(/\n/g, '⏎')}…» (позиція ${i}), у відповіді «…${chars.slice(Math.max(0, j - 15), j + 15).join('').replace(/\n/g, '⏎')}…» (символ ${j})`;
   while (j < chars.length) {
@@ -113,6 +119,20 @@ export function alignToSentText(sent: string, chars: string[]): number[] {
     if (sent.startsWith(el, i)) {
       map[j] = i;
       i += el.length;
+      j++;
+    } else if (i < sent.length && !mask[i] && foldChar(el) === foldChar(sent.slice(i, i + el.length))) {
+      // Той самий символ в іншій формі (апостроф ’ чи ', літера з діакритикою одним знаком чи з комбінованим).
+      map[j] = i;
+      i += el.length;
+      j++;
+    } else if (pending > 0 && /^\p{M}+$/u.test(el)) {
+      // Комбінований знак у відповіді: літера з діакритикою в надісланому тексті розкладена на основу й знак.
+      map[j] = i;
+      j++;
+      if (--pending === 0) i++;
+    } else if (i < sent.length && !mask[i] && pending === 0 && sent[i]!.normalize('NFD').length > 1 && sent[i]!.normalize('NFD').startsWith(el) && el !== sent[i]) {
+      map[j] = i;
+      pending = sent[i]!.normalize('NFD').length - el.length;
       j++;
     } else if (i < sent.length && mask[i]) {
       i++; // тег, якого немає у відповіді

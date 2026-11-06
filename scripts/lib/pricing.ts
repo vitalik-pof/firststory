@@ -13,7 +13,7 @@
 //   а після першої згенерованої картинки скрипт бере фактичну вартість із маніфесту.
 
 import type { ElevenLabsClient } from './elevenlabs';
-import { readManifest } from './manifest';
+import { narrationKeys, readManifest } from './manifest';
 
 export type PriceSource = 'з API' | 'з документації ElevenLabs' | 'оцінка' | 'не знайдено' | 'виміряно в маніфесті';
 
@@ -46,11 +46,15 @@ export function measuredTtsRate(story: string | undefined): { perChar: number; c
   if (!story) return undefined;
   let credits = 0;
   let chars = 0;
-  const parts = (readManifest(story).narration?.parts ?? {}) as Record<string, { credits?: number; chars_sent?: number; credits_source?: string }>;
-  for (const p of Object.values(parts)) {
-    if (p.credits_source === 'history' && p.credits && p.chars_sent) {
-      credits += p.credits;
-      chars += p.chars_sent;
+  const m = readManifest(story);
+  // Ціна знака однакова для всіх мов: беремо частини озвучення з усіх мовних записів (narration, narration_en, …).
+  for (const key of narrationKeys(m)) {
+    const parts = ((m[key] as { parts?: unknown } | undefined)?.parts ?? {}) as Record<string, { credits?: number; chars_sent?: number; credits_source?: string }>;
+    for (const p of Object.values(parts)) {
+      if (p.credits_source === 'history' && p.credits && p.chars_sent) {
+        credits += p.credits;
+        chars += p.chars_sent;
+      }
     }
   }
   return chars > 0 ? { perChar: credits / chars, chars } : undefined;
