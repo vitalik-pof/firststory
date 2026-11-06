@@ -33,17 +33,121 @@ export interface ScriptFragment {
   text: string;
   line: number;
 }
+/** Рядок таблиці «Назви»: як назву записано в тексті для озвучення і як її писати в субтитрах і титрах. */
+export interface ScriptName {
+  what: string;
+  /** Звучання з тексту для озвучення (без дужкового пояснення «(три слова, фрагмент 14)»). */
+  spoken: string;
+  /** Написання в субтитрах і титрах; «так само» (те саме, що звучить) дає shown = spoken. */
+  shown: string;
+  /** true: перепис потрібен (звучання відрізняється від написання і воно взагалі звучить). */
+  rename: boolean;
+  line: number;
+}
+/** Тексти одного титру з розділу «Титри» мовного сценарію. Чого сценарист не дав, того в полі немає. */
+export interface TitleTexts {
+  /** Назва, розбита на рядки знаком «/» чи переносом (один елемент, якщо розриву сценарист не дав). */
+  title?: string[];
+  author?: string;
+  project?: string;
+  site?: string;
+}
+export interface ScriptTitles {
+  opening?: TitleTexts;
+  closing?: TitleTexts;
+  line: number;
+}
 export interface ScriptDoc {
   title: string;
   language: string;
   fragments: ScriptFragment[];
+  /** Розділ «Назви»: порожній, якщо його немає (український сценарій його не має). */
+  names: ScriptName[];
+  /** Розділ «Титри»: undefined, якщо його немає (український сценарій його не має). */
+  titles?: ScriptTitles;
   changes: string;
   questions: string;
   raw: string;
 }
 
-export function parseScript(story: string): ScriptDoc {
-  const doc = readDoc(paths.storyFile(story, 'script.md'), 'scenarist');
+/** Назва мови із шапки «Мова озвучення:» → код для language_code та теки мови. */
+export const LANGUAGE_CODES: Record<string, string> = {
+  українська: 'uk', англійська: 'en', французька: 'fr', німецька: 'de', польська: 'pl', російська: 'ru',
+};
+
+/** Код за назвою мови («Англійська», «англійська.» → en); undefined для невідомої. */
+export function languageCodeFromName(name: string): string | undefined {
+  return LANGUAGE_CODES[name.trim().toLowerCase().replace(/[.\s]+$/g, '')];
+}
+
+const stripWrap = (v: string): string => {
+  const t = v.trim().replace(/`/g, '');
+  const m = /^[«"„“](.*)[»"“”]$/.exec(t);
+  return (m ? m[1]! : t).trim();
+};
+
+/** Клітинки рядка markdown-таблиці `| a | b | c |`; null, якщо це не рядок таблиці. */
+function tableCells(text: string): string[] | null {
+  const t = text.trim();
+  if (!t.startsWith('|')) return null;
+  return t.replace(/^\|/, '').replace(/\|\s*$/, '').split('|').map((c) => c.trim());
+}
+
+function parseNames(doc: Doc, section: Section | undefined): ScriptName[] {
+  if (!section) return [];
+  const out: ScriptName[] = [];
+  let header = true;
+  for (const l of section.body) {
+    const cells = tableCells(l.text);
+    if (!cells) continue;
+    if (cells.every((c) => /^:?-{2,}:?$/.test(c))) continue;
+    if (header) {
+      header = false; // рядок-заголовок таблиці
+      if (cells.length < 3) fail(doc, l.n, 'Таблиця «Назви» має три колонки: «Що | У тексті для озвучення | У субтитрах і титрах».');
+      continue;
+    }
+    if (cells.length < 3) fail(doc, l.n, `Рядок таблиці «Назви» має ${cells.length} колонок замість трьох.`);
+    const what = cells[0]!;
+    const spoken = stripWrap(cells[1]!.replace(/\s*\([^)]*\)\s*$/, ''));
+    const shownRaw = stripWrap(cells[2]!);
+    const same = /^так\s+само\.?$/i.test(shownRaw);
+    const silent = /не звучить/i.test(cells[1]!);
+    out.push({ what, spoken, shown: same ? spoken : shownRaw, rename: !same && !silent && spoken.toLowerCase() !== shownRaw.toLowerCase(), line: l.n });
+  }
+  return out;
+}
+
+function parseTitleTexts(doc: Doc, lines: Line[]): TitleTexts {
+  const out: TitleTexts = {};
+  for (const l of lines) {
+    const m = /^\s*(?:\d+[.)]|[-*])\s*([^:]+?)\s*:\s*(.+)$/.exec(l.text);
+    if (!m) continue;
+    const label = m[1]!.trim();
+    const value = stripWrap(m[2]!);
+    if (!value) fail(doc, l.n, `У розділі «Титри» порожнє значення «${label}».`);
+    if (/^Назва/i.test(label)) out.title = value.split(/\s*\/\s*|\s*\\n\s*/).map((x) => x.trim()).filter(Boolean);
+    else if (/^(Рядок про проєкт|Проєкт)/i.test(label)) out.project = value;
+    else if (/^Автор/i.test(label)) out.author = value;
+    else if (/^(Адреса|Сайт)/i.test(label)) out.site = value;
+  }
+  return out;
+}
+
+function parseTitles(doc: Doc, section: Section | undefined): ScriptTitles | undefined {
+  if (!section) return undefined;
+  const subs = splitByHeading(section.body, 3).sections;
+  const open = subs.find((x) => /^Початков/i.test(x.title));
+  const close = subs.find((x) => /^Фінальн/i.test(x.title));
+  return {
+    opening: open ? parseTitleTexts(doc, open.body) : undefined,
+    closing: close ? parseTitleTexts(doc, close.body) : undefined,
+    line: section.line,
+  };
+}
+
+/** Сценарій історії; lang: код мовної версії (stories/<id>/<код>/script.md), без нього українська (stories/<id>/script.md). */
+export function parseScript(story: string, lang?: string): ScriptDoc {
+  const doc = readDoc(paths.langFile(story, lang, 'script.md'), 'scenarist');
   const { preamble, sections } = splitByHeading(doc.lines, 2);
   const h1 = doc.lines.find((l) => /^#\s+/.test(l.text));
   const title = h1 ? h1.text.replace(/^#\s+/, '').replace(/^Сценарій:\s*/i, '').trim() : story;
@@ -67,6 +171,8 @@ export function parseScript(story: string): ScriptDoc {
     title,
     language,
     fragments,
+    names: parseNames(doc, sections.find((x) => /^Назви$/i.test(x.title))),
+    titles: parseTitles(doc, sections.find((x) => /^Титри$/i.test(x.title))),
     changes: sectionText(doc, /^Що змінено/i),
     questions: extractQuestions(doc),
     raw: doc.lines.map((l) => l.text).join('\n'),
@@ -169,8 +275,9 @@ export interface VoiceDoc {
   raw: string;
 }
 
-export function parseVoiceMd(story: string): VoiceDoc {
-  const doc = readDoc(paths.storyFile(story, 'voice.md'), 'voice-director');
+/** Розмітка озвучення; lang: код мовної версії (stories/<id>/<код>/voice.md), без нього українська. */
+export function parseVoiceMd(story: string, lang?: string): VoiceDoc {
+  const doc = readDoc(paths.langFile(story, lang, 'voice.md'), 'voice-director');
   const { preamble, sections } = splitByHeading(doc.lines, 2);
   const { fields } = readFieldsStrict(doc, preamble, { voice: /^Голос$/i });
   const voiceId = firstLine(requireField(doc, fields, 'voice', 'Голос', 'шапка файлу').value).replace(/[`*]/g, '').trim();
@@ -198,9 +305,23 @@ export function parseVoiceMd(story: string): VoiceDoc {
   };
 }
 
-/** Звіряє розмітку озвучення зі сценарієм: ті самі номери й ті самі слова (без тегів). */
-export function checkVoiceAgainstScript(story: string, voice: VoiceDoc, script: ScriptDoc, allowMissing: number[] = []): void {
-  const file = paths.storyFile(story, 'voice.md');
+/**
+ * Текст для звіряння слів: без тегів, пробіли згорнуто (зокрема нерозривні), Unicode у формі NFC
+ * (діакритика може бути записана літерою або літерою з комбінованим знаком), типографські апострофи
+ * й лапки зведено до прямих (l’avoir = l'avoir, “word” = "word"), пробіл перед розділовим знаком,
+ * що лишився на місці тега («Donetsk [pause], to»), прибрано. Самі слова й розділові знаки не міняються.
+ */
+export function normalizeForCompare(text: string): string {
+  return stripTags(text)
+    .normalize('NFC')
+    .replace(/[’ʼ‘`´]/g, "'")
+    .replace(/[“”„]/g, '"')
+    .replace(/\s+([,.;:!?…])/g, '$1');
+}
+
+/** Звіряє розмітку озвучення зі сценарієм: ті самі номери й ті самі слова (без тегів). lang: код мовної версії. */
+export function checkVoiceAgainstScript(story: string, voice: VoiceDoc, script: ScriptDoc, allowMissing: number[] = [], lang?: string): void {
+  const file = paths.langFile(story, lang, 'voice.md');
   const doc = readDoc(file, 'voice-director');
   const sNums = script.fragments.filter((f) => voice.fragments.some((v) => v.n === f.n) || !allowMissing.includes(f.n)).map((f) => f.n).join(',');
   const vNums = voice.fragments.map((f) => f.n).join(',');
@@ -209,8 +330,8 @@ export function checkVoiceAgainstScript(story: string, voice: VoiceDoc, script: 
   }
   for (const vf of voice.fragments) {
     const sf = script.fragments.find((f) => f.n === vf.n)!;
-    const a = collapseWs(sf.text);
-    const b = stripTags(vf.tagged);
+    const a = normalizeForCompare(sf.text);
+    const b = normalizeForCompare(vf.tagged);
     if (a !== b) {
       let i = 0;
       while (i < a.length && i < b.length && a[i] === b[i]) i++;
