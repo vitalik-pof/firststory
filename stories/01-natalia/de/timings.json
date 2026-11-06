@@ -1,0 +1,1881 @@
+{
+  "version": 1,
+  "story": "01-natalia",
+  "language_code": "de",
+  "model_id": "eleven_v4",
+  "voice_id": "49POAIkFDXsxrtR84sdj",
+  "audio_file": "work/01-natalia/de/narration.mp3",
+  "duration": 128.209,
+  "fragment_joiner": "\n\n",
+  "part_gap": 0,
+  "parts": [
+    {
+      "index": 0,
+      "fragments": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "offset": 0,
+      "duration": 128.209
+    }
+  ],
+  "silent_fragments": [],
+  "fragments": [
+    {
+      "n": 1,
+      "start": 0.08,
+      "end": 10.92,
+      "text": "Im Juli zweitausendvierzehn haben meine Familie und ich unsere Heimatstadt Donezk verlassen und sind in den Teil des Gebiets Donezk gefahren, der nicht besetzt war.",
+      "words": [
+        {
+          "text": "Im",
+          "start": 0.08,
+          "end": 0.24
+        },
+        {
+          "text": "Juli",
+          "start": 0.32,
+          "end": 0.56
+        },
+        {
+          "text": "zweitausendvierzehn",
+          "start": 0.64,
+          "end": 1.8
+        },
+        {
+          "text": "haben",
+          "start": 1.92,
+          "end": 2.16
+        },
+        {
+          "text": "meine",
+          "start": 2.2,
+          "end": 2.4
+        },
+        {
+          "text": "Familie",
+          "start": 2.48,
+          "end": 2.96
+        },
+        {
+          "text": "und",
+          "start": 3.04,
+          "end": 3.12
+        },
+        {
+          "text": "ich",
+          "start": 3.28,
+          "end": 3.52
+        },
+        {
+          "text": "unsere",
+          "start": 3.6,
+          "end": 3.92
+        },
+        {
+          "text": "Heimatstadt",
+          "start": 4,
+          "end": 4.56
+        },
+        {
+          "text": "Donezk",
+          "start": 4.72,
+          "end": 5.04
+        },
+        {
+          "text": "verlassen",
+          "start": 5.12,
+          "end": 5.6
+        },
+        {
+          "text": "und",
+          "start": 6.693,
+          "end": 6.72
+        },
+        {
+          "text": "sind",
+          "start": 6.76,
+          "end": 6.96
+        },
+        {
+          "text": "in",
+          "start": 7.04,
+          "end": 7.12
+        },
+        {
+          "text": "den",
+          "start": 7.2,
+          "end": 7.28
+        },
+        {
+          "text": "Teil",
+          "start": 7.36,
+          "end": 7.52
+        },
+        {
+          "text": "des",
+          "start": 7.6,
+          "end": 7.68
+        },
+        {
+          "text": "Gebiets",
+          "start": 7.76,
+          "end": 8.08
+        },
+        {
+          "text": "Donezk",
+          "start": 8.16,
+          "end": 8.56
+        },
+        {
+          "text": "gefahren,",
+          "start": 8.64,
+          "end": 9.32
+        },
+        {
+          "text": "der",
+          "start": 9.664,
+          "end": 9.68
+        },
+        {
+          "text": "nicht",
+          "start": 9.76,
+          "end": 10
+        },
+        {
+          "text": "besetzt",
+          "start": 10.08,
+          "end": 10.4
+        },
+        {
+          "text": "war.",
+          "start": 10.48,
+          "end": 10.92
+        }
+      ]
+    },
+    {
+      "n": 2,
+      "start": 11.267,
+      "end": 16.761,
+      "text": "Unsere Töchter sollten in die erste Klasse kommen, deshalb dachten wir, wir würden bald zurückkehren.",
+      "words": [
+        {
+          "text": "Unsere",
+          "start": 11.267,
+          "end": 11.52
+        },
+        {
+          "text": "Töchter",
+          "start": 11.6,
+          "end": 11.92
+        },
+        {
+          "text": "sollten",
+          "start": 12,
+          "end": 12.24
+        },
+        {
+          "text": "in",
+          "start": 12.32,
+          "end": 12.4
+        },
+        {
+          "text": "die",
+          "start": 12.44,
+          "end": 12.48
+        },
+        {
+          "text": "erste",
+          "start": 12.56,
+          "end": 12.8
+        },
+        {
+          "text": "Klasse",
+          "start": 12.88,
+          "end": 13.2
+        },
+        {
+          "text": "kommen,",
+          "start": 13.28,
+          "end": 13.72
+        },
+        {
+          "text": "deshalb",
+          "start": 14.081,
+          "end": 14.481
+        },
+        {
+          "text": "dachten",
+          "start": 14.521,
+          "end": 14.801
+        },
+        {
+          "text": "wir,",
+          "start": 14.881,
+          "end": 15.081
+        },
+        {
+          "text": "wir",
+          "start": 15.121,
+          "end": 15.201
+        },
+        {
+          "text": "würden",
+          "start": 15.281,
+          "end": 15.521
+        },
+        {
+          "text": "bald",
+          "start": 15.574,
+          "end": 15.681
+        },
+        {
+          "text": "zurückkehren.",
+          "start": 15.761,
+          "end": 16.761
+        }
+      ]
+    },
+    {
+      "n": 3,
+      "start": 17.121,
+      "end": 18.641,
+      "text": "Aber es sollte nicht sein.",
+      "words": [
+        {
+          "text": "Aber",
+          "start": 17.121,
+          "end": 17.281
+        },
+        {
+          "text": "es",
+          "start": 17.361,
+          "end": 17.441
+        },
+        {
+          "text": "sollte",
+          "start": 17.481,
+          "end": 17.761
+        },
+        {
+          "text": "nicht",
+          "start": 17.841,
+          "end": 18.001
+        },
+        {
+          "text": "sein.",
+          "start": 18.081,
+          "end": 18.641
+        }
+      ]
+    },
+    {
+      "n": 4,
+      "start": 18.961,
+      "end": 27.444,
+      "text": "Gegen September wurde uns klar, dass wir entscheiden mussten, wie es weitergeht, und wir fingen an, in einer anderen Stadt nach einem sicheren Ort zu suchen.",
+      "words": [
+        {
+          "text": "Gegen",
+          "start": 18.961,
+          "end": 19.121
+        },
+        {
+          "text": "September",
+          "start": 19.201,
+          "end": 19.761
+        },
+        {
+          "text": "wurde",
+          "start": 19.841,
+          "end": 20.001
+        },
+        {
+          "text": "uns",
+          "start": 20.081,
+          "end": 20.241
+        },
+        {
+          "text": "klar,",
+          "start": 20.321,
+          "end": 20.681
+        },
+        {
+          "text": "dass",
+          "start": 20.721,
+          "end": 20.881
+        },
+        {
+          "text": "wir",
+          "start": 20.908,
+          "end": 20.961
+        },
+        {
+          "text": "entscheiden",
+          "start": 21.041,
+          "end": 21.521
+        },
+        {
+          "text": "mussten,",
+          "start": 21.601,
+          "end": 21.948
+        },
+        {
+          "text": "wie",
+          "start": 21.974,
+          "end": 22.001
+        },
+        {
+          "text": "es",
+          "start": 22.081,
+          "end": 22.161
+        },
+        {
+          "text": "weitergeht,",
+          "start": 22.241,
+          "end": 23.241
+        },
+        {
+          "text": "und",
+          "start": 23.361,
+          "end": 23.441
+        },
+        {
+          "text": "wir",
+          "start": 23.521,
+          "end": 23.601
+        },
+        {
+          "text": "fingen",
+          "start": 23.681,
+          "end": 23.921
+        },
+        {
+          "text": "an,",
+          "start": 24.001,
+          "end": 24.281
+        },
+        {
+          "text": "in",
+          "start": 24.321,
+          "end": 24.401
+        },
+        {
+          "text": "einer",
+          "start": 24.481,
+          "end": 24.721
+        },
+        {
+          "text": "anderen",
+          "start": 24.841,
+          "end": 25.121
+        },
+        {
+          "text": "Stadt",
+          "start": 25.201,
+          "end": 25.441
+        },
+        {
+          "text": "nach",
+          "start": 25.494,
+          "end": 25.601
+        },
+        {
+          "text": "einem",
+          "start": 25.681,
+          "end": 25.841
+        },
+        {
+          "text": "sicheren",
+          "start": 25.881,
+          "end": 26.241
+        },
+        {
+          "text": "Ort",
+          "start": 26.321,
+          "end": 26.481
+        },
+        {
+          "text": "zu",
+          "start": 26.561,
+          "end": 26.641
+        },
+        {
+          "text": "suchen.",
+          "start": 26.761,
+          "end": 27.444
+        }
+      ]
+    },
+    {
+      "n": 5,
+      "start": 27.525,
+      "end": 36.34,
+      "text": "Wir haben uns buchstäblich dem Universum anvertraut und sind in die Stadt Pawlohrad gefahren. Dort haben wir sehr schnell eine Unterkunft und Arbeit gefunden.",
+      "words": [
+        {
+          "text": "Wir",
+          "start": 27.525,
+          "end": 27.605
+        },
+        {
+          "text": "haben",
+          "start": 27.685,
+          "end": 27.845
+        },
+        {
+          "text": "uns",
+          "start": 27.925,
+          "end": 28.165
+        },
+        {
+          "text": "buchstäblich",
+          "start": 28.285,
+          "end": 28.805
+        },
+        {
+          "text": "dem",
+          "start": 28.885,
+          "end": 28.965
+        },
+        {
+          "text": "Universum",
+          "start": 29.045,
+          "end": 29.605
+        },
+        {
+          "text": "anvertraut",
+          "start": 29.685,
+          "end": 30.405
+        },
+        {
+          "text": "und",
+          "start": 30.485,
+          "end": 30.565
+        },
+        {
+          "text": "sind",
+          "start": 30.618,
+          "end": 30.725
+        },
+        {
+          "text": "in",
+          "start": 30.805,
+          "end": 30.845
+        },
+        {
+          "text": "die",
+          "start": 30.885,
+          "end": 30.965
+        },
+        {
+          "text": "Stadt",
+          "start": 31.045,
+          "end": 31.285
+        },
+        {
+          "text": "Pawlohrad",
+          "start": 31.325,
+          "end": 31.845
+        },
+        {
+          "text": "gefahren.",
+          "start": 31.925,
+          "end": 32.735
+        },
+        {
+          "text": "Dort",
+          "start": 32.795,
+          "end": 32.965
+        },
+        {
+          "text": "haben",
+          "start": 33.045,
+          "end": 33.205
+        },
+        {
+          "text": "wir",
+          "start": 33.258,
+          "end": 33.365
+        },
+        {
+          "text": "sehr",
+          "start": 33.445,
+          "end": 33.605
+        },
+        {
+          "text": "schnell",
+          "start": 33.685,
+          "end": 33.925
+        },
+        {
+          "text": "eine",
+          "start": 34.005,
+          "end": 34.165
+        },
+        {
+          "text": "Unterkunft",
+          "start": 34.245,
+          "end": 34.805
+        },
+        {
+          "text": "und",
+          "start": 34.885,
+          "end": 34.965
+        },
+        {
+          "text": "Arbeit",
+          "start": 35.045,
+          "end": 35.285
+        },
+        {
+          "text": "gefunden.",
+          "start": 35.365,
+          "end": 36.34
+        }
+      ]
+    },
+    {
+      "n": 6,
+      "start": 36.485,
+      "end": 39.691,
+      "text": "Später erfuhr ich, dass ich schwanger war.",
+      "words": [
+        {
+          "text": "Später",
+          "start": 36.485,
+          "end": 36.805
+        },
+        {
+          "text": "erfuhr",
+          "start": 36.885,
+          "end": 37.205
+        },
+        {
+          "text": "ich,",
+          "start": 37.285,
+          "end": 37.645
+        },
+        {
+          "text": "dass",
+          "start": 37.685,
+          "end": 37.845
+        },
+        {
+          "text": "ich",
+          "start": 37.925,
+          "end": 38.485
+        },
+        {
+          "text": "schwanger",
+          "start": 38.629,
+          "end": 38.965
+        },
+        {
+          "text": "war.",
+          "start": 39.045,
+          "end": 39.691
+        }
+      ]
+    },
+    {
+      "n": 7,
+      "start": 39.765,
+      "end": 47.377,
+      "text": "Ich habe bis zum neunten Monat als Leiterin einer Apotheke gearbeitet. Jeden Morgen bin ich mit dem Bus in die Stadt Terniwka gefahren.",
+      "words": [
+        {
+          "text": "Ich",
+          "start": 39.765,
+          "end": 39.845
+        },
+        {
+          "text": "habe",
+          "start": 39.925,
+          "end": 40.085
+        },
+        {
+          "text": "bis",
+          "start": 40.165,
+          "end": 40.245
+        },
+        {
+          "text": "zum",
+          "start": 40.285,
+          "end": 40.485
+        },
+        {
+          "text": "neunten",
+          "start": 40.525,
+          "end": 40.805
+        },
+        {
+          "text": "Monat",
+          "start": 40.885,
+          "end": 41.205
+        },
+        {
+          "text": "als",
+          "start": 41.285,
+          "end": 41.445
+        },
+        {
+          "text": "Leiterin",
+          "start": 41.525,
+          "end": 41.925
+        },
+        {
+          "text": "einer",
+          "start": 42.005,
+          "end": 42.165
+        },
+        {
+          "text": "Apotheke",
+          "start": 42.205,
+          "end": 42.725
+        },
+        {
+          "text": "gearbeitet.",
+          "start": 42.885,
+          "end": 43.849
+        },
+        {
+          "text": "Jeden",
+          "start": 43.927,
+          "end": 44.167
+        },
+        {
+          "text": "Morgen",
+          "start": 44.247,
+          "end": 44.567
+        },
+        {
+          "text": "bin",
+          "start": 44.647,
+          "end": 44.727
+        },
+        {
+          "text": "ich",
+          "start": 44.807,
+          "end": 44.887
+        },
+        {
+          "text": "mit",
+          "start": 44.967,
+          "end": 45.047
+        },
+        {
+          "text": "dem",
+          "start": 45.127,
+          "end": 45.207
+        },
+        {
+          "text": "Bus",
+          "start": 45.327,
+          "end": 45.447
+        },
+        {
+          "text": "in",
+          "start": 45.527,
+          "end": 45.607
+        },
+        {
+          "text": "die",
+          "start": 45.647,
+          "end": 45.687
+        },
+        {
+          "text": "Stadt",
+          "start": 45.767,
+          "end": 45.927
+        },
+        {
+          "text": "Terniwka",
+          "start": 46.007,
+          "end": 46.487
+        },
+        {
+          "text": "gefahren.",
+          "start": 46.567,
+          "end": 47.377
+        }
+      ]
+    },
+    {
+      "n": 8,
+      "start": 47.517,
+      "end": 52.494,
+      "text": "Die Angst, ohne Lebensunterhalt dazustehen, trieb mich über meine Kräfte hinaus.",
+      "words": [
+        {
+          "text": "Die",
+          "start": 47.517,
+          "end": 47.527
+        },
+        {
+          "text": "Angst,",
+          "start": 47.607,
+          "end": 48.047
+        },
+        {
+          "text": "ohne",
+          "start": 48.087,
+          "end": 48.327
+        },
+        {
+          "text": "Lebensunterhalt",
+          "start": 48.407,
+          "end": 49.127
+        },
+        {
+          "text": "dazustehen,",
+          "start": 49.207,
+          "end": 50.174
+        },
+        {
+          "text": "trieb",
+          "start": 50.247,
+          "end": 50.447
+        },
+        {
+          "text": "mich",
+          "start": 50.487,
+          "end": 50.727
+        },
+        {
+          "text": "über",
+          "start": 50.807,
+          "end": 50.967
+        },
+        {
+          "text": "meine",
+          "start": 51.047,
+          "end": 51.287
+        },
+        {
+          "text": "Kräfte",
+          "start": 51.327,
+          "end": 51.607
+        },
+        {
+          "text": "hinaus.",
+          "start": 51.687,
+          "end": 52.494
+        }
+      ]
+    },
+    {
+      "n": 9,
+      "start": 52.567,
+      "end": 61.701,
+      "text": "Auch mein Mann hat sich in ein neues Arbeitsfeld eingearbeitet. Er hat mit Höhenarbeiten angefangen. Wir haben beide neue Erfahrungen und neue Möglichkeiten gewonnen.",
+      "words": [
+        {
+          "text": "Auch",
+          "start": 52.567,
+          "end": 52.727
+        },
+        {
+          "text": "mein",
+          "start": 52.767,
+          "end": 52.887
+        },
+        {
+          "text": "Mann",
+          "start": 52.927,
+          "end": 53.127
+        },
+        {
+          "text": "hat",
+          "start": 53.207,
+          "end": 53.287
+        },
+        {
+          "text": "sich",
+          "start": 53.327,
+          "end": 53.447
+        },
+        {
+          "text": "in",
+          "start": 53.487,
+          "end": 53.527
+        },
+        {
+          "text": "ein",
+          "start": 53.607,
+          "end": 53.687
+        },
+        {
+          "text": "neues",
+          "start": 53.767,
+          "end": 54.007
+        },
+        {
+          "text": "Arbeitsfeld",
+          "start": 54.087,
+          "end": 54.567
+        },
+        {
+          "text": "eingearbeitet.",
+          "start": 54.647,
+          "end": 55.727
+        },
+        {
+          "text": "Er",
+          "start": 55.767,
+          "end": 55.847
+        },
+        {
+          "text": "hat",
+          "start": 55.927,
+          "end": 56.007
+        },
+        {
+          "text": "mit",
+          "start": 56.087,
+          "end": 56.167
+        },
+        {
+          "text": "Höhenarbeiten",
+          "start": 56.207,
+          "end": 56.887
+        },
+        {
+          "text": "angefangen.",
+          "start": 57.007,
+          "end": 57.77
+        },
+        {
+          "text": "Wir",
+          "start": 57.849,
+          "end": 57.929
+        },
+        {
+          "text": "haben",
+          "start": 58.009,
+          "end": 58.249
+        },
+        {
+          "text": "beide",
+          "start": 58.329,
+          "end": 58.649
+        },
+        {
+          "text": "neue",
+          "start": 58.729,
+          "end": 58.969
+        },
+        {
+          "text": "Erfahrungen",
+          "start": 59.049,
+          "end": 59.689
+        },
+        {
+          "text": "und",
+          "start": 59.769,
+          "end": 59.929
+        },
+        {
+          "text": "neue",
+          "start": 60.009,
+          "end": 60.169
+        },
+        {
+          "text": "Möglichkeiten",
+          "start": 60.249,
+          "end": 60.889
+        },
+        {
+          "text": "gewonnen.",
+          "start": 60.969,
+          "end": 61.701
+        }
+      ]
+    },
+    {
+      "n": 10,
+      "start": 61.837,
+      "end": 69.956,
+      "text": "Als unser Sohn geboren wurde, sind wir in die Stadt Dnipro gezogen, weil sich für meinen Mann die Aussicht ergab, seine Tätigkeit in dieser Stadt auszubauen.",
+      "words": [
+        {
+          "text": "Als",
+          "start": 61.837,
+          "end": 61.849
+        },
+        {
+          "text": "unser",
+          "start": 61.929,
+          "end": 62.169
+        },
+        {
+          "text": "Sohn",
+          "start": 62.249,
+          "end": 62.409
+        },
+        {
+          "text": "geboren",
+          "start": 62.489,
+          "end": 62.889
+        },
+        {
+          "text": "wurde,",
+          "start": 62.969,
+          "end": 63.618
+        },
+        {
+          "text": "sind",
+          "start": 63.68,
+          "end": 63.769
+        },
+        {
+          "text": "wir",
+          "start": 63.849,
+          "end": 63.929
+        },
+        {
+          "text": "in",
+          "start": 63.969,
+          "end": 64.009
+        },
+        {
+          "text": "die",
+          "start": 64.049,
+          "end": 64.089
+        },
+        {
+          "text": "Stadt",
+          "start": 64.169,
+          "end": 64.409
+        },
+        {
+          "text": "Dnipro",
+          "start": 64.449,
+          "end": 64.809
+        },
+        {
+          "text": "gezogen,",
+          "start": 64.929,
+          "end": 65.489
+        },
+        {
+          "text": "weil",
+          "start": 65.529,
+          "end": 65.609
+        },
+        {
+          "text": "sich",
+          "start": 65.689,
+          "end": 65.769
+        },
+        {
+          "text": "für",
+          "start": 65.849,
+          "end": 65.929
+        },
+        {
+          "text": "meinen",
+          "start": 65.969,
+          "end": 66.169
+        },
+        {
+          "text": "Mann",
+          "start": 66.249,
+          "end": 66.409
+        },
+        {
+          "text": "die",
+          "start": 66.489,
+          "end": 66.569
+        },
+        {
+          "text": "Aussicht",
+          "start": 66.649,
+          "end": 66.969
+        },
+        {
+          "text": "ergab,",
+          "start": 67.089,
+          "end": 67.409
+        },
+        {
+          "text": "seine",
+          "start": 67.449,
+          "end": 67.689
+        },
+        {
+          "text": "Tätigkeit",
+          "start": 67.769,
+          "end": 68.249
+        },
+        {
+          "text": "in",
+          "start": 68.329,
+          "end": 68.409
+        },
+        {
+          "text": "dieser",
+          "start": 68.462,
+          "end": 68.649
+        },
+        {
+          "text": "Stadt",
+          "start": 68.729,
+          "end": 68.969
+        },
+        {
+          "text": "auszubauen.",
+          "start": 69.089,
+          "end": 69.956
+        }
+      ]
+    },
+    {
+      "n": 11,
+      "start": 70.142,
+      "end": 77.374,
+      "text": "Und das war die richtige Entscheidung. Neue Kontakte, ein neuer Bekanntenkreis, ein neuer Weg, unseren Alltag aufzubauen.",
+      "words": [
+        {
+          "text": "Und",
+          "start": 70.142,
+          "end": 70.169
+        },
+        {
+          "text": "das",
+          "start": 70.289,
+          "end": 70.409
+        },
+        {
+          "text": "war",
+          "start": 70.489,
+          "end": 70.569
+        },
+        {
+          "text": "die",
+          "start": 70.649,
+          "end": 70.729
+        },
+        {
+          "text": "richtige",
+          "start": 70.849,
+          "end": 71.129
+        },
+        {
+          "text": "Entscheidung.",
+          "start": 71.209,
+          "end": 72.024
+        },
+        {
+          "text": "Neue",
+          "start": 72.169,
+          "end": 72.329
+        },
+        {
+          "text": "Kontakte,",
+          "start": 72.409,
+          "end": 73.342
+        },
+        {
+          "text": "ein",
+          "start": 73.396,
+          "end": 73.449
+        },
+        {
+          "text": "neuer",
+          "start": 73.489,
+          "end": 73.689
+        },
+        {
+          "text": "Bekanntenkreis,",
+          "start": 73.729,
+          "end": 74.816
+        },
+        {
+          "text": "ein",
+          "start": 74.996,
+          "end": 75.049
+        },
+        {
+          "text": "neuer",
+          "start": 75.129,
+          "end": 75.449
+        },
+        {
+          "text": "Weg,",
+          "start": 75.489,
+          "end": 75.742
+        },
+        {
+          "text": "unseren",
+          "start": 75.796,
+          "end": 76.089
+        },
+        {
+          "text": "Alltag",
+          "start": 76.169,
+          "end": 76.409
+        },
+        {
+          "text": "aufzubauen.",
+          "start": 76.489,
+          "end": 77.374
+        }
+      ]
+    },
+    {
+      "n": 12,
+      "start": 77.45,
+      "end": 89.296,
+      "text": "In mein Leben trat das Playback-Theater, das mit der Zeit zu meiner Lieblingsbeschäftigung wurde, und es kam sogar zu einem beruflichen Wechsel, der mir heute nicht nur ein Einkommen bringt, sondern auch Freude an meinen Aufgaben.",
+      "words": [
+        {
+          "text": "In",
+          "start": 77.45,
+          "end": 77.53
+        },
+        {
+          "text": "mein",
+          "start": 77.57,
+          "end": 77.77
+        },
+        {
+          "text": "Leben",
+          "start": 77.85,
+          "end": 78.01
+        },
+        {
+          "text": "trat",
+          "start": 78.09,
+          "end": 78.25
+        },
+        {
+          "text": "das",
+          "start": 78.33,
+          "end": 78.49
+        },
+        {
+          "text": "Playback-Theater,",
+          "start": 78.69,
+          "end": 79.63
+        },
+        {
+          "text": "das",
+          "start": 79.75,
+          "end": 79.77
+        },
+        {
+          "text": "mit",
+          "start": 79.85,
+          "end": 79.93
+        },
+        {
+          "text": "der",
+          "start": 80.01,
+          "end": 80.09
+        },
+        {
+          "text": "Zeit",
+          "start": 80.17,
+          "end": 80.33
+        },
+        {
+          "text": "zu",
+          "start": 80.41,
+          "end": 80.49
+        },
+        {
+          "text": "meiner",
+          "start": 80.53,
+          "end": 80.81
+        },
+        {
+          "text": "Lieblingsbeschäftigung",
+          "start": 80.89,
+          "end": 81.85
+        },
+        {
+          "text": "wurde,",
+          "start": 81.93,
+          "end": 82.415
+        },
+        {
+          "text": "und",
+          "start": 82.598,
+          "end": 82.651
+        },
+        {
+          "text": "es",
+          "start": 82.731,
+          "end": 82.811
+        },
+        {
+          "text": "kam",
+          "start": 82.851,
+          "end": 83.051
+        },
+        {
+          "text": "sogar",
+          "start": 83.091,
+          "end": 83.371
+        },
+        {
+          "text": "zu",
+          "start": 83.411,
+          "end": 83.451
+        },
+        {
+          "text": "einem",
+          "start": 83.531,
+          "end": 83.691
+        },
+        {
+          "text": "beruflichen",
+          "start": 83.771,
+          "end": 84.251
+        },
+        {
+          "text": "Wechsel,",
+          "start": 84.331,
+          "end": 84.898
+        },
+        {
+          "text": "der",
+          "start": 84.964,
+          "end": 84.971
+        },
+        {
+          "text": "mir",
+          "start": 85.051,
+          "end": 85.131
+        },
+        {
+          "text": "heute",
+          "start": 85.211,
+          "end": 85.531
+        },
+        {
+          "text": "nicht",
+          "start": 85.584,
+          "end": 85.691
+        },
+        {
+          "text": "nur",
+          "start": 85.731,
+          "end": 85.851
+        },
+        {
+          "text": "ein",
+          "start": 85.931,
+          "end": 86.011
+        },
+        {
+          "text": "Einkommen",
+          "start": 86.091,
+          "end": 86.571
+        },
+        {
+          "text": "bringt,",
+          "start": 86.611,
+          "end": 87.171
+        },
+        {
+          "text": "sondern",
+          "start": 87.211,
+          "end": 87.451
+        },
+        {
+          "text": "auch",
+          "start": 87.531,
+          "end": 87.691
+        },
+        {
+          "text": "Freude",
+          "start": 87.771,
+          "end": 88.011
+        },
+        {
+          "text": "an",
+          "start": 88.091,
+          "end": 88.171
+        },
+        {
+          "text": "meinen",
+          "start": 88.211,
+          "end": 88.411
+        },
+        {
+          "text": "Aufgaben.",
+          "start": 88.491,
+          "end": 89.296
+        }
+      ]
+    },
+    {
+      "n": 13,
+      "start": 89.372,
+      "end": 93.692,
+      "text": "Und all das verdanke ich den Menschen, die mir auf meinem Weg begegnet sind.",
+      "words": [
+        {
+          "text": "Und",
+          "start": 89.372,
+          "end": 89.612
+        },
+        {
+          "text": "all",
+          "start": 89.692,
+          "end": 89.852
+        },
+        {
+          "text": "das",
+          "start": 89.972,
+          "end": 90.092
+        },
+        {
+          "text": "verdanke",
+          "start": 90.172,
+          "end": 90.492
+        },
+        {
+          "text": "ich",
+          "start": 90.572,
+          "end": 90.652
+        },
+        {
+          "text": "den",
+          "start": 90.732,
+          "end": 90.892
+        },
+        {
+          "text": "Menschen,",
+          "start": 90.932,
+          "end": 91.624
+        },
+        {
+          "text": "die",
+          "start": 91.76,
+          "end": 91.772
+        },
+        {
+          "text": "mir",
+          "start": 91.812,
+          "end": 91.852
+        },
+        {
+          "text": "auf",
+          "start": 91.932,
+          "end": 92.092
+        },
+        {
+          "text": "meinem",
+          "start": 92.132,
+          "end": 92.412
+        },
+        {
+          "text": "Weg",
+          "start": 92.452,
+          "end": 92.652
+        },
+        {
+          "text": "begegnet",
+          "start": 92.732,
+          "end": 93.212
+        },
+        {
+          "text": "sind.",
+          "start": 93.252,
+          "end": 93.692
+        }
+      ]
+    },
+    {
+      "n": 14,
+      "start": 93.933,
+      "end": 104.454,
+      "text": "Die meisten von ihnen, das ist heute das Team des Projekts Kontakt tu ju, wo ich als Buchhalterin tätig bin und manchmal auch als Schauspielerin der Playback-Gemeinschaft Farba Fabra.",
+      "words": [
+        {
+          "text": "Die",
+          "start": 93.933,
+          "end": 94.093
+        },
+        {
+          "text": "meisten",
+          "start": 94.173,
+          "end": 94.493
+        },
+        {
+          "text": "von",
+          "start": 94.573,
+          "end": 94.733
+        },
+        {
+          "text": "ihnen,",
+          "start": 94.813,
+          "end": 95.213
+        },
+        {
+          "text": "das",
+          "start": 95.373,
+          "end": 95.533
+        },
+        {
+          "text": "ist",
+          "start": 95.613,
+          "end": 95.693
+        },
+        {
+          "text": "heute",
+          "start": 95.773,
+          "end": 96.013
+        },
+        {
+          "text": "das",
+          "start": 96.133,
+          "end": 96.253
+        },
+        {
+          "text": "Team",
+          "start": 96.333,
+          "end": 96.493
+        },
+        {
+          "text": "des",
+          "start": 96.613,
+          "end": 96.733
+        },
+        {
+          "text": "Projekts",
+          "start": 96.853,
+          "end": 97.133
+        },
+        {
+          "text": "Kontakt",
+          "start": 97.213,
+          "end": 97.613
+        },
+        {
+          "text": "tu",
+          "start": 97.693,
+          "end": 97.773
+        },
+        {
+          "text": "ju,",
+          "start": 97.853,
+          "end": 98.253
+        },
+        {
+          "text": "wo",
+          "start": 98.494,
+          "end": 98.574
+        },
+        {
+          "text": "ich",
+          "start": 98.654,
+          "end": 98.734
+        },
+        {
+          "text": "als",
+          "start": 98.814,
+          "end": 98.974
+        },
+        {
+          "text": "Buchhalterin",
+          "start": 99.054,
+          "end": 99.614
+        },
+        {
+          "text": "tätig",
+          "start": 99.694,
+          "end": 100.014
+        },
+        {
+          "text": "bin",
+          "start": 100.094,
+          "end": 100.334
+        },
+        {
+          "text": "und",
+          "start": 100.414,
+          "end": 100.654
+        },
+        {
+          "text": "manchmal",
+          "start": 100.734,
+          "end": 101.134
+        },
+        {
+          "text": "auch",
+          "start": 101.214,
+          "end": 101.374
+        },
+        {
+          "text": "als",
+          "start": 101.454,
+          "end": 101.534
+        },
+        {
+          "text": "Schauspielerin",
+          "start": 101.574,
+          "end": 102.254
+        },
+        {
+          "text": "der",
+          "start": 102.334,
+          "end": 102.414
+        },
+        {
+          "text": "Playback-Gemeinschaft",
+          "start": 102.614,
+          "end": 103.374
+        },
+        {
+          "text": "Farba",
+          "start": 103.454,
+          "end": 103.774
+        },
+        {
+          "text": "Fabra.",
+          "start": 103.814,
+          "end": 104.454
+        }
+      ]
+    },
+    {
+      "n": 15,
+      "start": 104.806,
+      "end": 111.734,
+      "text": "Ich bin sehr froh, an so einem Schaffens- und Arbeitsprozess beteiligt zu sein, mit kreativen, zielstrebigen Menschen.",
+      "words": [
+        {
+          "text": "Ich",
+          "start": 104.806,
+          "end": 104.814
+        },
+        {
+          "text": "bin",
+          "start": 104.894,
+          "end": 105.134
+        },
+        {
+          "text": "sehr",
+          "start": 105.174,
+          "end": 105.454
+        },
+        {
+          "text": "froh,",
+          "start": 105.494,
+          "end": 105.734
+        },
+        {
+          "text": "an",
+          "start": 105.774,
+          "end": 105.934
+        },
+        {
+          "text": "so",
+          "start": 106.014,
+          "end": 106.094
+        },
+        {
+          "text": "einem",
+          "start": 106.174,
+          "end": 106.334
+        },
+        {
+          "text": "Schaffens-",
+          "start": 106.414,
+          "end": 106.867
+        },
+        {
+          "text": "und",
+          "start": 106.921,
+          "end": 106.974
+        },
+        {
+          "text": "Arbeitsprozess",
+          "start": 107.054,
+          "end": 107.774
+        },
+        {
+          "text": "beteiligt",
+          "start": 107.854,
+          "end": 108.334
+        },
+        {
+          "text": "zu",
+          "start": 108.414,
+          "end": 108.494
+        },
+        {
+          "text": "sein,",
+          "start": 108.734,
+          "end": 109.027
+        },
+        {
+          "text": "mit",
+          "start": 109.081,
+          "end": 109.134
+        },
+        {
+          "text": "kreativen,",
+          "start": 109.214,
+          "end": 110.054
+        },
+        {
+          "text": "zielstrebigen",
+          "start": 110.094,
+          "end": 110.814
+        },
+        {
+          "text": "Menschen.",
+          "start": 110.894,
+          "end": 111.734
+        }
+      ]
+    },
+    {
+      "n": 16,
+      "start": 111.854,
+      "end": 121.414,
+      "text": "Menschen, die in diesen für uns alle dunklen Zeiten Wichtiges tun, mit ihrer Energie inspirieren und durch ihr Handeln Halt und Unterstützung geben.",
+      "words": [
+        {
+          "text": "Menschen,",
+          "start": 111.854,
+          "end": 112.534
+        },
+        {
+          "text": "die",
+          "start": 112.574,
+          "end": 112.654
+        },
+        {
+          "text": "in",
+          "start": 112.734,
+          "end": 112.814
+        },
+        {
+          "text": "diesen",
+          "start": 112.921,
+          "end": 113.134
+        },
+        {
+          "text": "für",
+          "start": 113.174,
+          "end": 113.214
+        },
+        {
+          "text": "uns",
+          "start": 113.294,
+          "end": 113.534
+        },
+        {
+          "text": "alle",
+          "start": 113.614,
+          "end": 113.854
+        },
+        {
+          "text": "dunklen",
+          "start": 113.894,
+          "end": 114.334
+        },
+        {
+          "text": "Zeiten",
+          "start": 114.414,
+          "end": 115.374
+        },
+        {
+          "text": "Wichtiges",
+          "start": 115.796,
+          "end": 116.094
+        },
+        {
+          "text": "tun,",
+          "start": 116.174,
+          "end": 116.752
+        },
+        {
+          "text": "mit",
+          "start": 116.876,
+          "end": 116.894
+        },
+        {
+          "text": "ihrer",
+          "start": 116.934,
+          "end": 117.134
+        },
+        {
+          "text": "Energie",
+          "start": 117.174,
+          "end": 117.614
+        },
+        {
+          "text": "inspirieren",
+          "start": 117.734,
+          "end": 118.494
+        },
+        {
+          "text": "und",
+          "start": 118.574,
+          "end": 118.654
+        },
+        {
+          "text": "durch",
+          "start": 118.707,
+          "end": 118.814
+        },
+        {
+          "text": "ihr",
+          "start": 118.867,
+          "end": 118.974
+        },
+        {
+          "text": "Handeln",
+          "start": 119.054,
+          "end": 119.454
+        },
+        {
+          "text": "Halt",
+          "start": 119.534,
+          "end": 119.774
+        },
+        {
+          "text": "und",
+          "start": 119.854,
+          "end": 119.934
+        },
+        {
+          "text": "Unterstützung",
+          "start": 120.014,
+          "end": 120.654
+        },
+        {
+          "text": "geben.",
+          "start": 120.734,
+          "end": 121.414
+        }
+      ]
+    },
+    {
+      "n": 17,
+      "start": 121.534,
+      "end": 128.335,
+      "text": "Ich weiß das nicht vom Hörensagen, ich hatte damals Glück, dank ihnen habe ich mein Leben zum Besseren verändert.",
+      "words": [
+        {
+          "text": "Ich",
+          "start": 121.534,
+          "end": 121.614
+        },
+        {
+          "text": "weiß",
+          "start": 121.694,
+          "end": 121.854
+        },
+        {
+          "text": "das",
+          "start": 121.934,
+          "end": 122.014
+        },
+        {
+          "text": "nicht",
+          "start": 122.094,
+          "end": 122.254
+        },
+        {
+          "text": "vom",
+          "start": 122.307,
+          "end": 122.414
+        },
+        {
+          "text": "Hörensagen,",
+          "start": 122.494,
+          "end": 123.629
+        },
+        {
+          "text": "ich",
+          "start": 123.774,
+          "end": 123.854
+        },
+        {
+          "text": "hatte",
+          "start": 123.934,
+          "end": 124.094
+        },
+        {
+          "text": "damals",
+          "start": 124.174,
+          "end": 124.494
+        },
+        {
+          "text": "Glück,",
+          "start": 124.574,
+          "end": 125.299
+        },
+        {
+          "text": "dank",
+          "start": 125.375,
+          "end": 125.615
+        },
+        {
+          "text": "ihnen",
+          "start": 125.695,
+          "end": 126.095
+        },
+        {
+          "text": "habe",
+          "start": 126.175,
+          "end": 126.255
+        },
+        {
+          "text": "ich",
+          "start": 126.335,
+          "end": 126.415
+        },
+        {
+          "text": "mein",
+          "start": 126.455,
+          "end": 126.575
+        },
+        {
+          "text": "Leben",
+          "start": 126.655,
+          "end": 126.895
+        },
+        {
+          "text": "zum",
+          "start": 126.975,
+          "end": 127.055
+        },
+        {
+          "text": "Besseren",
+          "start": 127.135,
+          "end": 127.535
+        },
+        {
+          "text": "verändert.",
+          "start": 127.615,
+          "end": 128.335
+        }
+      ]
+    }
+  ]
+}
