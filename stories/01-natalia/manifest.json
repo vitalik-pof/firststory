@@ -3016,5 +3016,28 @@
     "credits": 0,
     "delivered": "файлом режисерові в застосунок Claude 6 листопада 2026 року",
     "drive_url": null
+  },
+  "film_fr": {
+    "file": "work/01-natalia/fr/film.mp4",
+    "language_code": "fr",
+    "duration_s": 132.117,
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "video_codec": "h264",
+    "audio_codec": "aac",
+    "crf": 18,
+    "size_bytes": 131846809,
+    "sha256": "5971e2a4e6e920bfa9c96a9ded4f21c0f01b8ba34dc8c5d80bf72f2dc6db51a6",
+    "rendered_at": "2026-11-06",
+    "render_command": "cd remotion && npx tsx render-film.ts --lang fr --full",
+    "inputs": {
+      "props": "work/01-natalia/fr/film-props.json",
+      "mix": "work/01-natalia/fr/mix.mp3",
+      "timings": "stories/01-natalia/fr/timings.json"
+    },
+    "credits": 0,
+    "delivered": "файлом режисерові в застосунок Claude 6 листопада 2026 року",
+    "drive_url": null
   }
 }
